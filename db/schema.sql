@@ -49,3 +49,15 @@ CREATE TABLE orders (
     FOREIGN KEY (buyer_id) REFERENCES users(id),
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
+-- 4. 선물 테이블 (받는 사람 기준의 교환권 - 가이드라인 필수 반영)
+CREATE TABLE gifts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,                        -- 어떤 주문에서 결제되었는지 연결
+    owner_id INT NOT NULL,                        -- [가이드라인 필수] 받는 사람 ID (나에게 선물하기면 구매자 ID와 동일)
+    product_id INT NOT NULL,                      -- 선물받은 상품 ID
+    status VARCHAR(20) DEFAULT 'unused',          -- [가이드라인 필수] unused(미사용) / used(사용완료)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (owner_id) REFERENCES users(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);

@@ -17,8 +17,9 @@ INSERT INTO products (name, price, original_price, discount_rate, brand_name, im
 ('BBQ 황금올리브치킨+콜라1.25L(배달가능)', 23500, 26500, 11, 'BBQ', 'https://example.com/bbq_main.jpg', 'https://example.com/bbq_detail.jpg', '닭고기:국내산'),
 ('배스킨라빈스 골라먹는 27 큐브', 29000, 29000, 0, '배스킨라빈스', 'https://example.com/br_main.jpg', 'https://example.com/br_detail.jpg', '상세설명 참조');
 
--- 3. 서비스 시나리오 테스트용 가짜 주문 데이터 등록
--- 홍길동(1번 유저)이 본죽 백숙죽(1번 상품)을 구매한 내역
-INSERT INTO orders (buyer_id, receiver_id, product_id, payment_status, gift_status) VALUES 
-(1, NULL, 1, 'SUCCESS', 'unused'),
-(2, 1, 4, 'SUCCESS', 'used'); -- 김철수(2번 유저)가 홍길동(1번 유저)에게 BBQ 치킨을 선물했고 홍길동이 이미 사용한 내역
+-- 3. 서비스 시나리오 테스트용 가짜 데이터 등록
+-- 시나리오: 홍길동(1번)이 본죽 백숙죽(1번 상품)을 '나에게 선물하기'로 구매
+INSERT INTO orders (user_id, product_id, payment_status) VALUES (1, 1, 'SUCCESS');
+
+-- 위 주문으로 인해 홍길동(1번)의 선물함에 교환권이 미사용(unused) 상태로 꽂힘
+INSERT INTO gifts (order_id, owner_id, product_id, status) VALUES (1, 1, 1, 'unused');
