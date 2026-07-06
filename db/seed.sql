@@ -1,25 +1,69 @@
 /*
- * 파일: db/seed.sql
- * 목적: 서비스 동작 확인 및 프론트엔드 화면 렌더링을 위한 초기 데이터 구축
- * 왜 이렇게: 피그마 기획서 화면 상의 실제 상품 데이터와 싱크를 맞춰 UI 개발 편의성 증대
+ * 파일명: db/seed.sql
+ * 목적: 카카오톡 선물하기 클론 프로젝트 (M2 마일스톤) 테스트용 초기 데이터 생성 스크립트
+ * 테마: 환승패스 (스마트 교통권 및 대중교통 이용권 체계)
+ * 특징: 
+ * - 부모 테이블(users, products)을 먼저 삽입한 후, 자식 테이블(orders, gifts)을 안전하게 채웁니다.
+ * - 피드백에 따라 barcode는 고유한 13자리 숫자로 설정하고, barcode_image_url은 고정 더미 리소스를 활용합니다.
+ * - expired_at은 발급일(주문 시간) 기준 1년 뒤로 상정하여 현실적인 날짜 데이터를 매핑했습니다.
  */
 
--- 1. 테스트용 기본 사용자 등록 (비밀번호는 예시 문정)
-INSERT INTO users (email, password, name, phone, birth_date, gender) VALUES 
-('test1@kakao.com', 'password123', '홍길동', '010-1234-5678', '1998-05-15', 'MALE'),
-('test2@kakao.com', 'password456', '김철수', '010-9876-5432', '2000-11-23', 'FEMALE');
+SET NAMES utf8mb4;
 
--- 2. 피그마 기획서 기반 실제 상품 데이터 등록
-INSERT INTO products (name, price, original_price, discount_rate, brand_name, image_url, description_image_url, origin_info) VALUES 
-('[본죽] 닭다리가 통째로 통닭다리 백숙죽 600g 3팩(T)', 19900, 29700, 32, '본죽', 'https://example.com/bonjuk_main.jpg', 'https://example.com/bonjuk_detail.jpg', '상세설명에 표시'),
-('"대한민국 피로회복제" 동아제약 박카스F 120 ml X 10병', 9900, 9900, 0, '동아제약', 'https://example.com/bacchus_main.jpg', 'https://example.com/bacchus_detail.jpg', '국내산:충청남도 당진시'),
-('하겐다즈 아이스크림 케이크 리얼블랑', 35000, 35000, 0, '하겐다즈', 'https://example.com/haagen_main.jpg', 'https://example.com/haagen_detail.jpg', '프랑스산'),
-('BBQ 황금올리브치킨+콜라1.25L(배달가능)', 23500, 26500, 11, 'BBQ', 'https://example.com/bbq_main.jpg', 'https://example.com/bbq_detail.jpg', '닭고기:국내산'),
-('배스킨라빈스 골라먹는 27 큐브', 29000, 29000, 0, '배스킨라빈스', 'https://example.com/br_main.jpg', 'https://example.com/br_detail.jpg', '상세설명 참조');
+-- 안전한 데이터 재삽입을 위해 외래키 체크를 잠시 끄고 기존 자식/부모 데이터를 초기화합니다.
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE gifts;
+TRUNCATE TABLE orders;
+TRUNCATE TABLE products;
+TRUNCATE TABLE users;
+SET FOREIGN_KEY_CHECKS = 1;
 
--- 3. 서비스 시나리오 테스트용 가짜 데이터 등록
--- 시나리오: 홍길동(1번)이 본죽 백숙죽(1번 상품)을 '나에게 선물하기'로 구매
-INSERT INTO orders (user_id, product_id, payment_status) VALUES (1, 1, 'SUCCESS');
 
--- 위 주문으로 인해 홍길동(1번)의 선물함에 교환권이 미사용(unused) 상태로 꽂힘
-INSERT INTO gifts (order_id, owner_id, product_id, status) VALUES (1, 1, 1, 'unused');
+-- ============================================================================
+-- [1] 회원 초기 데이터 (users)
+-- ============================================================================
+INSERT INTO users (id, email, password, name, phone, birth_date, gender, created_at, updated_at) VALUES
+(1, 'buyer1@example.com', '$2a$10$dXJ2bXNoYXNoYmFzZTY0dXNlcmNhcmRz...', '홍길동', '010-1234-5678', '2000-01-01', 'M', NOW(), NOW()),
+(2, 'receiver1@example.com', '$2a$10$dXJ2bXNoYXNoYmFzZTY0dXNlcmNhcmRz...', '성춘향', '010-9876-5432', '2001-05-05', 'F', NOW(), NOW()),
+(3, 'user3@example.com', '$2a$10$dXJ2bXNoYXNoYmFzZTY0dXNlcmNhcmRz...', '이몽룡', '010-5555-5555', '1999-11-11', 'M', NOW(), NOW());
+
+
+-- ============================================================================
+-- [2] 상품 초기 데이터 (products) - 환승패스 테마 적용
+-- ============================================================================
+INSERT INTO products (id, name, price, description, thumbnail_url, category, brand_name, created_at, updated_at) VALUES
+(1, '시내버스 무제한 1일 패스', 5000, '발급 후 24시간 동안 해당 권역 내 시내버스를 횟수 제한 없이 자유롭게 탑승할 수 있는 스마트 환승패스입니다.', '/images/products/pass-bus-1day.png', 'daily_pass', '서울교통공사', NOW(), NOW()),
+(2, '광역·시내 통합 환승 10회권', 18000, '수도권 광역버스와 시내버스 간 환승 시 유용하게 차감하여 사용할 수 있는 실속형 10회 다회권 패스입니다.', '/images/products/pass-multi-10.png', 'multi_pass', '경기교통공사', NOW(), NOW()),
+(3, '지하철 정기 주말권 (금·토·일)', 12000, '금요일부터 일요일까지 주말 내내 지하철을 무제한으로 이용할 수 있는 주말 나들이 전용 에코 패스입니다.', '/images/products/pass-subway-weekend.png', 'weekend_pass', '코레일', NOW(), NOW()),
+(4, '제주 탐라 자율교통 3일 프리패스', 35000, '제주 전 권역의 시내외 버스 및 순환 노선을 72시간 동안 제한 없이 이용 가능한 관광객 필수 패스입니다.', '/images/products/pass-jeju-3day.png', 'travel_pass', '제주특별자치도', NOW(), NOW());
+
+
+-- ============================================================================
+-- [3] 주문 초기 데이터 (orders)
+-- ============================================================================
+INSERT INTO orders (id, buyer_id, receiver_id, product_id, total_price, payment_status, gift_message, created_at, updated_at) VALUES
+-- 주문 1: 홍길동(1)이 성춘향(2)에게 '시내버스 무제한 1일 패스(1)' 선물
+(1, 1, 2, 1, 5000, 'paid', '춘향아, 내일 서울 시내 투어할 때 이 버스 패스로 편하게 이동해!', '2026-07-01 10:00:00', '2026-07-01 10:00:00'),
+
+-- 주문 2: 이몽룡(3)이 홍길동(1)에게 '광역·시내 통합 환승 10회권(2)' 선물
+(2, 3, 1, 2, 18000, 'paid', '길동아, 매일 출퇴근하느라 고생이 많다. 광역버스 탈 때 유용하게 쓰렴.', '2026-07-02 14:30:00', '2026-07-02 14:30:00'),
+
+-- 주문 3: 성춘향(2)이 이몽룡(3)에게 '지하철 정기 주말권(3)' 선물 (이 주문은 결제 완료 후 기프트까지 생성되나 이미 사용 완료된 케이스로 연출)
+(3, 2, 3, 3, 12000, 'paid', '몽룡 도령, 이번 주말 서울 데이트 올 때 지하철 정기권 요긴하게 쓰셔요.', '2026-07-03 09:15:00', '2026-07-03 09:15:00');
+
+
+-- ============================================================================
+-- [4] 선물/교환권 초기 데이터 (gifts) - orders와 1:1 매핑 필수
+-- ============================================================================
+INSERT INTO gifts (id, order_id, receiver_id, product_id, barcode, barcode_image_url, status, expired_at, used_at, created_at, updated_at) VALUES
+-- 기프트 1: 주문 1번에 대응되는 미사용(unused) 선물 (소유자: 성춘향)
+-- 만료일은 발급일로부터 1년 뒤인 2027-07-01
+(1, 1, 2, 1, '8800000000001', '/images/barcodes/default-barcode.png', 'unused', '2027-07-01 10:00:00', NULL, '2026-07-01 10:00:00', '2026-07-01 10:00:00'),
+
+-- 기프트 2: 주문 2번에 대응되는 미사용(unused) 선물 (소유자: 홍길동)
+-- 만료일은 발급일로부터 1년 뒤인 2027-07-02
+(2, 2, 1, 2, '8800000000002', '/images/barcodes/default-barcode.png', 'unused', '2027-07-02 14:30:00', NULL, '2026-07-02 14:30:00', '2026-07-02 14:30:00'),
+
+-- 기프트 3: 주문 3번에 대응되는 사용 완료(used) 선물 (소유자: 이몽룡)
+-- 만료일은 2027-07-03이나, 2026-07-05에 매장에서 실제 사용한 것으로 처리
+(3, 3, 3, 3, '8800000000003', '/images/barcodes/default-barcode.png', 'used', '2027-07-03 09:15:00', '2026-07-05 18:20:00', '2026-07-03 09:15:00', '2026-07-05 18:20:00');

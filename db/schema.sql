@@ -1,63 +1,116 @@
 /*
- * 파일: db/schema.sql
- * 목적: 카카오톡 선물하기 서비스 핵심 인프라 테이블 설계 (회원, 상품, 주문/선물함)
- * 왜 이렇게: 외부 결제 모듈 및 주소 API 연동 없이 내부 Mock 처리가 가능하도록 상태 제어 컬럼 반영
+ * 파일명: db/schema.sql
+ * 목적: 카카오톡 선물하기 클론 프로젝트 (M2 마일스톤) 데이터베이스 생성 스크립트
+ * 특징: 
+ * - API 명세서의 요청/응답 JSON 파라미터를 물리 DB 표준인 snake_case로 100% 일치시켰습니다.
+ * - orders 테이블에서 결제 상태(payment_status) 및 구매자/수신자 정보를 통합 관리합니다.
+ * - gifts 테이블은 중복 데이터를 방지하기 위해 order_id와 1:1 매핑되며, 실제 매장에서 사용하는 바코드 상태(status, used_at)를 전담 제어합니다.
+ 
+ * 구조적 흐름: 부모-자식 의존성 (schema.sql) 테이블을 생성(CREATE)하고 삭제(DROP)하는 순서는 외래키(FK)로 연결된 족보(부모-자식 관계)의 규칙을 철저하게 따랐습니다.
+ 
+ * 삭제 흐름 (자식 ➡️ 부모 순서)
+ * - 테이블을 지울 때는 자식부터 지워야 외래키 참조 에러가 나지 않습니다.
+ * - 쿠폰(gifts) 삭제 ➡️ 영수증(orders) 삭제 ➡️ 상품(products) 및 회원(users) 삭제 순으로 DROP TABLE 코드가 맨 위에 배치되었습니다.
+ 
+ * 생성 흐름 (부모 ➡️ 자식 순서)
+ * - 테이블을 만들 때는 바탕이 되는 부모가 먼저 존재해야 합니다.
+ * - 회원이 있고 상품이 있어야 ➡️ 주문/결제(orders)를 할 수 있고 ➡️ 결제가 완료되어야 ➡️ 쿠폰(gifts)이 발급되는 흐름입니다.
+ * - 이 흐름에 맞춰 users, products를 먼저 CREATE하고, 마지막에 gifts를 CREATE 하도록 구성했습니다.
  */
 
--- 외래키 제약 조건을 고려하여 안전하게 기존 테이블 삭제
+SET NAMES utf8mb4;
+
+-- [초기화] 기존 테이블이 있다면 자식 테이블부터 순서대로 안전하게 삭제합니다.
+DROP TABLE IF EXISTS gifts;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS users;
 
--- 1. 사용자 테이블 (회원가입 및 로그인 화면 기반)
+
+-- ============================================================================
+-- [1] 회원 테이블 (users)
+-- ============================================================================
 CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(100) NOT NULL UNIQUE,          -- 카카오메일 아이디 또는 이메일
-    password VARCHAR(255) NOT NULL,               -- 암호화되어 저장될 비밀번호
-    name VARCHAR(50) NOT NULL,                    -- 사용자 이름 또는 닉네임
-    phone VARCHAR(20) NOT NULL,                   -- 카카오톡 연동 전화번호
-    birth_date VARCHAR(10),                       -- [선택] 생년월일 (YYYY-MM-DD)
-    gender VARCHAR(10)                            -- [선택] 성별 (MALE / FEMALE)
-);
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,                 -- 회원 고유 번호 (API: userId)
+    email VARCHAR(100) NOT NULL UNIQUE,                   -- 로그인 이메일 (API: email, UNIQUE)
+    password VARCHAR(255) NOT NULL,                       -- 암호화된 비밀번호 (API: password)
+    name VARCHAR(50) NOT NULL,                            -- 사용자 실명/이름 (API: name)
+    phone VARCHAR(20) NOT NULL,                           -- 연락처 (API: phone)
+    birth_date DATE NULL,                                 -- 생년월일 (API: birthDate)
+    gender VARCHAR(10) NULL,                              -- 성별 (API: gender, 예: M, F)
+    
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 가입 일시 (API: createdAt)
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- 정보 수정 일시 (API: updatedAt)
+    deleted_at DATETIME NULL                              -- 소프트 딜리트용 시간 기록 (API: deletedAt)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 계정 및 프로필 정보';
 
--- 2. 상품 테이블 (홈 화면 및 상세 페이지 기반)
+
+-- ============================================================================
+-- [2] 상품 테이블 (products)
+-- ============================================================================
 CREATE TABLE products (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,                   -- 상품명 (예: 닭다리가 통째로 통닭다리 백숙죽)
-    price INT NOT NULL,                           -- 실제 판매 가격 (할인가)
-    original_price INT,                           -- 할인 전 원래 가격 (화면 표시용)
-    discount_rate INT DEFAULT 0,                  -- 할인율 (%)
-    brand_name VARCHAR(100) NOT NULL,             -- 브랜드명 (본죽, 동아제약, BBQ, 배스킨라빈스 등)
-    image_url VARCHAR(255) NOT NULL,              -- 홈/랭킹 노출용 메인 이미지 URL
-    description_image_url VARCHAR(255),           -- 상세페이지 하단 스크롤 설명 이미지 URL
-    origin_info VARCHAR(100),                     -- 원산지 정보 (예: 국내산)
-    shipping_info VARCHAR(100) DEFAULT '배송비 포함' -- 도서산간 추가 배송비 안내용 기본 문구
-);
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,                 -- 상품 고유 번호 (API: productId)
+    name VARCHAR(255) NOT NULL,                           -- 상품명 (API: name)
+    price INT NOT NULL,                                   -- 판매 가격 (API: price)
+    description TEXT NULL,                                -- 상품 상세 설명 (API: description)
+    thumbnail_url VARCHAR(255) NOT NULL,                  -- 대표 썸네일 이미지 경로 (API: thumbnailUrl)
+    category VARCHAR(50) NOT NULL,                        -- 카테고리 (API: category)
+    brand_name VARCHAR(100) NOT NULL,                     -- 브랜드명/운영기관 (API: brandName)
+    
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 등록 일시 (API: createdAt)
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='선물 및 판매 상품 카탈로그';
 
--- 3. 주문 및 선물함 테이블 (팀 4대 규칙 - Mock 처리 반영)
+
+-- ============================================================================
+-- [3] 주문 테이블 (orders)
+-- ============================================================================
 CREATE TABLE orders (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    buyer_id INT NOT NULL,                        -- 구매자 고유 ID (users 테이블 참조)
-    receiver_id INT,                              -- 선물받는 친구 ID (나에게 선물하기는 NULL 가능)
-    product_id INT NOT NULL,                      -- 구매한 상품 고유 ID (products 테이블 참조)
-    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 주문 일시
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,                 -- 주문 고유 번호 (API: orderId)
     
-    -- [팀 제약조건: 외부 결제 모듈 미연동에 따른 가짜 처리 컬럼]
-    payment_status VARCHAR(20) DEFAULT 'SUCCESS', -- 결제 상태 (외부 API 없이 SUCCESS 상태로 가짜 완료 처리)
-    gift_status VARCHAR(20) DEFAULT 'unused',     -- 선물함 상태 제어: unused(사용전) / used(사용완료)
+    buyer_id BIGINT NOT NULL,                             -- 결제자 ID (API 응답 내 buyer.userId)
+    receiver_id BIGINT NOT NULL,                          -- 선물 수신자 ID (API 응답 내 receiver.userId)
+    product_id BIGINT NOT NULL,                           -- 구매 상품 번호 (API: productId)
     
-    FOREIGN KEY (buyer_id) REFERENCES users(id),
-    FOREIGN KEY (product_id) REFERENCES products(id)
-);
--- 4. 선물 테이블 (받는 사람 기준의 교환권 - 가이드라인 필수 반영)
+    total_price INT NOT NULL,                             -- 최종 결제 금액 (API: totalPrice)
+    payment_status VARCHAR(20) NOT NULL DEFAULT 'paid',   -- 결제 상태 (API: paymentStatus)
+    gift_message TEXT NULL,                               -- 선물 축하 메시지 카드 내용 (API: giftMessage)
+    
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 주문/결제 완료 일시 (API: createdAt)
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    INDEX idx_orders_buyer (buyer_id),
+    INDEX idx_orders_receiver (receiver_id),
+    
+    FOREIGN KEY (buyer_id) REFERENCES users(id) ON DELETE RESTRICT,
+    FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE RESTRICT,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='상품 구매 및 선물하기 결제 트랜잭션 영수증';
+
+
+-- ============================================================================
+-- [4] 선물/교환권 테이블 (gifts)
+-- ============================================================================
 CREATE TABLE gifts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT NOT NULL,                        -- 어떤 주문에서 결제되었는지 연결
-    owner_id INT NOT NULL,                        -- [가이드라인 필수] 받는 사람 ID (나에게 선물하기면 구매자 ID와 동일)
-    product_id INT NOT NULL,                      -- 선물받은 상품 ID
-    status VARCHAR(20) DEFAULT 'unused',          -- [가이드라인 필수] unused(미사용) / used(사용완료)
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (order_id) REFERENCES orders(id),
-    FOREIGN KEY (owner_id) REFERENCES users(id),
-    FOREIGN KEY (product_id) REFERENCES products(id)
-);
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,                 -- 쿠폰 고유 번호 (API: giftId)
+    
+    order_id BIGINT NOT NULL UNIQUE,                      -- 원본 주문 ID (1:1 매핑)
+    receiver_id BIGINT NOT NULL,                          -- 선물 받은 소유자 ID (API 조회용)
+    product_id BIGINT NOT NULL,                           -- 교환할 상품 ID (API 조회용)
+    
+    barcode VARCHAR(50) NOT NULL UNIQUE,                  -- 매장 포스기 바코드 번호 (API: barcode)
+    barcode_image_url VARCHAR(255) NOT NULL,              -- 바코드 이미지 경로 (API: barcodeImageUrl)
+    
+    status VARCHAR(20) NOT NULL DEFAULT 'unused',         -- 쿠폰 사용 상태 (unused -> used)
+    expired_at DATETIME NOT NULL,                         -- 유효기간 만료 일시 (API: expiredAt)
+    used_at DATETIME NULL DEFAULT NULL,                   -- 매장 사용 완료 일시 (API: usedAt)
+    
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 쿠폰 발급 일시 (API: createdAt)
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    INDEX idx_receiver_status (receiver_id, status),
+    
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE RESTRICT,
+    FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE RESTRICT,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='수신자에게 발급된 모바일 교환권 및 소진 상태 관리';
