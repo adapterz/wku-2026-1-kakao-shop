@@ -7,16 +7,16 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// JSON ��û body �Ľ�
+// JSON 요청 body 파싱
 app.use(express.json());
 
-// public ���� ���� ���� ����
+// public 정적 파일 제공
 app.use(express.static(path.join(__dirname, '../public')));
 
-// API �����
+// API 라우터
 app.use('/api/products', productsRouter);
 
-// ���� ���� Ȯ�ο� API
+// 서버 상태 확인용 API
 app.get('/api/health', async (req, res) => {
   try {
     const dbResult = await testConnection();
@@ -36,7 +36,7 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
-// ���� API ��� ó��
+// 등록되지 않은 API 요청 처리
 app.use('/api', (req, res) => {
   res.status(404).json({
     message: 'API not found',

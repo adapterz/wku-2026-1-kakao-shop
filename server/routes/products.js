@@ -4,7 +4,7 @@ const { pool } = require('../db');
 const router = express.Router();
 
 /**
- * Convert DB snake_case columns to API camelCase fields.
+ * DB snake_case 컬럼을 API camelCase 필드로 변환합니다.
  */
 function toProductResponse(row) {
   return {
@@ -22,7 +22,7 @@ function toProductResponse(row) {
 
 /**
  * GET /api/products
- * Get product list.
+ * 상품 목록 조회
  */
 router.get('/', async (req, res) => {
   try {
@@ -57,7 +57,7 @@ router.get('/', async (req, res) => {
 
 /**
  * GET /api/products/:id
- * Get product detail.
+ * 상품 상세 조회
  */
 router.get('/:id', async (req, res) => {
   try {
