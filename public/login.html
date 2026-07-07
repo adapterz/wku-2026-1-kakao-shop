@@ -1,6 +1,33 @@
 <!--
- * 파일: public/login.html
- * 목적: 사용자 로그인 화면
- * 왜 이렇게: 로그인 후 서비스 기능을 이용할 수 있도록 하기 위해
- * 주요: POST /api/auth/login
+  파일: public/login.html
+  목적: 로그인 화면 — 로그인 처리
+  왜: 사용자가 이메일/비밀번호로 인증하고 서비스를 이용할 수 있게 하는 화면
+  주요: 이메일/비밀번호 입력, 로그인 버튼, 회원가입 이동 링크
 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인 - 선물하기</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <main class="auth-page">
+    <h1 class="auth-title">선물하기</h1>
+
+    <form class="auth-form">
+      <input type="email" id="login-email" class="text-input" placeholder="이메일">
+      <input type="password" id="login-password" class="text-input" placeholder="비밀번호">
+      <button type="button" class="btn-primary" id="login-btn">로그인</button>
+    </form>
+
+    <p class="auth-link">
+      계정이 없으신가요?
+      <a href="signup.html">회원가입</a>
+    </p>
+  </main>
+
+</body>
+</html>

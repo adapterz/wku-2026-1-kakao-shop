@@ -1,6 +1,289 @@
 <!--
- * 파일: public/index.html
- * 목적: 프로젝트 메인(홈) 화면
- * 왜 이렇게: 사용자가 처음 접속하여 상품 목록을 확인하는 시작 페이지
- * 주요: GET /api/products
+  파일: public/index.html
+  목적: 홈 화면 — 상품 목록 보여주기 (카카오 선물하기 원본 구조)
+  왜: 사용자가 처음 접속했을 때 상품을 둘러보는 메인 화면
+  주요: 상단 타이틀, 탭 메뉴, 상품 목록 (그 중 하나가 익산 환승패스)
 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>선물하기</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+ <!-- 상단 헤더 -->
+  <header class="top-header">
+    <button class="icon-btn">🛒</button>
+    <h1>선물하기</h1>
+    <button class="icon-btn">🔍</button>
+  </header>
+
+  <!-- 탭 메뉴 -->
+  <nav class="tab-menu">
+    <button class="tab active">FOR ME</button>
+    <button class="tab">홈</button>
+    <button class="tab">랭킹</button>
+    <button class="tab">썸머세일</button>
+    <button class="tab">와인/맥주</button>
+    <button class="tab">여름과일</button>
+  </nav>
+
+  <!-- 선물테마 서브탭 -->
+  <nav class="sub-tab-menu">
+    <button class="sub-tab active">선물 테마</button>
+    <button class="sub-tab">카테고리</button>
+    <button class="sub-tab">추천 브랜드</button>
+  </nav>
+
+  <!-- 원형 카테고리 아이콘 목록 -->
+  <section class="category-icons">
+    <div class="category-item"><div class="category-circle">🎂</div><span>생일</span></div>
+    <div class="category-item"><div class="category-circle">🎁</div><span>맛있는선물</span></div>
+    <div class="category-item"><div class="category-circle">💑</div><span>연인</span></div>
+    <div class="category-item"><div class="category-circle">👔</div><span>직장동료</span></div>
+    <div class="category-item"><div class="category-circle">🙋</div><span>FOR ME</span></div>
+    <div class="category-item"><div class="category-circle">🎈</div><span>가벼운선물</span></div>
+    <div class="category-item"><div class="category-circle">💎</div><span>스몰럭셔리</span></div>
+    <div class="category-item"><div class="category-circle">👜</div><span>명품선물</span></div>
+    <div class="category-item"><div class="category-circle">🍷</div><span>술·안주</span></div>
+    <div class="category-item"><div class="category-circle">🏠</div><span>결혼·집들이</span></div>
+    <div class="category-item"><div class="category-circle">🌊</div><span>시원한선물</span></div>
+    <div class="category-item"><div class="category-circle">💊</div><span>건강·케어</span></div>
+    <div class="category-item"><div class="category-circle">🥇</div><span>합격·응원</span></div>
+    <div class="category-item"><div class="category-circle">🎫</div><span>교환권</span></div>
+    <div class="category-item"><div class="category-circle">🎀</div><span>웃긴선물</span></div>
+  </section>
+
+  <!-- 배너 -->
+  <section class="banner">
+    <img src="img/banner1.jpg" alt="프로모션 배너">
+  </section>
+
+  <!-- 실시간 급상승 선물랭킹 -->
+  <section class="ranking-section">
+    <div class="ranking-title">
+      <h2>실시간 급상승 선물랭킹</h2>
+      <button class="icon-btn small">🔄</button>
+    </div>
+
+    <!-- 성별/연령 필터 -->
+    <div class="filter-row">
+      <button class="filter-btn active">ALL 모두가</button>
+      <button class="filter-btn">여성</button>
+      <button class="filter-btn">남성</button>
+      <button class="filter-btn">청소년</button>
+    </div>
+
+    <!-- 정렬 필터 -->
+    <div class="sort-row">
+      <button class="sort-btn active">받고 싶어한</button>
+      <button class="sort-btn">많이 선물한</button>
+      <button class="sort-btn">위시로 받은</button>
+    </div>
+
+    <!-- 가격대 필터 -->
+    <div class="price-filter-row">
+      <button class="price-btn">1만원 미만</button>
+      <button class="price-btn">1만원대</button>
+      <button class="price-btn active">2만원대</button>
+      <button class="price-btn">3만원대</button>
+      <button class="price-btn">4만원대</button>
+    </div>
+
+    <!-- 상품 그리드 (2열) -->
+    <div class="product-grid">
+      <div class="product-card-grid">
+        <div class="product-thumb">
+          <img src="img/product1.jpg" alt="베스킨라빈스 페이백 가능">
+          <button class="bookmark-btn">🔖</button>
+        </div>
+        <p class="product-brand">BBQ</p>
+        <p class="product-name-grid">베스킨라빈스</p>
+        <p class="product-price-grid">11% <span>23,000원</span></p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,536</span>
+        </div>
+      </div>
+
+      <div class="product-card-grid">
+        <div class="product-thumb">
+          <img src="img/pass1.jpg" alt="익산역-시내 환승 1일권">
+          <button class="bookmark-btn">🔖</button>
+        </div>
+        <p class="product-brand">익산교통</p>
+        <p class="product-name-grid">익산역-시내 환승 1일권</p>
+        <p class="product-price-grid">11% <span>23,000원</span></p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">982</span>
+        </div>
+      </div>
+
+      <div class="product-card-grid">
+        <div class="product-thumb">
+          <img src="img/product2.jpg" alt="베스킨라빈스 페이백 가능">
+          <button class="bookmark-btn">🔖</button>
+        </div>
+        <p class="product-brand">BBQ</p>
+        <p class="product-name-grid">베스킨라빈스(페이백 가능)</p>
+        <p class="product-price-grid">11% <span>23,000원</span></p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,535</span>
+        </div>
+      </div>
+
+      <div class="product-card-grid">
+        <div class="product-thumb">
+          <img src="img/product3.jpg" alt="베스킨라빈스 페이백 가능">
+          <button class="bookmark-btn">🔖</button>
+        </div>
+        <p class="product-brand">BBQ</p>
+        <p class="product-name-grid">베스킨라빈스(페이백 가능)</p>
+        <p class="product-price-grid">11% <span>23,000원</span></p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,535</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 더보기 -->
+    <button class="more-btn">더보기 ⌄</button>
+  </section>
+<!-- 금주의 브랜드 -->
+  <section class="brand-section">
+    <h2>금주의 브랜드</h2>
+    <nav class="brand-sub-tab">
+      <button class="sub-tab active">리베르</button>
+      <button class="sub-tab">입생로랑</button>
+      <button class="sub-tab">산타마리아노벨라</button>
+      <button class="sub-tab">클리오</button>
+    </nav>
+
+    <div class="brand-banner">
+      <img src="img/brand-banner1.jpg" alt="금주의 브랜드 배너">
+    </div>
+
+    <div class="brand-product-row">
+      <div class="brand-product-item">
+        <img src="img/product4.jpg" alt="버라이어티팩(배달가능)">
+        <p class="product-name-grid">버라이어티팩(배달가능)</p>
+        <p class="product-price-grid">23,000원</p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,535</span>
+        </div>
+      </div>
+      <div class="brand-product-item">
+        <img src="img/product5.jpg" alt="버라이어티팩(배달가능)">
+        <p class="product-name-grid">버라이어티팩(배달가능)</p>
+        <p class="product-price-grid">23,000원</p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,535</span>
+        </div>
+      </div>
+      <div class="brand-product-item">
+        <img src="img/product6.jpg" alt="버라이어티팩(배달가능)">
+        <p class="product-name-grid">버라이어티팩(배달가능)</p>
+        <p class="product-price-grid">23,000원</p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,535</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 인기 브랜드 -->
+  <section class="popular-brand-section">
+    <div class="ranking-title">
+      <h2>인기 브랜드</h2>
+      <button class="icon-btn small">🔄</button>
+    </div>
+
+    <div class="filter-row">
+      <button class="filter-btn">성인</button>
+      <button class="filter-btn active">남성</button>
+      <button class="filter-btn">청소년</button>
+    </div>
+
+    <ol class="brand-rank-list">
+      <li><span class="rank-num">1</span> 와인25플러스</li>
+      <li><span class="rank-num">2</span> 굽네치킨</li>
+      <li><span class="rank-num">3</span> 크록스코리아</li>
+      <li><span class="rank-num">4</span> 금상어가</li>
+      <li><span class="rank-num">5</span> 스윙어바웃</li>
+      <li><span class="rank-num">6</span> 이마트,트레이더스</li>
+      <li><span class="rank-num">7</span> 아이다스코리아</li>
+    </ol>
+  </section>
+
+  <!-- 일상을 채워주는 선물 -->
+  <section class="daily-gift-section">
+    <div class="ranking-title">
+      <h2>일상을 채워주는 선물</h2>
+    </div>
+
+    <nav class="sub-tab-menu">
+      <button class="sub-tab active">베스트셀러</button>
+      <button class="sub-tab">요즘 선물</button>
+      <button class="sub-tab">카카오 단독</button>
+      <button class="sub-tab">신규 브랜드</button>
+    </nav>
+
+    <div class="product-grid">
+      <div class="product-card-grid">
+        <div class="product-thumb">
+          <img src="img/product7.jpg" alt="애머 핑크 쿠션 [단독기획] 세트 [단독] 특별">
+        </div>
+        <p class="product-name-grid">애머 핑크 쿠션 [단독기획] 세트 [단독] 특별</p>
+        <p class="product-price-grid">23,000원</p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,535</span>
+        </div>
+      </div>
+
+      <div class="product-card-grid">
+        <div class="product-thumb">
+          <img src="img/product8.jpg" alt="애머 핑크 쿠션 [단독기획] 특별">
+        </div>
+        <p class="product-name-grid">애머 핑크 쿠션 [단독기획] 특별</p>
+        <p class="product-price-grid">11% <span>23,000원</span></p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,535</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+      <button class="page-arrow">‹</button>
+      <span class="page-info">1 / 5</span>
+      <button class="page-arrow">›</button>
+    </div>
+  </section>
+
+  <!-- 하단 고정 탭바 -->
+  <footer class="bottom-tabbar">
+    <button class="tabbar-item active">
+      <span class="tabbar-icon">🏠</span>
+      <span class="tabbar-label">홈</span>
+    </button>
+    <button class="tabbar-item">
+      <span class="tabbar-icon">📋</span>
+      <span class="tabbar-label">카테고리</span>
+    </button>
+    <button class="tabbar-item">
+      <span class="tabbar-icon">👤</span>
+      <span class="tabbar-label">선물함</span>
+    </button>
+  </footer>
+</body>
+</html>

@@ -1,6 +1,52 @@
 <!--
- * 파일: public/giftbox.html
- * 목적: 받은 선물함 화면
- * 왜 이렇게: 받은 선물을 확인하고 사용할 수 있도록 하기 위해
- * 주요: GET /api/gifts
+  파일: public/giftbox.html
+  목적: 선물함 화면 — 받은 선물 목록 보여주기
+  왜: 사용자가 받은 선물을 미사용/사용완료로 구분해서 확인하는 화면
+  주요: 미사용/사용완료 탭, 선물 목록
 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>선물함 - 선물하기</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 상단 헤더 -->
+  <header class="top-header">
+    <button class="icon-btn" onclick="location.href='index.html'">←</button>
+    <h1>선물함</h1>
+    <div style="width: 20px;"></div>
+  </header>
+
+  <!-- 미사용/사용완료 탭 -->
+  <nav class="giftbox-tab">
+    <button class="giftbox-tab-btn active" id="tab-unused">미사용</button>
+    <button class="giftbox-tab-btn" id="tab-used">사용완료</button>
+  </nav>
+
+  <!-- 선물 목록 -->
+  <main class="gift-list">
+    <div class="gift-card" onclick="location.href='gift-use.html'">
+      <img src="img/pass1.jpg" alt="익산역-시내 환승 1일권">
+      <div class="gift-info">
+        <p class="product-name">익산역-시내 환승 1일권</p>
+        <p class="gift-sender">김철수님이 보낸 선물</p>
+        <p class="gift-status">미사용</p>
+      </div>
+    </div>
+
+    <div class="gift-card" onclick="location.href='gift-use.html'">
+      <img src="img/product1.jpg" alt="베스킨라빈스 페이백 가능">
+      <div class="gift-info">
+        <p class="product-name">베스킨라빈스(페이백 가능)</p>
+        <p class="gift-sender">이영희님이 보낸 선물</p>
+        <p class="gift-status">미사용</p>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

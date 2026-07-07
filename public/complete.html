@@ -1,6 +1,49 @@
 <!--
- * 파일: public/complete.html
- * 목적: 주문 완료 화면
- * 왜 이렇게: 주문 및 선물 발송이 완료되었음을 안내하기 위해
- * 주요: GET /api/orders/:id
+  파일: public/complete.html
+  목적: 결제 완료 화면 — 주문 결과 보여주기
+  왜: 주문이 정상적으로 처리됐음을 사용자에게 확인시켜주는 화면
+  주요: 완료 아이콘, 주문 요약, 선물함/홈 이동 버튼
 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주문 완료 - 선물하기</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 상단 헤더 -->
+  <header class="top-header">
+    <div style="width: 20px;"></div>
+    <h1>주문 완료</h1>
+    <div style="width: 20px;"></div>
+  </header>
+
+  <main class="complete-page">
+
+    <!-- 완료 표시 -->
+    <div class="complete-icon">✅</div>
+    <p class="complete-title">선물이 발송되었어요!</p>
+    <p class="complete-subtitle">받는 사람의 선물함에 도착했어요</p>
+
+    <!-- 주문 요약 -->
+    <section class="order-summary">
+      <img src="img/pass1.jpg" alt="익산역-시내 환승 1일권">
+      <div class="order-summary-info">
+        <p class="product-name">익산역-시내 환승 1일권</p>
+        <p class="product-price"><span>20,470원</span></p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 하단 이동 버튼 -->
+  <footer class="bottom-bar-double">
+    <button class="btn-secondary" onclick="location.href='index.html'">홈으로</button>
+    <button class="btn-primary" onclick="location.href='giftbox.html'">선물함 보기</button>
+  </footer>
+
+</body>
+</html>

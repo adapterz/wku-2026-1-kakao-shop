@@ -1,6 +1,64 @@
 <!--
- * 파일: public/product.html
- * 목적: 상품 상세 화면
- * 왜 이렇게: 선택한 상품의 상세 정보를 제공하기 위해
- * 주요: GET /api/products/:id
+  파일: public/product.html
+  목적: 패스 상세 화면 — 패스 1개 정보 보여주고 주문서로 이동
+  왜: 사용자가 패스를 선택하면 상세 정보(경유지·소요시간·환승안내)를 확인 후 구매 결정
+  주요: 패스 이미지, 이름, 가격, 교통 상세 정보, 구매 버튼
 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>패스 상세 - 익산 환승패스 선물하기</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 상단 헤더 -->
+  <header class="top-header">
+    <button class="icon-btn" onclick="history.back()">←</button>
+    <h1>패스 상세</h1>
+    <button class="icon-btn">🛒</button>
+  </header>
+
+  <!-- 패스 대표 이미지 -->
+  <div class="product-image">
+    <img src="img/pass1.jpg" alt="익산역-시내 환승 1일권">
+  </div>
+
+  <!-- 패스 기본 정보 -->
+  <main class="product-detail">
+    <p class="product-name">익산역-시내 환승 1일권</p>
+    <p class="product-price">11% <span>23,000원</span></p>
+
+    <!-- 교통 전용 정보 (익산 버전 추가 필드) -->
+    <section class="transit-info">
+      <h2>이용 안내</h2>
+      <div class="info-row">
+        <span class="info-label">경유지</span>
+        <span class="info-value">익산역 → 시내버스터미널 → 원광대학교</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">소요시간</span>
+        <span class="info-value">약 35분</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">환승 안내</span>
+        <span class="info-value">1회 환승 가능 (버스 → 버스)</span>
+      </div>
+    </section>
+
+    <!-- 상세 설명 -->
+    <section class="product-description">
+      <h2>상품 설명</h2>
+      <p>익산역 도착 후 시내 주요 지점까지 하루 동안 자유롭게 이용 가능한 환승패스입니다.</p>
+    </section>
+  </main>
+
+  <!-- 하단 고정 구매 버튼 -->
+  <footer class="bottom-bar">
+    <button class="btn-primary" onclick="location.href='order.html'">선물하기</button>
+  </footer>
+
+</body>
+</html>
