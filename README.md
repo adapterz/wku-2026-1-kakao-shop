@@ -82,3 +82,175 @@ auth.js의 `/login`
 - 로그인/회원가입 → `server/routes/auth.js`
 - 주문 → `server/routes/orders.js` 예정
 - 선물함 → `server/routes/gifts.js` 예정
+
+## 회원가입 정보가 DB에 저장되는 흐름
+
+develop에 머지된 최신 코드를 EC2 서버에 반영하고 서버를 재시작하면, 회원가입 정보는 EC2의 MySQL DB `users` 테이블에 저장됩니다.
+
+전체 흐름은 아래와 같습니다.
+
+브라우저에서 회원가입 버튼 클릭
+→ `public/js/signup.js` 실행
+→ `/api/auth/signup`으로 POST 요청
+→ `server/app.js`가 `/api/auth` 요청을 `authRouter`로 전달
+→ `server/routes/auth.js`의 `router.post('/signup')` 실행
+→ 입력값 검증
+→ `bcrypt`로 비밀번호 해시
+→ MySQL `users` 테이블에 INSERT
+→ 성공 JSON 응답
+
+### 1. FE 화면
+
+사용자는 회원가입 화면에서 이메일, 비밀번호, 이름, 전화번호 등을 입력합니다.
+
+관련 파일:
+
+```text
+public/signup.html
+```
+
+### 2. FE JS
+
+회원가입 폼을 제출하면 아래 파일에서 form submit 이벤트를 처리합니다.
+
+```text
+public/js/signup.js
+```
+
+이 파일에서 입력값을 모아 `signupUser(payload)`를 호출합니다.
+
+```js
+await signupUser(payload);
+```
+
+### 3. 공통 API 함수
+
+`signupUser()`는 공통 API 함수 파일에 정의되어 있습니다.
+
+```text
+public/js/api.js
+```
+
+이 함수는 실제로 아래 주소로 요청을 보냅니다.
+
+```text
+POST /api/auth/signup
+```
+
+### 4. Express 서버 입구
+
+Express 서버의 시작점은 아래 파일입니다.
+
+```text
+server/app.js
+```
+
+`app.js`에는 다음 코드가 있습니다.
+
+```js
+app.use('/api/auth', authRouter);
+```
+
+이 코드는 아래 의미입니다.
+
+```text
+/api/auth 로 시작하는 요청은 server/routes/auth.js로 보낸다.
+```
+
+### 5. Auth 라우터
+
+회원가입 API는 아래 파일에서 처리합니다.
+
+```text
+server/routes/auth.js
+```
+
+이 안에는 다음 route가 있습니다.
+
+```js
+router.post('/signup', async (req, res) => {
+  ...
+});
+```
+
+`app.js`의 `/api/auth`와 `auth.js`의 `/signup`이 합쳐져 실제 API 주소가 됩니다.
+
+```text
+POST /api/auth/signup
+```
+
+### 6. 비밀번호 해시
+
+회원가입 시 비밀번호는 그대로 저장하지 않습니다.
+
+```js
+const passwordHash = await bcrypt.hash(password, 10);
+```
+
+즉, 사용자가 입력한 비밀번호를 `bcrypt` 해시값으로 바꾼 뒤 DB에 저장합니다.
+
+### 7. DB 저장
+
+회원 정보는 MySQL `users` 테이블에 저장됩니다.
+
+```sql
+INSERT INTO users (email, password, name, phone, birth_date, gender)
+VALUES (?, ?, ?, ?, ?, ?)
+```
+
+여기서 중요한 점은 SQL에 직접 값을 문자열로 붙이지 않고, `?` 파라미터 바인딩을 사용한다는 점입니다.
+
+### 8. EC2에서 DB가 연결되는 방식
+
+EC2 서버 안의 `.env`가 아래처럼 설정되어 있으면:
+
+```text
+DB_HOST=127.0.0.1
+DB_NAME=kakao_gift
+```
+
+EC2에서 실행 중인 Node 서버는 같은 EC2 안의 MySQL DB에 연결합니다.
+
+즉, EC2에서 서비스가 실행 중일 때 회원가입을 하면 EC2 MySQL의 `kakao_gift.users` 테이블에 데이터가 저장됩니다.
+
+### 9. 배포 후 반영 순서
+
+auth API가 develop에 머지된 뒤 EC2에 반영하려면 아래 순서로 진행합니다.
+
+```bash
+cd /home/ubuntu/wku-2026-1-kakao-shop
+git switch develop
+git pull origin develop
+npm install
+pm2 restart all
+```
+
+### 최종 정리
+
+회원가입 저장 흐름은 아래와 같습니다.
+
+```text
+FE 입력
+→ signup.js
+→ api.js
+→ POST /api/auth/signup
+→ app.js
+→ auth.js
+→ bcrypt 해시
+→ users 테이블 INSERT
+→ 회원가입 완료
+```
+
+정상 반영 후 아래 화면에서 회원가입하면 DB에 저장됩니다.
+
+```text
+http://3.26.95.225:3000/signup.html
+```
+
+단, 아래 조건이 충족되어야 합니다.
+
+- auth API PR이 `develop`에 머지되어 있어야 합니다.
+- EC2에서 최신 `develop`을 pull 해야 합니다.
+- `npm install`로 `bcrypt`, `express-session`이 설치되어야 합니다.
+- `pm2 restart all`로 서버가 재시작되어야 합니다.
+- EC2의 `.env` DB 접속 정보가 올바르게 설정되어 있어야 합니다.
