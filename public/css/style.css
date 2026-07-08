@@ -635,6 +635,23 @@ body > * {
   cursor: pointer;
 }
 
+.auth-message {
+  min-height: 18px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #777777;
+  text-align: center;
+}
+
+.auth-message[data-type="success"] {
+  color: #0074c8;
+}
+
+.auth-message[data-type="error"] {
+  color: #d93025;
+}
+
 .auth-links {
   display: flex;
   justify-content: center;

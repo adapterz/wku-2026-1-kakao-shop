@@ -1,0 +1,41 @@
+/*
+ * 파일: public/js/login.js
+ * 목적: 로그인 화면에서 입력값을 수집하고 로그인 API를 호출합니다.
+ * 주요: form submit 처리, POST /api/auth/login 요청, 성공/실패 메시지 처리
+ */
+
+const loginForm = document.querySelector('[data-login-form]');
+const loginMessage = document.querySelector('[data-auth-message]');
+
+function setLoginMessage(message, type = 'info') {
+  if (!loginMessage) return;
+
+  loginMessage.textContent = message;
+  loginMessage.dataset.type = type;
+}
+
+if (loginForm) {
+  loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(loginForm);
+    const payload = {
+      email: String(formData.get('email') || '').trim(),
+      password: String(formData.get('password') || ''),
+    };
+
+    if (!payload.email || !payload.password) {
+      setLoginMessage('이메일과 비밀번호를 입력해주세요.', 'error');
+      return;
+    }
+
+    try {
+      setLoginMessage('로그인 요청 중입니다.', 'info');
+      await loginUser(payload);
+      setLoginMessage('로그인되었습니다. 홈으로 이동합니다.', 'success');
+      window.location.href = 'index.html';
+    } catch (error) {
+      setLoginMessage(error.message || '로그인에 실패했습니다.', 'error');
+    }
+  });
+}

@@ -5,14 +5,21 @@
  * 주요: fetch 요청/응답 처리, 에러 핸들링
  */
 
-async function requestJson(url) {
-  const response = await fetch(url);
+async function requestJson(url, options = {}) {
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+      ...(options.headers || {}),
+    },
+  });
+  const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status}`);
+    throw new Error(data.message || `API request failed: ${response.status}`);
   }
 
-  return response.json();
+  return data;
 }
 
 async function fetchProducts() {
@@ -21,4 +28,18 @@ async function fetchProducts() {
 
 async function fetchProductDetail(productId) {
   return requestJson(`/api/products/${productId}`);
+}
+
+async function loginUser(payload) {
+  return requestJson('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+async function signupUser(payload) {
+  return requestJson('/api/auth/signup', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
 }
