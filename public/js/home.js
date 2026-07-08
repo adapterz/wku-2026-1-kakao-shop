@@ -19,8 +19,8 @@ async function loadProducts() {
   try {
     productList.innerHTML = '<p class="loading-message">상품 정보를 불러오는 중입니다.</p>';
 
-    const data = await fetchProducts();
-    const products = data.products || [];
+    const response = await fetchProducts();
+    const products = Array.isArray(response.data) ? response.data : [];
 
     if (products.length === 0) {
       productList.innerHTML = '<p class="empty-message">표시할 환승패스 상품이 없습니다.</p>';
