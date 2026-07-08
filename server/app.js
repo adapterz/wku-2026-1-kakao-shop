@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 // 로그인 상태 유지를 위한 세션 설정
+// auth 라우터보다 먼저 등록해야 /api/auth 내부에서 req.session을 사용할 수 있습니다.
 app.use(
   session({
     name: 'iksan.sid',
@@ -31,6 +32,7 @@ app.use(
 app.use(express.static(path.join(__dirname, '../public')));
 
 // API 라우터
+// 인증 라우터를 먼저 연결하고, 상품 조회 라우터를 별도 경로로 분리해 관리합니다.
 app.use('/api/auth', authRouter);
 app.use('/api/products', productsRouter);
 

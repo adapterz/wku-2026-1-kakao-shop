@@ -7,6 +7,10 @@ const { requireLogin } = require('../middleware/auth');
 const router = express.Router();
 const BCRYPT_SALT_ROUNDS = 10;
 
+/**
+ * DB 컬럼명(snake_case)을 API 응답 필드(camelCase)로 변환합니다.
+ * 비밀번호는 응답에 절대 포함하지 않습니다.
+ */
 function toUserResponse(row) {
   return {
     userId: row.id,
@@ -19,6 +23,10 @@ function toUserResponse(row) {
   };
 }
 
+/**
+ * 로그인 성공 후 세션에는 최소 사용자 정보만 저장합니다.
+ * 이후 requireLogin 미들웨어와 /me API가 이 값을 기준으로 로그인 여부를 판단합니다.
+ */
 function setSessionUser(req, user) {
   req.session.user = {
     userId: user.id,
@@ -27,6 +35,9 @@ function setSessionUser(req, user) {
   };
 }
 
+/**
+ * 로그인 직전에 세션을 새로 발급해 기존 세션 재사용 위험을 줄입니다.
+ */
 function regenerateSession(req) {
   return new Promise((resolve, reject) => {
     req.session.regenerate((error) => {
@@ -59,6 +70,7 @@ router.post('/signup', async (req, res) => {
       birthDate = null,
       gender = null,
     } = req.body || {};
+    // 이메일은 로그인 식별자로 사용하므로 공백 제거 후 소문자로 통일합니다.
     const normalizedEmail = String(email).trim().toLowerCase();
 
     if (!normalizedEmail || !password || !name || !phone) {
@@ -74,6 +86,7 @@ router.post('/signup', async (req, res) => {
       return sendError(res, 409, 'already_registered_email');
     }
 
+    // 비밀번호는 평문 저장 금지. bcrypt 해시만 DB에 저장합니다.
     const passwordHash = await bcrypt.hash(String(password), BCRYPT_SALT_ROUNDS);
     const [result] = await pool.query(
       `
@@ -121,6 +134,7 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email = '', password = '' } = req.body || {};
+    // 회원가입과 동일하게 이메일을 정규화해 대소문자 차이로 로그인 실패하지 않게 합니다.
     const normalizedEmail = String(email).trim().toLowerCase();
 
     if (!normalizedEmail || !password) {
@@ -145,6 +159,7 @@ router.post('/login', async (req, res) => {
     );
 
     if (users.length === 0) {
+      // 계정 존재 여부가 드러나지 않도록 비밀번호 오류와 같은 메시지를 사용합니다.
       return sendError(res, 401, 'invalid_email_or_password');
     }
 
@@ -152,6 +167,7 @@ router.post('/login', async (req, res) => {
     const passwordMatched = await bcrypt.compare(String(password), user.password);
 
     if (!passwordMatched) {
+      // 계정 존재 여부가 드러나지 않도록 이메일 오류와 같은 메시지를 사용합니다.
       return sendError(res, 401, 'invalid_email_or_password');
     }
 
