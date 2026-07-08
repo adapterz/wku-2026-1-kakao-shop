@@ -90,62 +90,8 @@
       <button class="price-btn">4만원대</button>
     </div>
 
-    <div class="product-grid">
-      <div class="product-card-grid">
-        <div class="product-thumb">
-          <img src="img/product1.jpg" alt="시내버스 무제한 1일 패스">
-          <button class="bookmark-btn">🔖</button>
-        </div>
-        <p class="product-brand">익산교통</p>
-        <p class="product-name-grid">시내버스 무제한 1일 패스</p>
-        <p class="product-price-grid">추천 <span>5,000원</span></p>
-        <div class="product-like">
-          <span class="like-icon">❤️</span>
-          <span class="like-count">1,536</span>
-        </div>
-      </div>
-
-      <div class="product-card-grid">
-        <div class="product-thumb">
-          <img src="img/pass1.jpg" alt="익산역-시내 환승 1일권">
-          <button class="bookmark-btn">🔖</button>
-        </div>
-        <p class="product-brand">익산시티패스</p>
-        <p class="product-name-grid">익산역-시내 환승 1일권</p>
-        <p class="product-price-grid">인기 <span>8,000원</span></p>
-        <div class="product-like">
-          <span class="like-icon">❤️</span>
-          <span class="like-count">982</span>
-        </div>
-      </div>
-
-      <div class="product-card-grid">
-        <div class="product-thumb">
-          <img src="img/product2.jpg" alt="광역 시내 통합 환승 10회권">
-          <button class="bookmark-btn">🔖</button>
-        </div>
-        <p class="product-brand">익산교통</p>
-        <p class="product-name-grid">광역·시내 통합 환승 10회권</p>
-        <p class="product-price-grid">실속 <span>18,000원</span></p>
-        <div class="product-like">
-          <span class="like-icon">❤️</span>
-          <span class="like-count">1,535</span>
-        </div>
-      </div>
-
-      <div class="product-card-grid">
-        <div class="product-thumb">
-          <img src="img/product3.jpg" alt="익산 관광 순환버스 패스">
-          <button class="bookmark-btn">🔖</button>
-        </div>
-        <p class="product-brand">익산여행패스</p>
-        <p class="product-name-grid">익산 관광 순환버스 패스</p>
-        <p class="product-price-grid">코스 <span>12,000원</span></p>
-        <div class="product-like">
-          <span class="like-icon">❤️</span>
-          <span class="like-count">1,535</span>
-        </div>
-      </div>
+    <div id="product-list" class="product-grid">
+      <p class="loading-message">상품 정보를 불러오는 중입니다.</p>
     </div>
 
     <button class="more-btn">더보기 ⌄</button>
@@ -282,5 +228,7 @@
     </button>
   </footer>
 
+  <script src="js/api.js"></script>
+  <script src="js/home.js"></script>
 </body>
 </html>
