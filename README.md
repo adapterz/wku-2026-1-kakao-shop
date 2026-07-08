@@ -83,7 +83,10 @@ auth.js의 `/login`
 - 주문 → `server/routes/orders.js` 예정
 - 선물함 → `server/routes/gifts.js` 예정
 
-## 회원가입 정보가 DB에 저장되는 흐름
+
+
+
+## 회원가입 정보가 DB에 저장되는 흐름 (로그인 /회원가입 작동 흐름)
 
 develop에 머지된 최신 코드를 EC2 서버에 반영하고 서버를 재시작하면, 회원가입 정보는 EC2의 MySQL DB `users` 테이블에 저장됩니다.
 
