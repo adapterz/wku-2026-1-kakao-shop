@@ -24,18 +24,33 @@ body > * {
   max-width: 430px;
 }
 
-/* 상단 헤더 */
+/* 상단 헤더 (익산 보석빛 그라데이션) */
 .top-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
-  background-color: #ffffff;
+  padding: 14px 16px;
+  background: linear-gradient(120deg, #003d7a 0%, #005bac 55%, #2a90d0 100%);
 }
 
 .top-header h1 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 18px;
   font-weight: bold;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+}
+
+.iksan-logo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  padding: 3px;
+  background-color: #ffffff;
+  border-radius: 9px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .icon-btn {
@@ -43,6 +58,7 @@ body > * {
   border: none;
   font-size: 20px;
   cursor: pointer;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
 }
 
 .icon-btn.small {
@@ -70,9 +86,9 @@ body > * {
 }
 
 .tab.active {
-  color: #111111;
+  color: #005bac;
   font-weight: bold;
-  border-bottom: 2px solid #111111;
+  border-bottom: 2px solid #005bac;
 }
 
 /* 서브탭 (선물테마/카테고리/추천브랜드) */
@@ -92,7 +108,7 @@ body > * {
 }
 
 .sub-tab.active {
-  color: #111111;
+  color: #005bac;
   font-weight: bold;
 }
 
@@ -132,6 +148,7 @@ body > * {
 /* 배너 */
 .banner {
   padding: 12px 16px;
+  position: relative;
 }
 
 .banner img {
@@ -140,6 +157,69 @@ body > * {
   object-fit: cover;
   border-radius: 8px;
   background-color: #dddddd;
+}
+
+/* 마룡이 마스코트 뱃지 (배너 위 오버레이) */
+.mascot-badge {
+  position: absolute;
+  left: 24px;
+  bottom: -10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mascot-avatar {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  padding: 2px;
+  background: linear-gradient(135deg, #2a90d0, #6a016f);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.mascot-avatar img,
+.mascot-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #ffffff;
+}
+
+.mascot-avatar img {
+  object-fit: cover;
+}
+
+.mascot-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.mascot-speech {
+  position: relative;
+  background-color: #ffffff;
+  border: 1px solid #2a90d0;
+  border-radius: 14px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #003d7a;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.mascot-speech::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 5px 6px 5px 0;
+  border-style: solid;
+  border-color: transparent #2a90d0 transparent transparent;
 }
 
 /* 실시간 랭킹 섹션 */
@@ -181,9 +261,9 @@ body > * {
 }
 
 .filter-btn.active, .sort-btn.active, .price-btn.active {
-  background-color: #111111;
+  background-color: #005bac;
   color: #ffffff;
-  border-color: #111111;
+  border-color: #005bac;
 }
 
 /* 상품 목록 (세로형 카드, 상세/기타 화면 재사용) */
@@ -427,7 +507,7 @@ body > * {
 }
 
 .tabbar-item.active {
-  color: #111111;
+  color: #005bac;
   font-weight: bold;
 }
 
