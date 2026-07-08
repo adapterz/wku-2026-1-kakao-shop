@@ -3,6 +3,8 @@ const { pool } = require('../db');
 const { sendSuccess, sendError } = require('../utils/response');
 
 const router = express.Router();
+// DB 연결 전 FE-BE 흐름만 확인할 때 사용하는 임시 옵션입니다.
+// M1/M2 통합 기준에서는 이 값을 끄고 실제 products 테이블을 조회합니다.
 const useDummyProducts = process.env.USE_DUMMY_PRODUCTS === 'true';
 
 const dummyProductRows = [

@@ -11,6 +11,7 @@
 | 파일 | `package.json` | Node.js 프로젝트 설정 파일입니다. 프로젝트 이름, 실행 스크립트(`npm run dev`, `npm start`), 설치해야 할 패키지 목록을 관리합니다. |
 | 파일 | `package-lock.json` | npm 패키지의 정확한 설치 버전을 고정하는 파일입니다. 팀원들이 `npm install`을 했을 때 최대한 같은 버전의 패키지가 설치되도록 도와줍니다. |
 
+
 ## 이해한 내용 정리
 
 - `db/`는 DB 테이블 구조와 초기 데이터를 관리하는 폴더이다.
@@ -27,3 +28,57 @@
 
 - home.js는 api가 가져온 파일들을 화면에 출력하고 배치하는 코드. (+예외상황 출력)
 물품 조회 api가 해당 데이터를 가져오면 어떤 물품을 어디에 배치할지 정해서 실행 데이터없으면 상황에 맞는 메세지출력
+
+## Express 라우터 구조 이해
+
+Express 서버에서는 요청 주소에 따라 처리할 코드를 나누기 위해 라우터(router)를 사용합니다.
+
+전체 흐름은 아래와 같습니다.
+
+브라우저/FE 요청
+→ server/app.js
+→ app.js가 주소 앞부분으로 1차 분류
+→ 해당 router 파일로 이동
+→ router 안의 개별 route가 실제 요청 처리
+→ JSON 응답 반환
+
+우리 프로젝트에서는 `server/app.js`가 API의 큰 입구 역할을 합니다.
+
+예시:
+
+app.use('/api/auth', authRouter);
+app.use('/api/products', productsRouter);
+
+위 코드는 다음과 같은 의미입니다.
+
+- `/api/auth`로 시작하는 요청 → `server/routes/auth.js`에서 처리
+- `/api/products`로 시작하는 요청 → `server/routes/products.js`에서 처리
+
+라우터 파일 안에서는 세부 주소별로 실제 처리 코드를 나눕니다.
+
+예시:
+
+router.post('/login', ...)
+router.post('/signup', ...)
+router.get('/me', ...)
+
+예를 들어 아래 두 코드가 합쳐지면 실제 API 주소가 됩니다.
+
+app.js의 `/api/auth`
++
+auth.js의 `/login`
+=
+`POST /api/auth/login`
+
+정리하면 다음과 같습니다.
+
+- `app.js` = 큰 접수처
+- `router 파일` = 업무별 담당 창구
+- `route` = 실제 요청을 처리하는 코드
+
+현재 프로젝트 기준으로는 아래처럼 나눠서 관리합니다.
+
+- 상품 조회 → `server/routes/products.js`
+- 로그인/회원가입 → `server/routes/auth.js`
+- 주문 → `server/routes/orders.js` 예정
+- 선물함 → `server/routes/gifts.js` 예정

@@ -6,6 +6,7 @@
  */
 
 async function requestJson(url, options = {}) {
+  // GET/POST 등 모든 JSON API 호출에서 공통으로 사용하는 fetch 래퍼입니다.
   const response = await fetch(url, {
     ...options,
     headers: {
@@ -16,6 +17,7 @@ async function requestJson(url, options = {}) {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
+    // BE가 내려준 message를 화면 JS에서 그대로 표시할 수 있도록 Error로 넘깁니다.
     throw new Error(data.message || `API request failed: ${response.status}`);
   }
 

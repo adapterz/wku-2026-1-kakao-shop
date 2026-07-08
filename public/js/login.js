@@ -16,6 +16,7 @@ function setLoginMessage(message, type = 'info') {
 
 if (loginForm) {
   loginForm.addEventListener('submit', async (event) => {
+    // form의 기본 새로고침을 막고 JS에서 API 요청 흐름을 직접 제어합니다.
     event.preventDefault();
 
     const formData = new FormData(loginForm);
@@ -24,6 +25,7 @@ if (loginForm) {
       password: String(formData.get('password') || ''),
     };
 
+    // FE에서는 빈 값만 먼저 막고, 계정 검증은 BE auth API가 최종 판단합니다.
     if (!payload.email || !payload.password) {
       setLoginMessage('이메일과 비밀번호를 입력해주세요.', 'error');
       return;

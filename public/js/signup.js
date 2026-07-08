@@ -16,6 +16,7 @@ function setSignupMessage(message, type = 'info') {
 
 if (signupForm) {
   signupForm.addEventListener('submit', async (event) => {
+    // form의 기본 새로고침을 막고 JS에서 API 요청 흐름을 직접 제어합니다.
     event.preventDefault();
 
     const formData = new FormData(signupForm);
@@ -27,8 +28,10 @@ if (signupForm) {
       birthDate: String(formData.get('birthDate') || ''),
       gender: String(formData.get('gender') || ''),
     };
+    // passwordConfirm은 화면 검증용 값이라 BE로 보내지 않습니다.
     const passwordConfirm = String(formData.get('passwordConfirm') || '');
 
+    // 회원가입 payload는 ERD/API에서 약속한 users 필드 기준으로 구성합니다.
     if (!payload.email || !payload.password || !payload.name || !payload.phone) {
       setSignupMessage('필수 입력값을 확인해주세요.', 'error');
       return;
