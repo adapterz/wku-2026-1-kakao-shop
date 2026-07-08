@@ -1,0 +1,440 @@
+ /*
+ * 파일: public/css/style.css
+ * 목적: 전체 화면 공통 스타일 (모바일 기준 390px)
+ * 왜: 모든 페이지가 공통으로 쓰는 레이아웃과 디자인을 한 곳에서 관리
+ * 주요: 모바일 폭 설정, 공통 색상, 여백, 폰트, 홈 화면 구성요소 스타일
+ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+body > * {
+  width: 100%;
+  max-width: 430px;
+}
+
+/* 상단 헤더 */
+.top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: #ffffff;
+}
+
+.top-header h1 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.icon-btn.small {
+  font-size: 14px;
+}
+
+/* 탭 메뉴 */
+.tab-menu {
+  display: flex;
+  overflow-x: auto;
+  background-color: #ffffff;
+  padding: 8px 16px;
+  gap: 12px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.tab {
+  background: none;
+  border: none;
+  padding: 8px 4px;
+  font-size: 14px;
+  color: #888888;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab.active {
+  color: #111111;
+  font-weight: bold;
+  border-bottom: 2px solid #111111;
+}
+
+/* 서브탭 (선물테마/카테고리/추천브랜드) */
+.sub-tab-menu {
+  display: flex;
+  gap: 20px;
+  padding: 12px 16px;
+  background-color: #ffffff;
+}
+
+.sub-tab {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #888888;
+  cursor: pointer;
+}
+
+.sub-tab.active {
+  color: #111111;
+  font-weight: bold;
+}
+
+/* 원형 카테고리 아이콘 목록 */
+.category-icons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px 8px;
+  padding: 16px;
+  background-color: #ffffff;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.category-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.category-item span {
+  font-size: 11px;
+  color: #555555;
+  text-align: center;
+}
+
+/* 배너 */
+.banner {
+  padding: 12px 16px;
+}
+
+.banner img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #dddddd;
+}
+
+/* 실시간 랭킹 섹션 */
+.ranking-section {
+  padding: 16px;
+}
+
+.ranking-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ranking-title h2 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* 필터 공통 (성별, 정렬, 가격대) */
+.filter-row, .sort-row, .price-filter-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 10px;
+  padding-bottom: 4px;
+}
+
+.filter-btn, .sort-btn, .price-btn {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border: 1px solid #dddddd;
+  border-radius: 16px;
+  background-color: #ffffff;
+  font-size: 12px;
+  color: #888888;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.filter-btn.active, .sort-btn.active, .price-btn.active {
+  background-color: #111111;
+  color: #ffffff;
+  border-color: #111111;
+}
+
+/* 상품 목록 (세로형 카드, 상세/기타 화면 재사용) */
+.product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.product-card {
+  display: flex;
+  gap: 12px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.product-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #dddddd;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* 상품 그리드 2열 (홈 화면용) */
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.product-card-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-thumb {
+  position: relative;
+}
+
+.product-thumb img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #dddddd;
+}
+
+.bookmark-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255,255,255,0.8);
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.product-brand {
+  font-size: 11px;
+  color: #888888;
+  margin-top: 6px;
+}
+
+.product-name {
+  font-size: 14px;
+  color: #333333;
+}
+
+.product-name-grid {
+  font-size: 13px;
+  color: #333333;
+  margin-top: 2px;
+}
+
+.product-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ff5722;
+}
+
+.product-price span {
+  color: #111111;
+}
+
+.product-price-grid {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ff5722;
+  margin-top: 4px;
+}
+
+.product-price-grid span {
+  color: #111111;
+}
+
+.product-like {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #888888;
+}
+
+/* 더보기 버튼 */
+.more-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 16px;
+  background: none;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  color: #555555;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* 금주의 브랜드 / 인기 브랜드 / 일상을 채워주는 선물 공통 */
+.brand-section, .popular-brand-section, .daily-gift-section {
+  padding: 16px;
+  background-color: #ffffff;
+  margin-top: 8px;
+}
+
+.brand-section h2, .popular-brand-section h2, .daily-gift-section h2 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.brand-sub-tab {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  margin-bottom: 12px;
+}
+
+.brand-banner img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #dddddd;
+  margin-bottom: 12px;
+}
+
+.brand-product-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.brand-product-item {
+  flex-shrink: 0;
+  width: 100px;
+}
+
+.brand-product-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #dddddd;
+}
+
+/* 인기 브랜드 순위 리스트 */
+.brand-rank-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.brand-rank-list li {
+  font-size: 14px;
+  color: #333333;
+}
+
+.rank-num {
+  display: inline-block;
+  width: 20px;
+  font-weight: bold;
+  color: #ff5722;
+}
+
+/* 페이지네이션 */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.page-arrow {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #888888;
+}
+
+.page-info {
+  font-size: 13px;
+  color: #555555;
+}
+
+/* 하단 고정 탭바 */
+.bottom-tabbar {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  background-color: #ffffff;
+  border-top: 1px solid #eeeeee;
+  padding: 8px 0;
+}
+
+.tabbar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888888;
+}
+
+.tabbar-item.active {
+  color: #111111;
+  font-weight: bold;
+}
+
+.tabbar-icon {
+  font-size: 18px;
+}
+
+.tabbar-label {
+  font-size: 11px;
+}

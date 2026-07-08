@@ -1,0 +1,286 @@
+<!--
+  파일: public/index.html
+  목적: 홈 화면 — 익산 환승패스 상품 목록 보여주기
+  왜: 사용자가 처음 접속했을 때 익산 교통권과 이동 코스를 둘러보는 메인 화면
+  주요: 상단 타이틀, 탭 메뉴, 환승패스 상품 목록
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>익산 환승패스 선물하기</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 상단 헤더 -->
+  <header class="top-header">
+    <button class="icon-btn">🛒</button>
+    <h1>익산 환승패스</h1>
+    <button class="icon-btn">🔍</button>
+  </header>
+
+  <!-- 탭 메뉴 -->
+  <nav class="tab-menu">
+    <button class="tab active">추천 패스</button>
+    <button class="tab">익산역</button>
+    <button class="tab">시내버스</button>
+    <button class="tab">관광 코스</button>
+    <button class="tab">환승권</button>
+    <button class="tab">당일권</button>
+  </nav>
+
+  <!-- 선물테마 서브탭 -->
+  <nav class="sub-tab-menu">
+    <button class="sub-tab active">이동 테마</button>
+    <button class="sub-tab">패스 종류</button>
+    <button class="sub-tab">추천 코스</button>
+  </nav>
+
+  <!-- 원형 카테고리 아이콘 목록 -->
+  <section class="category-icons">
+    <div class="category-item"><div class="category-circle">🚉</div><span>익산역 도착</span></div>
+    <div class="category-item"><div class="category-circle">🚌</div><span>시내 이동</span></div>
+    <div class="category-item"><div class="category-circle">🔁</div><span>환승 패스</span></div>
+    <div class="category-item"><div class="category-circle">🎫</div><span>1일권</span></div>
+    <div class="category-item"><div class="category-circle">🗺️</div><span>관광 코스</span></div>
+    <div class="category-item"><div class="category-circle">🏛️</div><span>문화유산</span></div>
+    <div class="category-item"><div class="category-circle">🌿</div><span>당일 여행</span></div>
+    <div class="category-item"><div class="category-circle">🛍️</div><span>상권 연계</span></div>
+    <div class="category-item"><div class="category-circle">👨‍👩‍👧</div><span>가족 이동</span></div>
+    <div class="category-item"><div class="category-circle">🎒</div><span>학생 추천</span></div>
+    <div class="category-item"><div class="category-circle">💳</div><span>10회권</span></div>
+    <div class="category-item"><div class="category-circle">⏰</div><span>24시간</span></div>
+    <div class="category-item"><div class="category-circle">📍</div><span>주요 정류장</span></div>
+    <div class="category-item"><div class="category-circle">🎁</div><span>선물 추천</span></div>
+    <div class="category-item"><div class="category-circle">✅</div><span>사용 가능</span></div>
+  </section>
+
+  <!-- 배너 -->
+  <section class="banner">
+    <img src="img/banner1.jpg" alt="익산 환승패스 프로모션 배너">
+  </section>
+
+  <!-- 인기 환승패스 -->
+  <section class="ranking-section">
+    <div class="ranking-title">
+      <h2>인기 환승패스</h2>
+      <button class="icon-btn small">🔄</button>
+    </div>
+
+    <div class="filter-row">
+      <button class="filter-btn active">전체</button>
+      <button class="filter-btn">익산역</button>
+      <button class="filter-btn">시내</button>
+      <button class="filter-btn">관광</button>
+    </div>
+
+    <div class="sort-row">
+      <button class="sort-btn active">많이 찾는</button>
+      <button class="sort-btn">선물 인기</button>
+      <button class="sort-btn">당일 추천</button>
+    </div>
+
+    <div class="price-filter-row">
+      <button class="price-btn">1만원 미만</button>
+      <button class="price-btn">1만원대</button>
+      <button class="price-btn active">2만원대</button>
+      <button class="price-btn">3만원대</button>
+      <button class="price-btn">4만원대</button>
+    </div>
+
+    <div class="product-grid">
+      <div class="product-card-grid">
+        <div class="product-thumb">
+          <img src="img/product1.jpg" alt="시내버스 무제한 1일 패스">
+          <button class="bookmark-btn">🔖</button>
+        </div>
+        <p class="product-brand">익산교통</p>
+        <p class="product-name-grid">시내버스 무제한 1일 패스</p>
+        <p class="product-price-grid">추천 <span>5,000원</span></p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,536</span>
+        </div>
+      </div>
+
+      <div class="product-card-grid">
+        <div class="product-thumb">
+          <img src="img/pass1.jpg" alt="익산역-시내 환승 1일권">
+          <button class="bookmark-btn">🔖</button>
+        </div>
+        <p class="product-brand">익산시티패스</p>
+        <p class="product-name-grid">익산역-시내 환승 1일권</p>
+        <p class="product-price-grid">인기 <span>8,000원</span></p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">982</span>
+        </div>
+      </div>
+
+      <div class="product-card-grid">
+        <div class="product-thumb">
+          <img src="img/product2.jpg" alt="광역 시내 통합 환승 10회권">
+          <button class="bookmark-btn">🔖</button>
+        </div>
+        <p class="product-brand">익산교통</p>
+        <p class="product-name-grid">광역·시내 통합 환승 10회권</p>
+        <p class="product-price-grid">실속 <span>18,000원</span></p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,535</span>
+        </div>
+      </div>
+
+      <div class="product-card-grid">
+        <div class="product-thumb">
+          <img src="img/product3.jpg" alt="익산 관광 순환버스 패스">
+          <button class="bookmark-btn">🔖</button>
+        </div>
+        <p class="product-brand">익산여행패스</p>
+        <p class="product-name-grid">익산 관광 순환버스 패스</p>
+        <p class="product-price-grid">코스 <span>12,000원</span></p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,535</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="more-btn">더보기 ⌄</button>
+  </section>
+
+  <!-- 추천 이동 코스 -->
+  <section class="brand-section">
+    <h2>추천 이동 코스</h2>
+    <nav class="brand-sub-tab">
+      <button class="sub-tab active">익산역</button>
+      <button class="sub-tab">문화유산</button>
+      <button class="sub-tab">중앙시장</button>
+      <button class="sub-tab">당일여행</button>
+    </nav>
+
+    <div class="brand-banner">
+      <img src="img/brand-banner1.jpg" alt="추천 이동 코스 배너">
+    </div>
+
+    <div class="brand-product-row">
+      <div class="brand-product-item">
+        <img src="img/product4.jpg" alt="익산역 중앙시장 코스">
+        <p class="product-name-grid">익산역 중앙시장 코스</p>
+        <p class="product-price-grid">6,000원</p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,535</span>
+        </div>
+      </div>
+      <div class="brand-product-item">
+        <img src="img/product5.jpg" alt="미륵사지 문화유산 코스">
+        <p class="product-name-grid">미륵사지 문화유산 코스</p>
+        <p class="product-price-grid">9,000원</p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,535</span>
+        </div>
+      </div>
+      <div class="brand-product-item">
+        <img src="img/product6.jpg" alt="익산 시내 당일 이동권">
+        <p class="product-name-grid">익산 시내 당일 이동권</p>
+        <p class="product-price-grid">5,000원</p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,535</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 인기 이용 구간 -->
+  <section class="popular-brand-section">
+    <div class="ranking-title">
+      <h2>인기 이용 구간</h2>
+      <button class="icon-btn small">🔄</button>
+    </div>
+
+    <div class="filter-row">
+      <button class="filter-btn">전체</button>
+      <button class="filter-btn active">관광</button>
+      <button class="filter-btn">생활</button>
+    </div>
+
+    <ol class="brand-rank-list">
+      <li><span class="rank-num">1</span> 익산역 → 중앙시장</li>
+      <li><span class="rank-num">2</span> 익산역 → 미륵사지</li>
+      <li><span class="rank-num">3</span> 익산역 → 원광대학교</li>
+      <li><span class="rank-num">4</span> 익산역 → 보석박물관</li>
+      <li><span class="rank-num">5</span> 익산역 → 시외버스터미널</li>
+      <li><span class="rank-num">6</span> 중앙시장 → 문화예술의거리</li>
+      <li><span class="rank-num">7</span> 원광대학교 → 익산역</li>
+    </ol>
+  </section>
+
+  <!-- 익산 이동을 채워주는 패스 -->
+  <section class="daily-gift-section">
+    <div class="ranking-title">
+      <h2>익산 이동을 채워주는 패스</h2>
+    </div>
+
+    <nav class="sub-tab-menu">
+      <button class="sub-tab active">베스트 패스</button>
+      <button class="sub-tab">출퇴근</button>
+      <button class="sub-tab">관광</button>
+      <button class="sub-tab">신규 코스</button>
+    </nav>
+
+    <div class="product-grid">
+      <div class="product-card-grid">
+        <div class="product-thumb">
+          <img src="img/product7.jpg" alt="익산 생활권 5회 환승권">
+        </div>
+        <p class="product-name-grid">익산 생활권 5회 환승권</p>
+        <p class="product-price-grid">10,000원</p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,535</span>
+        </div>
+      </div>
+
+      <div class="product-card-grid">
+        <div class="product-thumb">
+          <img src="img/product8.jpg" alt="익산 주말 관광 패스">
+        </div>
+        <p class="product-name-grid">익산 주말 관광 패스</p>
+        <p class="product-price-grid">추천 <span>15,000원</span></p>
+        <div class="product-like">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">1,535</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination">
+      <button class="page-arrow">‹</button>
+      <span class="page-info">1 / 5</span>
+      <button class="page-arrow">›</button>
+    </div>
+  </section>
+
+  <!-- 하단 고정 탭바 -->
+  <footer class="bottom-tabbar">
+    <button class="tabbar-item active">
+      <span class="tabbar-icon">🏠</span>
+      <span class="tabbar-label">홈</span>
+    </button>
+    <button class="tabbar-item">
+      <span class="tabbar-icon">📋</span>
+      <span class="tabbar-label">패스</span>
+    </button>
+    <button class="tabbar-item">
+      <span class="tabbar-icon">👤</span>
+      <span class="tabbar-label">선물함</span>
+    </button>
+  </footer>
+
+</body>
+</html>
