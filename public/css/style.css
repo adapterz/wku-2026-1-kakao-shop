@@ -1023,3 +1023,69 @@ body > * {
   font-weight: bold;
   cursor: pointer;
 }
+
+/* 선물함 탭 (미사용/사용완료) */
+.giftbox-tab {
+  display: flex;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.giftbox-tab-btn {
+  flex: 1;
+  padding: 14px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #888888;
+  cursor: pointer;
+}
+
+.giftbox-tab-btn.active {
+  color: #005bac;
+  font-weight: bold;
+  border-bottom: 2px solid #005bac;
+}
+
+/* 선물 목록 */
+.gift-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.gift-card {
+  display: flex;
+  gap: 12px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.gift-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #dddddd;
+}
+
+.gift-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.gift-sender {
+  font-size: 12px;
+  color: #888888;
+  margin-top: 4px;
+}
+
+.gift-date {
+  font-size: 11px;
+  color: #aaaaaa;
+}
