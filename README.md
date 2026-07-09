@@ -194,17 +194,20 @@ const passwordHash = await bcrypt.hash(password, 10);
 
 ### 7. DB 저장
 
-회원 정보는 MySQL users 테이블에 최종 적재됩니다.
+회원 정보는 MySQL `users` 테이블에 저장됩니다.
 
 ```sql
 INSERT INTO users (email, password, name, phone, birth_date, gender)
 VALUES (?, ?, ?, ?, ?, ?)
 ```
 
-여기서 중요한 점은 SQL 인젝션 공격을 원천 차단하기 위해 SQL문에 직접 문자열을 결합하지 않고, ? 파라미터 바인딩 방식을 필수적으로 사용하여 쿼리를 안정적으로 수행합니다.
+여기서 중요한 점은 SQL에 직접 문자열을 붙이지 않고 `?` 파라미터 바인딩을 사용한다는 점입니다.
+
+이 방식은 SQL 인젝션 위험을 줄이고, 입력값을 안전하게 DB 쿼리에 전달하는 기본 규칙입니다.
+
 ### 8. EC2에서 DB가 연결되는 방식
 
-EC2 서버 안의 .env 파일 정보가 아래와 같이 루프백 주소 및 활성화된 인프라 데이터베이스 명으로 지정되어 있으면
+EC2 서버 안의 `.env`가 아래처럼 설정되어 있으면:
 
 ```text
 DB_HOST=127.0.0.1
@@ -213,27 +216,27 @@ DB_NAME=kakao_gift
 
 EC2에서 실행 중인 Node 서버는 같은 EC2 안의 MySQL DB에 연결합니다.
 
-EC2 내에서 구동 중인 Node.js 인스턴스 서버는 로컬 내부망을 통해 안전하게 EC2 내부 MySQL 컨텍스트 환경의 데이터베이스에 동기화됩니다. 즉, 사용자가 배포 서버 웹 화면을 통해 회원가입을 완료하면 데이터는 실제 EC2 내부 MySQL의 kakao_gift.users 테이블에 영구 적재됩니다.
+즉, EC2 배포 서버에서 회원가입을 하면 데이터는 EC2 내부 MySQL의 `kakao_gift.users` 테이블에 저장됩니다.
 
 ### 9. 배포 후 반영 순서
 
-새로운 API 기능이나 수정 버그가 통합 브랜치인 develop에 머지되었을 때, 실제 AWS 가상 컴퓨터 인프라 환경(EC2)에 소스 코드를 무중단 상태로 무결성 있게 전개하고 배포하는 절차는 다음과 같습니다.
+새로운 API 기능이나 수정 사항이 `develop`에 머지되었을 때, EC2에는 아래 순서로 반영합니다.
 
 ```bash
-# 1. EC2 원격 서버 접속 후 프로젝트 최상위 루트 디렉토리 이동
+# 1. EC2 서버의 프로젝트 폴더로 이동
 cd /home/ubuntu/wku-2026-1-kakao-shop
 
-# 2. 통합 검증 브랜치로 확실하게 전환 후 깃허브 원격 최신 소스 다운로드
+# 2. develop 최신 코드 반영
 git switch develop
 git pull origin develop
 
-# 3. 신규 도입 패키지(예: bcrypt, express-session 등) 인스톨 및 동기화
+# 3. 패키지 변경 반영
 npm install
 
-# 4. PM2 프로세스 매니저를 통한 무중단 백엔드 서비스 전원 재시작
+# 4. PM2 서버 재시작
 pm2 restart all
 
-# 5. (선택) 무중단 배포 가동 상태 및 런타임 로그 실시간 감시
+# 5. 상태와 로그 확인
 pm2 list
 pm2 logs
 ```
@@ -243,25 +246,22 @@ pm2 logs
 회원가입 저장 흐름은 아래와 같습니다.
 
 ```text
-FE 입력 폼 작성 
-→ signup.js 이벤트 캡처 
-→ api.js 비동기 요청 전송 
-→ POST /api/auth/signup 호출 
-→ app.js 1차 분기 접수 
-→ auth.js API 처리부 도달 
-→ bcrypt 모듈 암호화 해싱 
-→ MySQL users 테이블 파라미터 바인딩 INSERT 
-→ 파이프라인 연동 및 가입 완료
+FE 입력
+→ signup.js
+→ api.js
+→ POST /api/auth/signup
+→ app.js
+→ auth.js
+→ bcrypt 해시
+→ users 테이블 INSERT
+→ 회원가입 완료
 ```
 
-정상 반영 후 아래 활성화된 배포본의 인프라 주소에서 회원가입을 시도하면 실제 데이터베이스와 정상 연동되어 작동합니다.
+정상 반영 후 아래 화면에서 회원가입하면 DB에 저장됩니다.
 
-```
-
-서비스 메인 화면 주소: http://3.26.95.225:3000/
-
-회원가입 화면 주소: http://3.26.95.225:3000/signup.html
-
+```text
+메인 화면: http://3.26.95.225:3000/
+회원가입 화면: http://3.26.95.225:3000/signup.html
 ```
 
 단, 아래 조건이 충족되어야 합니다.
