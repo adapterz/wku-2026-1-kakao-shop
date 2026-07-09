@@ -23,31 +23,13 @@
 
   <!-- 미사용/사용완료 탭 -->
   <nav class="giftbox-tab">
-    <button class="giftbox-tab-btn active" id="tab-unused">미사용 선물 2</button>
-    <button class="giftbox-tab-btn" id="tab-used">사용완료 41</button>
+    <button class="giftbox-tab-btn active" id="tab-unused">미사용 선물</button>
+    <button class="giftbox-tab-btn" id="tab-used">사용완료</button>
   </nav>
 
   <!-- 선물 목록 -->
-  <main class="gift-list">
-    <div class="gift-card">
-      <img src="img/station.jpg" alt="익산역-시내 환승 1일권">
-      <div class="gift-info">
-        <p class="order-brand">익산교통</p>
-        <p class="product-name">익산역-시내 환승 1일권</p>
-        <p class="gift-sender">from. 나</p>
-        <p class="gift-date">2025.09.18 오전 02:32</p>
-      </div>
-    </div>
-
-    <div class="gift-card">
-      <img src="img/pass2.jpg" alt="익산 관광 순환버스 패스">
-      <div class="gift-info">
-        <p class="order-brand">익산여행패스</p>
-        <p class="product-name">익산 관광 순환버스 패스</p>
-        <p class="gift-sender">from. 김철수</p>
-        <p class="gift-date">2025.09.17 오후 03:12</p>
-      </div>
-    </div>
+  <main class="gift-list" id="gift-list">
+    <p class="loading-message">선물함을 불러오는 중입니다.</p>
   </main>
 
   <!-- 하단 고정 탭바 -->
@@ -66,6 +48,7 @@
     </button>
   </footer>
 
+  <script src="js/api.js"></script>
   <script src="js/giftbox.js"></script>
 </body>
 </html>
