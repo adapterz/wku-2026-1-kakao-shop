@@ -43,9 +43,10 @@ async function loadProducts() {
 
 function bindProductCardEvents(container) {
   container.querySelectorAll('.product-card-grid').forEach((card) => {
-    card.addEventListener('click', () => {
-      const productId = card.dataset.productId;
-      location.href = `product.html?id=${productId}`;
+    card.addEventListener('click', (event) => {
+     if (event.target.closest('.bookmark-btn')) return;
+     const productId = card.dataset.productId;
+     location.href = `product.html?id=${productId}`;
     });
   });
 }
