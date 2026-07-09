@@ -40,7 +40,8 @@ async function loadProducts() {
 }
 
 function createProductCard(product) {
-  const imageUrl = product.thumbnailUrl || 'img/product1.jpg';
+  const fallbackImageUrl = 'img/iksan-logo.svg';
+  const imageUrl = product.thumbnailUrl || fallbackImageUrl;
   const brandName = product.brandName || '익산 교통';
   const productName = product.name || '환승패스 상품';
   const price = formatPrice(product.price);
@@ -48,7 +49,7 @@ function createProductCard(product) {
   return `
     <div class="product-card-grid" data-product-id="${product.productId}">
       <div class="product-thumb">
-        <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(productName)}">
+        <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(productName)}" onerror="this.onerror=null; this.src='${fallbackImageUrl}';">
         <button class="bookmark-btn" type="button">🔖</button>
       </div>
       <p class="product-brand">${escapeHtml(brandName)}</p>
