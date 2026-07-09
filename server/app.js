@@ -4,6 +4,7 @@ const path = require('path');
 const { testConnection } = require('./db');
 const productsRouter = require('./routes/products');
 const authRouter = require('./routes/auth');
+const ordersRouter = require('./routes/orders');
 
 const app = express();
 
@@ -32,9 +33,10 @@ app.use(
 app.use(express.static(path.join(__dirname, '../public')));
 
 // API 라우터
-// 인증 라우터를 먼저 연결하고, 상품 조회 라우터를 별도 경로로 분리해 관리합니다.
+// 기능별 라우터를 분리해 인증, 상품 조회, 주문 생성을 각각 관리합니다.
 app.use('/api/auth', authRouter);
 app.use('/api/products', productsRouter);
+app.use('/api/orders', ordersRouter);
 
 // 서버 상태 확인용 API
 app.get('/api/health', async (req, res) => {
