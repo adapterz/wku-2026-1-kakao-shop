@@ -39,24 +39,23 @@ document.getElementById('checkout-btn').addEventListener('click', async () => {
 
   const orderData = {
     productId: 1, // TODO: product.html에서 넘어온 실제 상품 ID로 교체 필요
-    receiver: isGiftToFriend ? receiverInputValue : null,
-    message: '나는 내가 챙긴다! 소중한 나에게 주는 선물'
+    giftMessage: document.querySelector('.message-text').textContent.trim().replace(/\s+/g, ' ')
   };
 
   try {
-    const res = await fetch('/api/orders', {
+    const response = await requestJson('/api/orders', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(orderData)
     });
+    const orderId = response.data && response.data.orderId;
 
-    if (res.ok) {
-      location.href = 'complete.html';
-    } else {
-      alert('주문 생성에 실패했습니다. 다시 시도해주세요.');
+    if (!orderId) {
+      throw new Error('주문 번호를 확인할 수 없습니다.');
     }
+
+    location.href = `complete.html?orderId=${orderId}`;
   } catch (error) {
     console.error('주문 생성 중 오류:', error);
-    alert('네트워크 오류가 발생했습니다.');
+    alert(error.message || '주문 생성에 실패했습니다. 다시 시도해주세요.');
   }
 });

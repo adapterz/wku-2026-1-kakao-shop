@@ -25,24 +25,24 @@
 
     <!-- 완료 안내 -->
     <div class="complete-avatar">👤</div>
-    <p class="complete-title"><strong>나</strong>에게<br>선물을 보냈습니다.</p>
+    <p class="complete-title" id="complete-title"><strong>나</strong>에게<br>선물을 보냈습니다.</p>
 
     <!-- 받는 사람 정보 -->
     <section class="order-section complete-receiver">
       <h2>받는 사람</h2>
-      <p class="receiver-name">스타트업코드</p>
-      <p class="receiver-detail">010-1234-5678</p>
+      <p class="receiver-name" id="receiver-name">주문 정보를 불러오는 중입니다.</p>
+      <p class="receiver-detail" id="receiver-detail"></p>
     </section>
 
     <!-- 보낸 패스 요약 -->
     <section class="order-section">
       <h2>보낸 선물</h2>
       <div class="order-summary">
-        <img src="img/station.jpg" alt="익산역-시내 환승 1일권">
+        <img id="complete-product-image" src="img/station.jpg" alt="익산역-시내 환승 1일권">
         <div class="order-summary-info">
-          <p class="order-brand">익산교통</p>
-          <p class="product-name">익산역-시내 환승 1일권</p>
-          <p class="gift-quantity">수량 : 1개</p>
+          <p class="order-brand" id="complete-product-brand">익산교통</p>
+          <p class="product-name" id="complete-product-name">익산역-시내 환승 1일권</p>
+          <p class="gift-quantity" id="complete-product-quantity">수량 : 1개</p>
         </div>
       </div>
     </section>
@@ -55,6 +55,7 @@
     <button class="btn-primary" id="giftbox-btn">선물함 가기</button>
   </footer>
 
+  <script src="js/api.js"></script>
   <script src="js/complete.js"></script>
 </body>
 </html>
