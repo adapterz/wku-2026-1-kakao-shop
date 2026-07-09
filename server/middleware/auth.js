@@ -9,6 +9,7 @@ function requireLogin(req, res, next) {
     return sendError(res, 401, 'login_required');
   }
 
+  // 로그인된 요청이면 다음 미들웨어 또는 실제 라우터 처리 함수로 넘깁니다.
   return next();
 }
 

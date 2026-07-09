@@ -5,6 +5,7 @@ const { sendSuccess, sendError } = require('../utils/response');
 const router = express.Router();
 // DB 연결 전 FE-BE 흐름만 확인할 때 사용하는 임시 옵션입니다.
 // M1/M2 통합 기준에서는 이 값을 끄고 실제 products 테이블을 조회합니다.
+// 로컬에서 MySQL 없이 화면 연동만 확인할 때만 true로 둡니다.
 const useDummyProducts = process.env.USE_DUMMY_PRODUCTS === 'true';
 
 const dummyProductRows = [
@@ -56,6 +57,7 @@ const dummyProductRows = [
 
 /**
  * DB snake_case 컬럼을 API camelCase 필드로 변환합니다.
+ * 목록 화면에서는 카드에 필요한 최소 필드만 내려줍니다.
  */
 function toProductListResponse(row) {
   return {
@@ -67,6 +69,7 @@ function toProductListResponse(row) {
   };
 }
 
+// 상세 화면은 목록보다 설명(description)이 추가로 필요합니다.
 function toProductDetailResponse(row) {
   return {
     productId: row.id,
@@ -88,6 +91,7 @@ router.get('/', async (req, res) => {
       return sendSuccess(res, 200, 'get_products_success', dummyProductRows.map(toProductListResponse));
     }
 
+    // SELECT 필드는 실제 응답에 사용하는 값만 조회해 API 응답과 DB 조회 범위를 맞춥니다.
     const [rows] = await pool.query(
       `
       SELECT
@@ -118,6 +122,7 @@ router.get('/:id', async (req, res) => {
   try {
     const productId = Number(req.params.id);
 
+    // URL path 값은 문자열로 들어오므로 숫자 id인지 먼저 검증합니다.
     if (!Number.isInteger(productId) || productId <= 0) {
       return sendError(res, 400, 'invalid_product_id');
     }
@@ -147,6 +152,7 @@ router.get('/:id', async (req, res) => {
       [productId]
     );
 
+    // id 형식은 맞지만 DB에 해당 상품이 없으면 404로 응답합니다.
     if (rows.length === 0) {
       return sendError(res, 404, 'not_found_product');
     }
