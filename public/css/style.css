@@ -792,3 +792,147 @@ body > * {
   font-weight: bold;
   cursor: pointer;
 }
+
+/* 주문서 화면 */
+.order-form {
+  padding: 16px;
+}
+
+/* 메시지 카드 */
+.message-card {
+  position: relative;
+  background-color: #fff8e7;
+  border-radius: 12px;
+  padding: 32px 20px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.message-text {
+  font-size: 17px;
+  font-weight: bold;
+  color: #333333;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.message-illustration {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.message-edit-btn {
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #555555;
+  cursor: pointer;
+}
+
+/* 각 주문 항목 구역 */
+.order-section {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.order-section h2 {
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.order-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.option-btn {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #888888;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.option-btn.active {
+  border-color: #005bac;
+  color: #005bac;
+  font-weight: bold;
+}
+
+.text-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* 주문 요약 (패스 이미지+정보) */
+.order-summary {
+  display: flex;
+  gap: 12px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.order-summary img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #dddddd;
+}
+
+.order-summary-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.order-brand {
+  font-size: 11px;
+  color: #888888;
+}
+
+.total-row {
+  border-top: 1px solid #eeeeee;
+  margin-top: 8px;
+  padding-top: 10px;
+  font-weight: bold;
+}
+
+.total-row .info-value {
+  color: #005bac;
+}
+
+/* 하단 고정 버튼 (단일 버튼용, product.html과 별개) */
+.bottom-bar {
+  position: sticky;
+  bottom: 0;
+  background-color: #ffffff;
+  padding: 12px 16px;
+  border-top: 1px solid #eeeeee;
+}
+
+.bottom-bar .btn-primary {
+  width: 100%;
+  padding: 14px;
+  background-color: #005bac;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
