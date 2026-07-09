@@ -1,6 +1,74 @@
 <!--
- * 파일: public/order.html
- * 목적: 선물 주문 및 결제 화면
- * 왜 이렇게: 주문 정보를 입력하고 선물을 발송하기 위해
- * 주요: POST /api/orders
+  파일: public/order.html
+  목적: 주문서 화면 — 받는 사람 지정 및 패스 주문 생성
+  왜: 사용자가 패스를 선택한 뒤, 받는 사람과 메시지를 정하고 최종 주문(Mock 결제)을 생성하는 단계
+  주요: 메시지 카드, 받는 사람 선택, 주문 요약, 결제 정보, 결제 버튼
 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주문서 - 익산 환승패스</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 상단 헤더 -->
+  <header class="top-header">
+    <button class="icon-btn" onclick="history.back()">←</button>
+    <h1>선물하기</h1>
+    <div style="width: 20px;"></div>
+  </header>
+
+  <main class="order-form">
+
+    <!-- 메시지 카드 -->
+    <section class="message-card">
+      <p class="message-text">나는 내가 챙긴다!<br>소중한 나에게 주는 선물</p>
+      <div class="message-illustration">🚌💙</div>
+      <button class="message-edit-btn">✏️ 메시지 편집</button>
+    </section>
+
+    <!-- 받는 사람 선택 -->
+    <section class="order-section">
+      <h2>받는 사람</h2>
+      <div class="order-row">
+        <button class="option-btn active" id="btn-me">나에게 선물</button>
+        <button class="option-btn" id="btn-friend">친구에게 선물</button>
+      </div>
+      <input type="text" id="receiver-input" placeholder="받는 사람 이메일 또는 아이디" class="text-input">
+    </section>
+
+    <!-- 주문 내역 -->
+    <section class="order-summary">
+      <img src="img/station.jpg" alt="익산역-시내 환승 1일권">
+      <div class="order-summary-info">
+        <p class="order-brand">익산교통</p>
+        <p class="product-name">익산역-시내 환승 1일권</p>
+        <p class="product-price"><span>23,000원</span></p>
+      </div>
+    </section>
+
+    <!-- 결제 정보 -->
+    <section class="order-section">
+      <h2>결제 정보</h2>
+      <div class="info-row">
+        <span class="info-label">총 상품 (1개)</span>
+        <span class="info-value">23,000원</span>
+      </div>
+      <div class="info-row total-row">
+        <span class="info-label">최종 결제금액</span>
+        <span class="info-value">23,000원</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 하단 고정 결제 버튼 -->
+  <footer class="bottom-bar">
+    <button class="btn-primary" onclick="location.href='complete.html'">23,000원 결제하기</button>
+  </footer>
+
+</body>
+</html>
