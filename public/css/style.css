@@ -936,3 +936,90 @@ body > * {
   font-weight: bold;
   cursor: pointer;
 }
+
+/* 결제 완료 화면 */
+.complete-page {
+  padding: 40px 16px;
+  text-align: center;
+}
+
+.complete-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: #333333;
+  color: #ffffff;
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.complete-title {
+  font-size: 17px;
+  color: #333333;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.complete-title strong {
+  color: #005bac;
+}
+
+.complete-receiver {
+  text-align: left;
+}
+
+.receiver-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 4px;
+}
+
+.receiver-detail {
+  font-size: 12px;
+  color: #888888;
+}
+
+.gift-quantity {
+  font-size: 12px;
+  color: #888888;
+  margin-top: 2px;
+}
+
+/* 하단 버튼 2개 나란히 */
+.bottom-bar-double {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  gap: 8px;
+  background-color: #ffffff;
+  padding: 12px 16px;
+  border-top: 1px solid #eeeeee;
+}
+
+.btn-secondary {
+  flex: 1;
+  padding: 14px;
+  background-color: #f0f0f0;
+  color: #333333;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.bottom-bar-double .btn-primary {
+  flex: 1;
+  padding: 14px;
+  background-color: #005bac;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
