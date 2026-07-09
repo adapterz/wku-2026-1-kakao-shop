@@ -39,3 +39,8 @@
 - 한 일: 로그인/회원가입 버튼 색상 변경 (노란색 → 익산 테마 파란색) 및 텍스트 색상 흰색으로 변경
 - 왜: 버튼 배경색을 테마 색상(#005bac)으로 통일, 파란 배경에 검은 텍스트로 가독성이 떨어지는 문제 해결
 - 다음: BE API 완성 후 각 화면 실제 데이터 연동 (product.js/order.js/giftbox.js/gift-use.js의 TODO 항목 처리)
+
+## 2026-07-10 (작성자: ggue1203)
+- 한 일: createProductCard 함수를 home.js에서 components.js로 이동, 상품 카드 클릭 시 product.html 이동 이벤트 및 하단 탭바 선물함 버튼 클릭 이벤트 추가
+- 왜: components.js 원래 계획(반복 UI 함수 재사용)에 맞게 정리하고, 상품 카드를 클릭해도 상세 페이지로 이동 안 되던 M2 핵심 흐름 단절 문제와 선물함 버튼 미동작 문제 해결
+- 다음: product.js/order.js/gift-use.js의 productId·giftId 임시 고정값을 URL 쿼리스트링 기반 실제 값으로 교체
