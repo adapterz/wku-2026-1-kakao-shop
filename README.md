@@ -247,7 +247,9 @@ INSERT INTO users (email, password, name, phone, birth_date, gender)
 VALUES (?, ?, ?, ?, ?, ?)
 ```
 
-여기서 중요한 점은 SQL에 직접 값을 문자열로 붙이지 않고, `?` 파라미터 바인딩을 사용한다는 점입니다.
+여기서 중요한 점은 SQL에 직접 문자열을 붙이지 않고 `?` 파라미터 바인딩을 사용한다는 점입니다.
+
+이 방식은 SQL 인젝션 위험을 줄이고, 입력값을 안전하게 DB 쿼리에 전달하는 기본 규칙입니다.
 
 ### 8. EC2에서 DB가 연결되는 방식
 
@@ -260,18 +262,29 @@ DB_NAME=kakao_gift
 
 EC2에서 실행 중인 Node 서버는 같은 EC2 안의 MySQL DB에 연결합니다.
 
-즉, EC2에서 서비스가 실행 중일 때 회원가입을 하면 EC2 MySQL의 `kakao_gift.users` 테이블에 데이터가 저장됩니다.
+즉, EC2 배포 서버에서 회원가입을 하면 데이터는 EC2 내부 MySQL의 `kakao_gift.users` 테이블에 저장됩니다.
 
 ### 9. 배포 후 반영 순서
 
-auth API가 develop에 머지된 뒤 EC2에 반영하려면 아래 순서로 진행합니다.
+새로운 API 기능이나 수정 사항이 `develop`에 머지되었을 때, EC2에는 아래 순서로 반영합니다.
 
 ```bash
+# 1. EC2 서버의 프로젝트 폴더로 이동
 cd /home/ubuntu/wku-2026-1-kakao-shop
+
+# 2. develop 최신 코드 반영
 git switch develop
 git pull origin develop
+
+# 3. 패키지 변경 반영
 npm install
+
+# 4. PM2 서버 재시작
 pm2 restart all
+
+# 5. 상태와 로그 확인
+pm2 list
+pm2 logs
 ```
 
 ### 최종 정리
@@ -293,7 +306,8 @@ FE 입력
 정상 반영 후 아래 화면에서 회원가입하면 DB에 저장됩니다.
 
 ```text
-http://3.26.95.225:3000/signup.html
+메인 화면: http://3.26.95.225:3000/
+회원가입 화면: http://3.26.95.225:3000/signup.html
 ```
 
 단, 아래 조건이 충족되어야 합니다.

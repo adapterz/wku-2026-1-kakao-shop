@@ -57,8 +57,8 @@ CREATE TABLE products (
     category VARCHAR(50) NOT NULL,                        -- 카테고리 (API: category)
     brand_name VARCHAR(100) NOT NULL,                     -- 브랜드명/운영기관 (API: brandName)
     
-    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 등록 일시 (API: createdAt)
-    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 등록 일시 (프론트 응답 제외, DB 내부 관리용)
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- 수정 일시 (프론트 응답 제외, DB 내부 관리용)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='선물 및 판매 상품 카탈로그';
 
 
