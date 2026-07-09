@@ -42,11 +42,11 @@
 
     <!-- 주문 내역 -->
     <section class="order-summary">
-      <img src="img/station.jpg" alt="익산역-시내 환승 1일권">
+      <img id="order-product-image" src="img/iksan-logo.svg" alt="주문 상품 이미지">
       <div class="order-summary-info">
-        <p class="order-brand">익산교통</p>
-        <p class="product-name">익산역-시내 환승 1일권</p>
-        <p class="product-price"><span>23,000원</span></p>
+        <p class="order-brand" id="order-product-brand">익산 교통</p>
+        <p class="product-name" id="order-product-name">상품 정보를 불러오는 중입니다.</p>
+        <p class="product-price"><span id="order-product-price">-</span></p>
       </div>
     </section>
 
@@ -55,11 +55,11 @@
       <h2>결제 정보</h2>
       <div class="info-row">
         <span class="info-label">총 상품 (1개)</span>
-        <span class="info-value">23,000원</span>
+        <span class="info-value" id="order-total-price">-</span>
       </div>
       <div class="info-row total-row">
         <span class="info-label">최종 결제금액</span>
-        <span class="info-value">23,000원</span>
+        <span class="info-value" id="order-final-price">-</span>
       </div>
     </section>
 
@@ -67,7 +67,7 @@
 
   <!-- 하단 고정 결제 버튼 -->
   <footer class="bottom-bar">
-    <button class="btn-primary" id="checkout-btn">23,000원 결제하기</button>
+    <button class="btn-primary" id="checkout-btn">결제하기</button>
   </footer>
 
   <script src="js/api.js"></script>
