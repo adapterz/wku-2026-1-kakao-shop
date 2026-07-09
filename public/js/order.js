@@ -5,6 +5,8 @@
  * 주요: 뒤로가기, 나에게/친구에게 선물 토글, 결제하기 클릭 시 주문 생성 API 호출
  */
 
+checkLoginBeforeOrder();
+
 // 뒤로가기 버튼
 document.getElementById('back-btn').addEventListener('click', () => {
   history.back();
@@ -59,3 +61,11 @@ document.getElementById('checkout-btn').addEventListener('click', async () => {
     alert(error.message || '주문 생성에 실패했습니다. 다시 시도해주세요.');
   }
 });
+
+async function checkLoginBeforeOrder() {
+  try {
+    await requestJson('/api/auth/me');
+  } catch (error) {
+    location.href = 'login.html';
+  }
+}
