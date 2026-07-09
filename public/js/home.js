@@ -1,12 +1,13 @@
 /*
  * 파일: public/js/home.js
  * 목적: 홈 화면(index.html) 전용 동작 처리
- * 왜: 상품 목록을 서버에서 받아 화면에 표시하기 위해
- * 주요: 상품 목록 fetch, 카드 렌더링
+ * 왜: 상품 목록을 서버에서 받아 화면에 표시하고, 하단 탭바/카드 클릭 이벤트를 처리하기 위해
+ * 주요: 상품 목록 fetch, 카드 렌더링(components.js 함수 사용), 카드 클릭 시 상세 이동, 하단 탭바 선물함 이동
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   loadProducts();
+  bindTabbarEvents();
 });
 
 async function loadProducts() {
@@ -28,6 +29,7 @@ async function loadProducts() {
     }
 
     productList.innerHTML = products.map(createProductCard).join('');
+    bindProductCardEvents(productList);
   } catch (error) {
     console.error('Failed to load products:', error);
 
@@ -39,40 +41,20 @@ async function loadProducts() {
   }
 }
 
-function createProductCard(product) {
-  const fallbackImageUrl = 'img/iksan-logo.svg';
-  const imageUrl = product.thumbnailUrl || fallbackImageUrl;
-  const brandName = product.brandName || '익산 교통';
-  const productName = product.name || '환승패스 상품';
-  const price = formatPrice(product.price);
-
-  return `
-    <div class="product-card-grid" data-product-id="${product.productId}">
-      <div class="product-thumb">
-        <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(productName)}" onerror="this.onerror=null; this.src='${fallbackImageUrl}';">
-        <button class="bookmark-btn" type="button">🔖</button>
-      </div>
-      <p class="product-brand">${escapeHtml(brandName)}</p>
-      <p class="product-name-grid">${escapeHtml(productName)}</p>
-      <p class="product-price-grid">추천 <span>${price}</span></p>
-      <div class="product-like">
-        <span class="like-icon">❤️</span>
-        <span class="like-count">M1</span>
-      </div>
-    </div>
-  `;
+function bindProductCardEvents(container) {
+  container.querySelectorAll('.product-card-grid').forEach((card) => {
+    card.addEventListener('click', () => {
+      const productId = card.dataset.productId;
+      location.href = `product.html?id=${productId}`;
+    });
+  });
 }
 
-function formatPrice(price) {
-  const numberPrice = Number(price || 0);
-  return `${numberPrice.toLocaleString('ko-KR')}원`;
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
+function bindTabbarEvents() {
+  const giftboxBtn = document.getElementById('tabbar-giftbox-btn');
+  if (giftboxBtn) {
+    giftboxBtn.addEventListener('click', () => {
+      location.href = 'giftbox.html';
+    });
+  }
 }
