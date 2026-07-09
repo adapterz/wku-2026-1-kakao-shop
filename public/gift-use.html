@@ -1,6 +1,49 @@
 <!--
- * 파일: public/gift-use.html
- * 목적: 바코드 사용 화면
- * 왜 이렇게: 받은 선물을 매장에서 사용할 수 있도록 하기 위해
- * 주요: GET /api/gifts/:id, PATCH /api/gifts/:id/use
+  파일: public/gift-use.html
+  목적: 선물 사용 화면 — 패스 1개 정보 보여주고 사용 처리
+  왜: 받은 패스를 버스 탑승·검표 시 QR로 제시하고 사용 완료 처리하는 화면
+  주요: 패스 정보, QR 표시, 사용 완료 처리 버튼
 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>패스 사용 - 익산 환승패스</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 상단 헤더 -->
+  <header class="top-header">
+    <button class="icon-btn" id="back-btn">←</button>
+    <h1>선물하기</h1>
+    <div style="width: 20px;"></div>
+  </header>
+
+  <main class="gift-use-page">
+
+    <!-- 패스 정보 -->
+    <section class="gift-use-card">
+      <img src="img/station.jpg" alt="익산역-시내 환승 1일권">
+      <p class="order-brand">익산교통</p>
+      <p class="product-name">익산역-시내 환승 1일권</p>
+
+      <!-- QR 영역 -->
+      <div class="qr-box">
+        <div class="qr-image">⬛⬜⬛⬜⬛<br>⬜⬛⬜⬛⬜<br>⬛⬜⬛⬛⬜<br>⬜⬛⬜⬛⬛<br>⬛⬛⬜⬛⬜</div>
+        <p class="qr-number">2350 9782 3095 3538</p>
+        <p class="qr-guide">버스 탑승 시 이 화면을 단말기에 제시하세요</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 하단 사용 완료 버튼 -->
+  <footer class="bottom-bar">
+    <button class="btn-primary" id="use-complete-btn">사용 완료 처리</button>
+  </footer>
+
+  <script src="js/gift-use.js"></script>
+</body>
+</html>
