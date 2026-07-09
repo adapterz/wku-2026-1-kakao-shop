@@ -16,7 +16,7 @@
 
   <!-- 상단 헤더 -->
   <header class="top-header">
-    <button class="icon-btn" onclick="location.href='index.html'">←</button>
+    <button class="icon-btn" id="back-btn">←</button>
     <h1>선물함</h1>
     <button class="icon-btn">🔍</button>
   </header>
@@ -29,7 +29,7 @@
 
   <!-- 선물 목록 -->
   <main class="gift-list">
-    <div class="gift-card" onclick="location.href='gift-use.html'">
+    <div class="gift-card">
       <img src="img/station.jpg" alt="익산역-시내 환승 1일권">
       <div class="gift-info">
         <p class="order-brand">익산교통</p>
@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <div class="gift-card" onclick="location.href='gift-use.html'">
+    <div class="gift-card">
       <img src="img/pass2.jpg" alt="익산 관광 순환버스 패스">
       <div class="gift-info">
         <p class="order-brand">익산여행패스</p>
@@ -52,7 +52,7 @@
 
   <!-- 하단 고정 탭바 -->
   <footer class="bottom-tabbar">
-    <button class="tabbar-item" onclick="location.href='index.html'">
+    <button class="tabbar-item" id="tabbar-home-btn">
       <span class="tabbar-icon">🏠</span>
       <span class="tabbar-label">홈</span>
     </button>
@@ -66,5 +66,6 @@
     </button>
   </footer>
 
+  <script src="js/giftbox.js"></script>
 </body>
 </html>
