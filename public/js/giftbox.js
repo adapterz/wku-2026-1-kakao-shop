@@ -9,6 +9,7 @@ const fallbackImageUrl = 'img/iksan-logo.svg';
 const giftList = document.getElementById('gift-list');
 const tabUnused = document.getElementById('tab-unused');
 const tabUsed = document.getElementById('tab-used');
+// 상태별 목록을 미리 나누어 저장하면 탭 전환 때 API를 다시 호출하지 않고 화면만 바꿀 수 있습니다.
 const giftsByStatus = {
   unused: [],
   used: [],
@@ -44,6 +45,7 @@ async function loadGiftbox() {
       requestJson('/api/gifts?status=used'),
     ]);
 
+    // API 응답 data를 상태별 배열로 보관하고, 탭 라벨과 목록 렌더링에 함께 사용합니다.
     giftsByStatus.unused = Array.isArray(unusedResponse.data) ? unusedResponse.data : [];
     giftsByStatus.used = Array.isArray(usedResponse.data) ? usedResponse.data : [];
 
@@ -62,6 +64,7 @@ async function loadGiftbox() {
 }
 
 function setActiveStatus(status) {
+  // 실제 선물 상태값(unused/used)과 탭 UI 상태를 같은 값으로 맞춰 관리합니다.
   activeStatus = status;
   tabUnused.classList.toggle('active', status === 'unused');
   tabUsed.classList.toggle('active', status === 'used');
@@ -109,6 +112,7 @@ function bindGiftCardEvents() {
   giftList.querySelectorAll('.gift-card').forEach((card) => {
     card.addEventListener('click', () => {
       const giftId = card.dataset.giftId;
+      // 선물 상세/사용 화면은 giftId 하나로 API를 다시 조회하는 구조입니다.
       location.href = `gift-use.html?giftId=${giftId}`;
     });
   });
@@ -139,6 +143,7 @@ function formatGiftDate(value) {
 }
 
 function escapeHtml(value) {
+  // 선물명/보낸 사람 이름처럼 DB에서 온 문자열이 HTML로 해석되지 않게 처리합니다.
   return String(value)
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')

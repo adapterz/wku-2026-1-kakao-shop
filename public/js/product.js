@@ -6,6 +6,7 @@
  */
 
 const fallbackImageUrl = 'img/iksan-logo.svg';
+// 홈 화면에서 product.html?id=상품ID 형태로 넘긴 값을 상세 조회 기준으로 사용합니다.
 const productId = new URLSearchParams(location.search).get('id');
 
 loadProductDetail();
@@ -23,6 +24,7 @@ async function loadProductDetail() {
 
   try {
     const response = await fetchProductDetail(productId);
+    // 상세 화면도 API의 data만 사용합니다. status/message는 성공 여부와 로그 확인용입니다.
     renderProductDetail(response.data);
   } catch (error) {
     console.error('상품 상세 조회 중 오류:', error);
@@ -43,6 +45,7 @@ function renderProductDetail(product) {
   const description = document.getElementById('product-description');
   const productName = product.name || '환승패스 상품';
 
+  // 이미지 경로가 없거나 로딩에 실패해도 화면이 비지 않도록 익산 로고를 대체 이미지로 사용합니다.
   image.src = product.thumbnailUrl || fallbackImageUrl;
   image.alt = productName;
   image.onerror = () => {
@@ -71,6 +74,7 @@ async function goToOrderIfLoggedIn(type) {
   }
 
   try {
+    // 주문서는 로그인 세션이 필요한 화면이라, 이동 전 /api/auth/me로 현재 로그인 여부를 확인합니다.
     const res = await fetch('/api/auth/me');
     if (res.ok) {
       // 로그인 되어있음 → 주문서로 이동
