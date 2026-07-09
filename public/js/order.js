@@ -7,9 +7,11 @@
 
 const fallbackImageUrl = 'img/iksan-logo.svg';
 const orderParams = new URLSearchParams(location.search);
+// product.html에서 넘긴 productId로 주문서에 표시할 상품과 주문 생성 대상을 맞춥니다.
 const productId = Number(orderParams.get('productId'));
 let selectedProduct = null;
 
+// 주문서는 로그인 사용자만 접근 가능해야 하므로 화면 로딩 시 세션을 먼저 확인합니다.
 checkLoginBeforeOrder();
 loadOrderProduct();
 
@@ -52,6 +54,7 @@ document.getElementById('checkout-btn').addEventListener('click', async () => {
 
   const orderData = {
     productId,
+    // M2 명세 기준 요청 필드는 message가 아니라 giftMessage로 통일합니다.
     giftMessage: document.querySelector('.message-text').textContent.trim().replace(/\s+/g, ' ')
   };
 
@@ -77,6 +80,7 @@ async function checkLoginBeforeOrder() {
   try {
     await requestJson('/api/auth/me');
   } catch (error) {
+    // 세션이 없으면 주문 생성을 시도하지 않고 로그인 화면으로 돌려보냅니다.
     location.href = 'login.html';
   }
 }
@@ -89,6 +93,7 @@ async function loadOrderProduct() {
 
   try {
     const response = await fetchProductDetail(productId);
+    // 주문 금액은 FE에서 임의로 만들지 않고 상품 상세 API의 가격을 그대로 표시합니다.
     selectedProduct = response.data;
     renderOrderProduct(selectedProduct);
   } catch (error) {

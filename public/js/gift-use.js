@@ -6,6 +6,7 @@
  */
 
 const fallbackImageUrl = 'img/iksan-logo.svg';
+// giftbox.html에서 gift-use.html?giftId=... 로 넘긴 값을 선물 상세 조회 기준으로 사용합니다.
 const giftId = Number(new URLSearchParams(location.search).get('giftId'));
 let selectedGift = null;
 
@@ -24,6 +25,7 @@ document.getElementById('use-complete-btn').addEventListener('click', async () =
   }
 
   if (selectedGift.status === 'used') {
+    // 이미 사용된 선물은 FE에서 한 번 막고, BE에서도 다시 400으로 막아 중복 사용을 방지합니다.
     alert('이미 사용 완료된 선물입니다.');
     return;
   }
@@ -32,6 +34,7 @@ document.getElementById('use-complete-btn').addEventListener('click', async () =
   if (!confirmed) return;
 
   try {
+    // 사용 처리는 상태를 바꾸는 요청이므로 GET이 아니라 PATCH /api/gifts/:id/use를 호출합니다.
     const response = await requestJson(`/api/gifts/${giftId}/use`, {
       method: 'PATCH',
     });
@@ -54,6 +57,7 @@ async function loadGiftDetail() {
 
   try {
     const response = await requestJson(`/api/gifts/${giftId}`);
+    // 상세 조회 결과를 전역 selectedGift에 보관해 사용 완료 버튼에서 같은 선물 상태를 확인합니다.
     selectedGift = response.data;
     renderGiftDetail(selectedGift);
   } catch (error) {
@@ -77,6 +81,7 @@ function renderGiftDetail(gift) {
   const productName = gift.productName || '익산 환승패스';
   const productImage = document.getElementById('gift-product-image');
 
+  // 상품 이미지가 아직 없거나 경로가 깨져도 화면 확인이 가능하도록 공통 대체 이미지를 사용합니다.
   productImage.src = gift.thumbnailUrl || fallbackImageUrl;
   productImage.alt = productName;
   productImage.onerror = () => {

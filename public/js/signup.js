@@ -11,6 +11,7 @@ function setSignupMessage(message, type = 'info') {
   if (!signupMessage) return;
 
   signupMessage.textContent = message;
+  // CSS에서 성공/실패 메시지 색을 구분할 수 있도록 상태값을 data 속성에 남깁니다.
   signupMessage.dataset.type = type;
 }
 
@@ -45,6 +46,7 @@ if (signupForm) {
     try {
       setSignupMessage('회원가입 요청 중입니다.', 'info');
       await signupUser(payload);
+      // 회원가입은 계정 생성까지만 담당하고, 실제 로그인 세션은 로그인 화면에서 다시 생성합니다.
       setSignupMessage('회원가입이 완료되었습니다. 로그인 화면으로 이동합니다.', 'success');
       window.location.href = 'login.html';
     } catch (error) {

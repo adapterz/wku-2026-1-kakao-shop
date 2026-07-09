@@ -10,10 +10,12 @@ async function requestJson(url, options = {}) {
   const response = await fetch(url, {
     ...options,
     headers: {
+      // body가 있는 요청만 JSON Content-Type을 붙입니다. GET 요청에는 불필요한 헤더를 넣지 않습니다.
       ...(options.body ? { 'Content-Type': 'application/json' } : {}),
       ...(options.headers || {}),
     },
   });
+  // 응답 본문이 비어있는 경우에도 화면 JS가 터지지 않도록 빈 객체로 처리합니다.
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
@@ -33,6 +35,7 @@ async function fetchProductDetail(productId) {
 }
 
 async function loginUser(payload) {
+  // 로그인 성공 시 서버가 세션을 만들고, 이후 같은 브라우저 요청에서 로그인 상태가 유지됩니다.
   return requestJson('/api/auth/login', {
     method: 'POST',
     body: JSON.stringify(payload),
@@ -40,6 +43,7 @@ async function loginUser(payload) {
 }
 
 async function signupUser(payload) {
+  // 회원가입 화면은 입력값을 모아 보내고, 중복 이메일/비밀번호 해시는 BE에서 최종 처리합니다.
   return requestJson('/api/auth/signup', {
     method: 'POST',
     body: JSON.stringify(payload),

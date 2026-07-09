@@ -23,6 +23,7 @@ document.getElementById('giftbox-btn').addEventListener('click', () => {
 
 async function loadOrderDetail() {
   const params = new URLSearchParams(location.search);
+  // 주문 생성 성공 후 complete.html?orderId=... 로 넘어온 주문 번호를 기준으로 완료 내용을 조회합니다.
   const orderId = params.get('orderId');
 
   if (!orderId) {
@@ -32,6 +33,7 @@ async function loadOrderDetail() {
 
   try {
     const response = await requestJson(`/api/orders/${orderId}`);
+    // 완료 화면은 주문 API가 내려준 receiver/product 정보를 조합해 표시합니다.
     renderOrderDetail(response.data);
   } catch (error) {
     console.error('주문 상세 조회 중 오류:', error);
@@ -40,6 +42,7 @@ async function loadOrderDetail() {
 }
 
 function renderOrderDetail(order) {
+  // M2의 나에게 선물하기 흐름에서는 받는 사람이 없을 수 있어 기본값을 '나'로 둡니다.
   const receiverName = order.receiver && order.receiver.name ? order.receiver.name : '나';
   const receiverPhone = order.receiver && order.receiver.phone ? order.receiver.phone : '';
   const product = order.product || {};
@@ -69,6 +72,7 @@ function showOrderLoadError(message) {
 }
 
 function escapeHtml(value) {
+  // 완료 문구 일부는 innerHTML을 쓰므로, 사용자/DB 문자열은 HTML 이스케이프 후 넣습니다.
   return String(value)
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
