@@ -5,6 +5,7 @@ const { testConnection } = require('./db');
 const productsRouter = require('./routes/products');
 const authRouter = require('./routes/auth');
 const ordersRouter = require('./routes/orders');
+const giftsRouter = require('./routes/gifts');
 
 const app = express();
 
@@ -33,10 +34,11 @@ app.use(
 app.use(express.static(path.join(__dirname, '../public')));
 
 // API 라우터
-// 기능별 라우터를 분리해 인증, 상품 조회, 주문 생성을 각각 관리합니다.
+// 기능별 라우터를 분리해 인증, 상품 조회, 주문, 선물함을 각각 관리합니다.
 app.use('/api/auth', authRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
+app.use('/api/gifts', giftsRouter);
 
 // 서버 상태 확인용 API
 app.get('/api/health', async (req, res) => {

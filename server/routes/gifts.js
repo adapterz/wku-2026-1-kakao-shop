@@ -1,0 +1,78 @@
+const express = require('express');
+const { pool } = require('../db');
+const { requireLogin } = require('../middleware/auth');
+const { sendSuccess, sendError } = require('../utils/response');
+
+const router = express.Router();
+const GIFT_STATUSES = new Set(['unused', 'used']);
+
+function toGiftListResponse(row) {
+  return {
+    giftId: row.gift_id,
+    productId: row.product_id,
+    productName: row.product_name,
+    brandName: row.brand_name,
+    thumbnailUrl: row.thumbnail_url,
+    senderName: row.sender_name,
+    status: row.status,
+    barcode: row.barcode,
+    createdAt: row.created_at,
+    usedAt: row.used_at,
+  };
+}
+
+/**
+ * GET /api/gifts?status=unused|used
+ * 로그인한 사용자의 선물함 목록을 미사용/사용완료 상태별로 조회합니다.
+ */
+router.get('/', requireLogin, async (req, res) => {
+  const { status } = req.query;
+  const normalizedStatus = status ? String(status).trim().toLowerCase() : null;
+
+  if (normalizedStatus && !GIFT_STATUSES.has(normalizedStatus)) {
+    return sendError(res, 400, 'invalid_gift_status');
+  }
+
+  try {
+    const userId = req.session.user.userId;
+    const queryParams = [userId];
+    let statusCondition = '';
+
+    if (normalizedStatus) {
+      statusCondition = 'AND g.status = ?';
+      queryParams.push(normalizedStatus);
+    }
+
+    const [gifts] = await pool.query(
+      `
+      SELECT
+        g.id AS gift_id,
+        g.product_id,
+        g.status,
+        g.barcode,
+        g.created_at,
+        g.used_at,
+        p.name AS product_name,
+        p.brand_name,
+        p.thumbnail_url,
+        sender.name AS sender_name
+      FROM gifts g
+      JOIN products p ON p.id = g.product_id
+      JOIN orders o ON o.id = g.order_id
+      JOIN users sender ON sender.id = o.buyer_id
+      WHERE g.receiver_id = ?
+      ${statusCondition}
+      ORDER BY g.created_at DESC
+      `,
+      queryParams
+    );
+
+    return sendSuccess(res, 200, 'get_user_gifts_success', gifts.map(toGiftListResponse));
+  } catch (error) {
+    console.error('GET /api/gifts error:', error);
+
+    return sendError(res, 500, 'internal_server_error');
+  }
+});
+
+module.exports = router;
