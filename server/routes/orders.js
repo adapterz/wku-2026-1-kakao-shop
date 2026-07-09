@@ -4,15 +4,18 @@ const { requireLogin } = require('../middleware/auth');
 const { sendSuccess, sendError } = require('../utils/response');
 
 const router = express.Router();
+// 실제 바코드 이미지를 생성하지 않는 단계라, M2에서는 공통 목업 이미지를 사용합니다.
 const BARCODE_IMAGE_URL = '/images/barcodes/default-barcode.png';
 
 function createBarcode(orderId) {
+  // 주문 id와 현재 시간을 섞어 데모용 교환권 번호를 만듭니다.
   const timestamp = Date.now();
   const paddedOrderId = String(orderId).padStart(6, '0');
 
   return `IKSAN${timestamp}${paddedOrderId}`;
 }
 
+// 주문 상세 화면은 주문, 구매자, 수신자, 상품, 선물 정보를 한 번에 보여줘야 해서 중첩 객체로 정리합니다.
 function toOrderDetailResponse(row) {
   return {
     orderId: row.order_id,
@@ -63,10 +66,12 @@ router.post('/', requireLogin, async (req, res) => {
   }
 
   const buyerId = req.session.user.userId;
+  // 현재 M2 범위는 "나에게 선물하기"라서 받는 사람도 로그인 사용자와 동일하게 둡니다.
   const receiverId = buyerId;
   let connection;
 
   try {
+    // 주문 생성과 선물 발급은 반드시 같이 성공하거나 같이 실패해야 하므로 트랜잭션을 사용합니다.
     connection = await pool.getConnection();
     await connection.beginTransaction();
 
@@ -80,12 +85,14 @@ router.post('/', requireLogin, async (req, res) => {
     );
 
     if (products.length === 0) {
+      // 상품이 없으면 주문도 선물도 만들면 안 되므로 트랜잭션을 되돌립니다.
       await connection.rollback();
 
       return sendError(res, 404, 'not_found_product');
     }
 
     const product = products[0];
+    // 1단계: orders 테이블에 주문 1건을 저장합니다.
     const [orderResult] = await connection.query(
       `
       INSERT INTO orders (
@@ -110,6 +117,7 @@ router.post('/', requireLogin, async (req, res) => {
 
     const orderId = orderResult.insertId;
     const barcode = createBarcode(orderId);
+    // 2단계: 같은 주문 흐름 안에서 gifts 테이블에 교환권 1건을 발급합니다.
     const [giftResult] = await connection.query(
       `
       INSERT INTO gifts (
@@ -133,6 +141,7 @@ router.post('/', requireLogin, async (req, res) => {
       ]
     );
 
+    // 주문과 선물 발급이 모두 성공했을 때만 DB에 최종 반영합니다.
     await connection.commit();
 
     return sendSuccess(res, 201, 'create_order_success', {
@@ -145,6 +154,7 @@ router.post('/', requireLogin, async (req, res) => {
     });
   } catch (error) {
     if (connection) {
+      // 중간에 하나라도 실패하면 부분 저장을 막기 위해 롤백합니다.
       await connection.rollback();
     }
 
@@ -171,6 +181,7 @@ router.get('/:id', requireLogin, async (req, res) => {
 
   try {
     const userId = req.session.user.userId;
+    // 본인이 구매자이거나 수신자인 주문만 조회되게 해서 다른 사람 주문 접근을 막습니다.
     const [orders] = await pool.query(
       `
       SELECT

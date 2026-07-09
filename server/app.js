@@ -12,10 +12,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // JSON 요청 body 파싱
+// FE에서 fetch로 보낸 JSON body를 req.body로 읽기 위해 API 라우터보다 먼저 등록합니다.
 app.use(express.json());
 
 // 로그인 상태 유지를 위한 세션 설정
 // auth 라우터보다 먼저 등록해야 /api/auth 내부에서 req.session을 사용할 수 있습니다.
+// 브라우저에는 세션 id만 쿠키로 저장되고, 실제 로그인 사용자 정보는 서버 세션에 저장됩니다.
 app.use(
   session({
     name: 'iksan.sid',
@@ -31,10 +33,12 @@ app.use(
 );
 
 // public 정적 파일 제공
+// index.html, login.html, css, js 파일을 Express가 직접 내려주기 위한 설정입니다.
 app.use(express.static(path.join(__dirname, '../public')));
 
 // API 라우터
 // 기능별 라우터를 분리해 인증, 상품 조회, 주문, 선물함을 각각 관리합니다.
+// 예: /api/orders + router.post('/') = POST /api/orders
 app.use('/api/auth', authRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
@@ -61,6 +65,7 @@ app.get('/api/health', async (req, res) => {
 });
 
 // 등록되지 않은 API 요청 처리
+// 위에서 등록한 라우터에 걸리지 않은 /api 요청은 여기서 공통 404로 응답합니다.
 app.use('/api', (req, res) => {
   res.status(404).json({
     message: 'API not found',

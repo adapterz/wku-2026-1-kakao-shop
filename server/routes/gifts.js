@@ -4,8 +4,10 @@ const { requireLogin } = require('../middleware/auth');
 const { sendSuccess, sendError } = require('../utils/response');
 
 const router = express.Router();
+// 선물 상태는 미사용(unused), 사용완료(used) 두 값만 허용합니다.
 const GIFT_STATUSES = new Set(['unused', 'used']);
 
+// 선물함 목록 카드에 필요한 필드만 정리합니다.
 function toGiftListResponse(row) {
   return {
     giftId: row.gift_id,
@@ -21,6 +23,7 @@ function toGiftListResponse(row) {
   };
 }
 
+// 선물 사용 화면은 바코드, 만료일, 사용일 등 더 자세한 정보가 필요합니다.
 function toGiftDetailResponse(row) {
   return {
     giftId: row.gift_id,
@@ -40,6 +43,7 @@ function toGiftDetailResponse(row) {
 }
 
 function parseGiftId(value) {
+  // path parameter는 문자열로 들어오므로 양의 정수인지 확인한 뒤 사용합니다.
   const giftId = Number(value);
 
   if (!Number.isInteger(giftId) || giftId <= 0) {
@@ -50,6 +54,7 @@ function parseGiftId(value) {
 }
 
 async function findOwnedGift(giftId, userId) {
+  // gift id만으로 조회하지 않고 receiver_id까지 같이 확인해 다른 사람 선물 접근을 막습니다.
   const [rows] = await pool.query(
     `
     SELECT
@@ -98,6 +103,7 @@ router.get('/', requireLogin, async (req, res) => {
     let statusCondition = '';
 
     if (normalizedStatus) {
+      // status 값도 문자열로 SQL에 붙이지 않고 ? 바인딩으로 전달합니다.
       statusCondition = 'AND g.status = ?';
       queryParams.push(normalizedStatus);
     }
@@ -150,6 +156,7 @@ router.get('/:id', requireLogin, async (req, res) => {
     const gift = await findOwnedGift(giftId, userId);
 
     if (!gift) {
+      // 존재하지 않거나 내 선물이 아닌 경우 모두 not_found로 처리합니다.
       return sendError(res, 404, 'not_found_gift');
     }
 
@@ -184,6 +191,7 @@ router.patch('/:id/use', requireLogin, async (req, res) => {
       return sendError(res, 400, 'already_used_gift');
     }
 
+    // 사용 처리 시 status와 used_at을 함께 갱신해 "언제 사용했는지" 기록합니다.
     await pool.query(
       `
       UPDATE gifts

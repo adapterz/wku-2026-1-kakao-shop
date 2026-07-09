@@ -5,11 +5,13 @@ const { sendSuccess, sendError } = require('../utils/response');
 const { requireLogin } = require('../middleware/auth');
 
 const router = express.Router();
+// 숫자가 높을수록 해시 계산이 오래 걸리지만 보안성이 좋아집니다. 실습용으로 10을 사용합니다.
 const BCRYPT_SALT_ROUNDS = 10;
 
 /**
  * DB 컬럼명(snake_case)을 API 응답 필드(camelCase)로 변환합니다.
  * 비밀번호는 응답에 절대 포함하지 않습니다.
+ * 이 함수는 "응답으로 내보내도 되는 사용자 필드"를 제한하는 역할도 합니다.
  */
 function toUserResponse(row) {
   return {
@@ -73,10 +75,12 @@ router.post('/signup', async (req, res) => {
     // 이메일은 로그인 식별자로 사용하므로 공백 제거 후 소문자로 통일합니다.
     const normalizedEmail = String(email).trim().toLowerCase();
 
+    // FE에서도 입력 검사를 하지만, 최종 검증은 항상 BE에서 한 번 더 해야 합니다.
     if (!normalizedEmail || !password || !name || !phone) {
       return sendError(res, 400, 'missing_required_fields');
     }
 
+    // 같은 이메일로 중복 가입되는 것을 막습니다. deleted_at이 없는 사용자만 실제 가입자로 봅니다.
     const [existingUsers] = await pool.query(
       'SELECT id FROM users WHERE email = ? AND deleted_at IS NULL',
       [normalizedEmail]
@@ -119,6 +123,7 @@ router.post('/signup', async (req, res) => {
       [result.insertId]
     );
 
+    // INSERT 직후 다시 SELECT하는 이유는 DB에 실제 저장된 값을 기준으로 응답하기 위해서입니다.
     return sendSuccess(res, 201, 'signup_success', toUserResponse(users[0]));
   } catch (error) {
     console.error('POST /api/auth/signup error:', error);
@@ -164,6 +169,7 @@ router.post('/login', async (req, res) => {
     }
 
     const user = users[0];
+    // bcrypt.compare는 입력한 평문 비밀번호와 DB의 해시 값을 비교합니다.
     const passwordMatched = await bcrypt.compare(String(password), user.password);
 
     if (!passwordMatched) {
@@ -171,6 +177,7 @@ router.post('/login', async (req, res) => {
       return sendError(res, 401, 'invalid_email_or_password');
     }
 
+    // 로그인 성공 시 세션 id를 새로 발급한 뒤 사용자 정보를 세션에 저장합니다.
     await regenerateSession(req);
     setSessionUser(req, user);
 
@@ -192,6 +199,7 @@ router.post('/logout', async (req, res) => {
       return sendSuccess(res, 200, 'logout_success', null);
     }
 
+    // 서버에 저장된 세션을 제거하면 이후 같은 브라우저에서도 로그인 상태가 풀립니다.
     await destroySession(req);
 
     return sendSuccess(res, 200, 'logout_success', null);
@@ -208,6 +216,7 @@ router.post('/logout', async (req, res) => {
  */
 router.get('/me', requireLogin, async (req, res) => {
   try {
+    // 세션에는 최소 정보만 있으므로, 화면/API 응답에 필요한 최신 사용자 정보는 DB에서 다시 조회합니다.
     const [users] = await pool.query(
       `
       SELECT
