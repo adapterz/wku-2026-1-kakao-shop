@@ -1,6 +1,70 @@
 <!--
- * 파일: public/giftbox.html
- * 목적: 받은 선물함 화면
- * 왜 이렇게: 받은 선물을 확인하고 사용할 수 있도록 하기 위해
- * 주요: GET /api/gifts
+  파일: public/giftbox.html
+  목적: 선물함 화면 — 받은 선물(환승패스) 목록 보여주기
+  왜: 사용자가 받은 패스를 미사용/사용완료로 구분해서 확인하는 화면
+  주요: 미사용/사용완료 탭, 패스 목록
 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>선물함 - 익산 환승패스</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 상단 헤더 -->
+  <header class="top-header">
+    <button class="icon-btn" onclick="location.href='index.html'">←</button>
+    <h1>선물함</h1>
+    <button class="icon-btn">🔍</button>
+  </header>
+
+  <!-- 미사용/사용완료 탭 -->
+  <nav class="giftbox-tab">
+    <button class="giftbox-tab-btn active" id="tab-unused">미사용 선물 2</button>
+    <button class="giftbox-tab-btn" id="tab-used">사용완료 41</button>
+  </nav>
+
+  <!-- 선물 목록 -->
+  <main class="gift-list">
+    <div class="gift-card" onclick="location.href='gift-use.html'">
+      <img src="img/station.jpg" alt="익산역-시내 환승 1일권">
+      <div class="gift-info">
+        <p class="order-brand">익산교통</p>
+        <p class="product-name">익산역-시내 환승 1일권</p>
+        <p class="gift-sender">from. 나</p>
+        <p class="gift-date">2025.09.18 오전 02:32</p>
+      </div>
+    </div>
+
+    <div class="gift-card" onclick="location.href='gift-use.html'">
+      <img src="img/pass2.jpg" alt="익산 관광 순환버스 패스">
+      <div class="gift-info">
+        <p class="order-brand">익산여행패스</p>
+        <p class="product-name">익산 관광 순환버스 패스</p>
+        <p class="gift-sender">from. 김철수</p>
+        <p class="gift-date">2025.09.17 오후 03:12</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- 하단 고정 탭바 -->
+  <footer class="bottom-tabbar">
+    <button class="tabbar-item" onclick="location.href='index.html'">
+      <span class="tabbar-icon">🏠</span>
+      <span class="tabbar-label">홈</span>
+    </button>
+    <button class="tabbar-item">
+      <span class="tabbar-icon">📋</span>
+      <span class="tabbar-label">패스</span>
+    </button>
+    <button class="tabbar-item active">
+      <span class="tabbar-icon">👤</span>
+      <span class="tabbar-label">선물함</span>
+    </button>
+  </footer>
+
+</body>
+</html>
