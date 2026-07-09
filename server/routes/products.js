@@ -64,7 +64,6 @@ function toProductListResponse(row) {
     price: row.price,
     thumbnailUrl: row.thumbnail_url,
     category: row.category,
-    createdAt: row.created_at,
   };
 }
 
@@ -76,7 +75,6 @@ function toProductDetailResponse(row) {
     description: row.description,
     thumbnailUrl: row.thumbnail_url,
     category: row.category,
-    createdAt: row.created_at,
   };
 }
 
@@ -98,8 +96,7 @@ router.get('/', async (req, res) => {
         price,
         description,
         thumbnail_url,
-        category,
-        created_at
+        category
       FROM products
       ORDER BY id ASC
       `
@@ -143,8 +140,7 @@ router.get('/:id', async (req, res) => {
         price,
         description,
         thumbnail_url,
-        category,
-        created_at
+        category
       FROM products
       WHERE id = ?
       `,

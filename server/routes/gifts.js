@@ -181,7 +181,7 @@ router.patch('/:id/use', requireLogin, async (req, res) => {
     }
 
     if (gift.status === 'used') {
-      return sendError(res, 409, 'already_used_gift');
+      return sendError(res, 400, 'already_used_gift');
     }
 
     await pool.query(
