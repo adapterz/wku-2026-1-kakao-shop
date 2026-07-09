@@ -1089,3 +1089,64 @@ body > * {
   font-size: 11px;
   color: #aaaaaa;
 }
+
+/* 선물 사용 화면 */
+.gift-use-page {
+  padding: 16px;
+}
+
+.gift-use-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.gift-use-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #dddddd;
+  margin-bottom: 16px;
+}
+
+.gift-use-card .order-brand {
+  font-size: 11px;
+  color: #888888;
+  margin-bottom: 2px;
+}
+
+.gift-use-card .product-name {
+  font-size: 15px;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 16px;
+}
+
+/* QR 영역 */
+.qr-box {
+  border-top: 1px dashed #dddddd;
+  padding-top: 16px;
+}
+
+.qr-image {
+  font-size: 20px;
+  line-height: 1.3;
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+  font-family: monospace;
+}
+
+.qr-number {
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #555555;
+  margin-bottom: 8px;
+}
+
+.qr-guide {
+  font-size: 11px;
+  color: #999999;
+}
+
