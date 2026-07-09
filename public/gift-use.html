@@ -25,15 +25,15 @@
 
     <!-- 패스 정보 -->
     <section class="gift-use-card">
-      <img src="img/station.jpg" alt="익산역-시내 환승 1일권">
-      <p class="order-brand">익산교통</p>
-      <p class="product-name">익산역-시내 환승 1일권</p>
+      <img id="gift-product-image" src="img/iksan-logo.svg" alt="선물 상품 이미지">
+      <p class="order-brand" id="gift-brand">익산 교통</p>
+      <p class="product-name" id="gift-product-name">선물 정보를 불러오는 중입니다.</p>
 
       <!-- QR 영역 -->
       <div class="qr-box">
-        <div class="qr-image">⬛⬜⬛⬜⬛<br>⬜⬛⬜⬛⬜<br>⬛⬜⬛⬛⬜<br>⬜⬛⬜⬛⬛<br>⬛⬛⬜⬛⬜</div>
-        <p class="qr-number">2350 9782 3095 3538</p>
-        <p class="qr-guide">버스 탑승 시 이 화면을 단말기에 제시하세요</p>
+        <div class="qr-image" id="gift-qr-image">⬛⬜⬛⬜⬛<br>⬜⬛⬜⬛⬜<br>⬛⬜⬛⬛⬜<br>⬜⬛⬜⬛⬛<br>⬛⬛⬜⬛⬜</div>
+        <p class="qr-number" id="gift-barcode">-</p>
+        <p class="qr-guide" id="gift-status-guide">버스 탑승 시 이 화면을 단말기에 제시하세요</p>
       </div>
     </section>
 
@@ -44,6 +44,7 @@
     <button class="btn-primary" id="use-complete-btn">사용 완료 처리</button>
   </footer>
 
+  <script src="js/api.js"></script>
   <script src="js/gift-use.js"></script>
 </body>
 </html>
