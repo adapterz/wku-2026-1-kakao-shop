@@ -16,7 +16,7 @@
 
   <!-- 상단 헤더 -->
   <header class="top-header">
-    <button class="icon-btn" onclick="history.back()">←</button>
+    <button class="icon-btn" id="back-btn">←</button>
     <h1>선물하기</h1>
     <div style="width: 20px;"></div>
   </header>
@@ -67,8 +67,9 @@
 
   <!-- 하단 고정 결제 버튼 -->
   <footer class="bottom-bar">
-    <button class="btn-primary" onclick="location.href='complete.html'">23,000원 결제하기</button>
+    <button class="btn-primary" id="checkout-btn">23,000원 결제하기</button>
   </footer>
 
+  <script src="js/order.js"></script>
 </body>
 </html>
