@@ -1,6 +1,61 @@
 <!--
- * 파일: public/complete.html
- * 목적: 주문 완료 화면
- * 왜 이렇게: 주문 및 선물 발송이 완료되었음을 안내하기 위해
- * 주요: GET /api/orders/:id
+  파일: public/complete.html
+  목적: 결제 완료 화면 — 주문 결과 보여주기
+  왜: 패스 선물이 정상적으로 발송됐음을 사용자에게 확인시켜주는 화면
+  주요: 완료 안내, 받는 사람 정보, 보낸 패스 요약, 주문내역/선물함 이동 버튼
 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>선물 발송 완료 - 익산 환승패스</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 상단 헤더 -->
+  <header class="top-header">
+    <button class="icon-btn" id="home-btn">🏠</button>
+    <div style="width: 20px;"></div>
+    <div style="width: 20px;"></div>
+  </header>
+
+  <main class="complete-page">
+
+    <!-- 완료 안내 -->
+    <div class="complete-avatar">👤</div>
+    <p class="complete-title" id="complete-title"><strong>나</strong>에게<br>선물을 보냈습니다.</p>
+
+    <!-- 받는 사람 정보 -->
+    <section class="order-section complete-receiver">
+      <h2>받는 사람</h2>
+      <p class="receiver-name" id="receiver-name">주문 정보를 불러오는 중입니다.</p>
+      <p class="receiver-detail" id="receiver-detail"></p>
+    </section>
+
+    <!-- 보낸 패스 요약 -->
+    <section class="order-section">
+      <h2>보낸 선물</h2>
+      <div class="order-summary">
+        <img id="complete-product-image" src="img/station.jpg" alt="익산역-시내 환승 1일권">
+        <div class="order-summary-info">
+          <p class="order-brand" id="complete-product-brand">익산교통</p>
+          <p class="product-name" id="complete-product-name">익산역-시내 환승 1일권</p>
+          <p class="gift-quantity" id="complete-product-quantity">수량 : 1개</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 하단 이동 버튼 -->
+  <footer class="bottom-bar-double">
+    <button class="btn-secondary" id="order-history-btn">주문내역</button>
+    <button class="btn-primary" id="giftbox-btn">선물함 가기</button>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/complete.js"></script>
+</body>
+</html>

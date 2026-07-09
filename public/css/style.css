@@ -1,4 +1,4 @@
- /*
+/*
  * 파일: public/css/style.css
  * 목적: 전체 화면 공통 스타일 (모바일 기준 390px)
  * 왜: 모든 페이지가 공통으로 쓰는 레이아웃과 디자인을 한 곳에서 관리
@@ -44,13 +44,13 @@ body > * {
 }
 
 .iksan-logo {
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
-  padding: 3px;
-  background-color: #ffffff;
-  border-radius: 9px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .icon-btn {
@@ -145,33 +145,26 @@ body > * {
   text-align: center;
 }
 
-/* 배너 */
+/* 배너 (마스코트 배지 — 독립된 알약형 카드) */
 .banner {
   padding: 12px 16px;
-  position: relative;
-}
-
-.banner img {
-  width: 100%;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 8px;
-  background-color: #dddddd;
-}
-
-/* 마룡이 마스코트 뱃지 (배너 위 오버레이) */
-.mascot-badge {
-  position: absolute;
-  left: 24px;
-  bottom: -10px;
   display: flex;
   align-items: center;
-  gap: 8px;
+}
+
+.mascot-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #ffffff;
+  border-radius: 30px;
+  padding: 8px 16px 8px 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .mascot-avatar {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   border-radius: 50%;
   padding: 2px;
@@ -195,31 +188,14 @@ body > * {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .mascot-speech {
-  position: relative;
-  background-color: #ffffff;
-  border: 1px solid #2a90d0;
-  border-radius: 14px;
-  padding: 6px 12px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: bold;
   color: #003d7a;
   white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-}
-
-.mascot-speech::before {
-  content: "";
-  position: absolute;
-  left: -6px;
-  top: 50%;
-  transform: translateY(-50%);
-  border-width: 5px 6px 5px 0;
-  border-style: solid;
-  border-color: transparent #2a90d0 transparent transparent;
 }
 
 /* 실시간 랭킹 섹션 */
@@ -628,8 +604,8 @@ body > * {
   height: 48px;
   border: none;
   border-radius: 6px;
-  background-color: #ffe500;
-  color: #111111;
+  background-color: #005bac;
+  color: #ffffff;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -691,3 +667,486 @@ body > * {
   white-space: nowrap;
   border: 0;
 }
+
+/* product detail */
+
+/* 헤더 왼쪽 아이콘 묶음 (product.html 전용) */
+.header-left {
+  display: flex;
+  gap: 8px;
+}
+
+/* 상품(패스) 상세 이미지 */
+.product-image img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  background-color: #dddddd;
+}
+
+.product-detail {
+  padding: 16px;
+}
+
+.product-category-tag {
+  font-size: 12px;
+  color: #005bac;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.product-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.product-price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff5722;
+  margin-bottom: 20px;
+}
+
+.product-price span {
+  color: #111111;
+}
+
+/* 교통 정보 섹션 */
+.transit-info {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #eeeeee;
+}
+
+.transit-info h2 {
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+}
+
+.info-label {
+  color: #888888;
+}
+
+.info-value {
+  color: #333333;
+  text-align: right;
+}
+
+/* 상품 설명 */
+.product-description {
+  padding: 4px;
+}
+
+.product-description h2 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.product-description p {
+  font-size: 13px;
+  color: #555555;
+  line-height: 1.5;
+}
+
+/* 하단 고정 버튼 2개 (나에게 선물하기 / 선물하기) */
+.bottom-bar-double {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  gap: 8px;
+  background-color: #ffffff;
+  padding: 12px 16px;
+  border-top: 1px solid #eeeeee;
+}
+
+.btn-secondary {
+  flex: 1;
+  padding: 14px;
+  background-color: #f0f0f0;
+  color: #333333;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.bottom-bar-double .btn-primary {
+  flex: 1;
+  padding: 14px;
+  background-color: #005bac;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 주문서 화면 */
+.order-form {
+  padding: 16px;
+}
+
+/* 메시지 카드 */
+.message-card {
+  position: relative;
+  background-color: #fff8e7;
+  border-radius: 12px;
+  padding: 32px 20px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.message-text {
+  font-size: 17px;
+  font-weight: bold;
+  color: #333333;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.message-illustration {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.message-edit-btn {
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #555555;
+  cursor: pointer;
+}
+
+/* 각 주문 항목 구역 */
+.order-section {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.order-section h2 {
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.order-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.option-btn {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #888888;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.option-btn.active {
+  border-color: #005bac;
+  color: #005bac;
+  font-weight: bold;
+}
+
+.text-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* 주문 요약 (패스 이미지+정보) */
+.order-summary {
+  display: flex;
+  gap: 12px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.order-summary img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #dddddd;
+}
+
+.order-summary-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.order-brand {
+  font-size: 11px;
+  color: #888888;
+}
+
+.total-row {
+  border-top: 1px solid #eeeeee;
+  margin-top: 8px;
+  padding-top: 10px;
+  font-weight: bold;
+}
+
+.total-row .info-value {
+  color: #005bac;
+}
+
+/* 하단 고정 버튼 (단일 버튼용, product.html과 별개) */
+.bottom-bar {
+  position: sticky;
+  bottom: 0;
+  background-color: #ffffff;
+  padding: 12px 16px;
+  border-top: 1px solid #eeeeee;
+}
+
+.bottom-bar .btn-primary {
+  width: 100%;
+  padding: 14px;
+  background-color: #005bac;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 결제 완료 화면 */
+.complete-page {
+  padding: 40px 16px;
+  text-align: center;
+}
+
+.complete-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: #333333;
+  color: #ffffff;
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.complete-title {
+  font-size: 17px;
+  color: #333333;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.complete-title strong {
+  color: #005bac;
+}
+
+.complete-receiver {
+  text-align: left;
+}
+
+.receiver-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 4px;
+}
+
+.receiver-detail {
+  font-size: 12px;
+  color: #888888;
+}
+
+.gift-quantity {
+  font-size: 12px;
+  color: #888888;
+  margin-top: 2px;
+}
+
+/* 하단 버튼 2개 나란히 */
+.bottom-bar-double {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  gap: 8px;
+  background-color: #ffffff;
+  padding: 12px 16px;
+  border-top: 1px solid #eeeeee;
+}
+
+.btn-secondary {
+  flex: 1;
+  padding: 14px;
+  background-color: #f0f0f0;
+  color: #333333;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.bottom-bar-double .btn-primary {
+  flex: 1;
+  padding: 14px;
+  background-color: #005bac;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 선물함 탭 (미사용/사용완료) */
+.giftbox-tab {
+  display: flex;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.giftbox-tab-btn {
+  flex: 1;
+  padding: 14px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #888888;
+  cursor: pointer;
+}
+
+.giftbox-tab-btn.active {
+  color: #005bac;
+  font-weight: bold;
+  border-bottom: 2px solid #005bac;
+}
+
+/* 선물 목록 */
+.gift-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.gift-card {
+  display: flex;
+  gap: 12px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.gift-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #dddddd;
+}
+
+.gift-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.gift-sender {
+  font-size: 12px;
+  color: #888888;
+  margin-top: 4px;
+}
+
+.gift-date {
+  font-size: 11px;
+  color: #aaaaaa;
+}
+
+/* 선물 사용 화면 */
+.gift-use-page {
+  padding: 16px;
+}
+
+.gift-use-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.gift-use-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #dddddd;
+  margin-bottom: 16px;
+}
+
+.gift-use-card .order-brand {
+  font-size: 11px;
+  color: #888888;
+  margin-bottom: 2px;
+}
+
+.gift-use-card .product-name {
+  font-size: 15px;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 16px;
+}
+
+/* QR 영역 */
+.qr-box {
+  border-top: 1px dashed #dddddd;
+  padding-top: 16px;
+}
+
+.qr-image {
+  font-size: 20px;
+  line-height: 1.3;
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+  font-family: monospace;
+}
+
+.qr-number {
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #555555;
+  margin-bottom: 8px;
+}
+
+.qr-guide {
+  font-size: 11px;
+  color: #999999;
+}
+

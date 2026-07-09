@@ -44,17 +44,16 @@
     <div class="category-item"><div class="category-circle">🚌</div><span>시내 이동</span></div>
     <div class="category-item"><div class="category-circle">🔁</div><span>환승 패스</span></div>
     <div class="category-item"><div class="category-circle">🎫</div><span>1일권</span></div>
+    <div class="category-item"><div class="category-circle">🧧</div><span>정기권</span></div>
     <div class="category-item"><div class="category-circle">🗺️</div><span>관광 코스</span></div>
     <div class="category-item"><div class="category-circle">🏛️</div><span>문화유산</span></div>
     <div class="category-item"><div class="category-circle">🌿</div><span>당일 여행</span></div>
-    <div class="category-item"><div class="category-circle">🛍️</div><span>상권 연계</span></div>
     <div class="category-item"><div class="category-circle">👨‍👩‍👧</div><span>가족 이동</span></div>
     <div class="category-item"><div class="category-circle">🎒</div><span>학생 추천</span></div>
   </section>
 
   <!-- 배너 -->
   <section class="banner">
-    <img src="img/banner1.jpg" alt="익산 환승패스 프로모션 배너">
     <div class="mascot-badge">
       <div class="mascot-avatar">
         <img src="img/mascot-maryong.jpg" alt="익산시 마스코트 마룡이" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mascot-fallback',textContent:'🐲'}))">
@@ -214,22 +213,23 @@
   </section>
 
   <!-- 하단 고정 탭바 -->
-  <footer class="bottom-tabbar">
-    <button class="tabbar-item active">
-      <span class="tabbar-icon">🏠</span>
-      <span class="tabbar-label">홈</span>
-    </button>
-    <button class="tabbar-item">
-      <span class="tabbar-icon">📋</span>
-      <span class="tabbar-label">패스</span>
-    </button>
-    <button class="tabbar-item">
-      <span class="tabbar-icon">👤</span>
-      <span class="tabbar-label">선물함</span>
-    </button>
-  </footer>
+<footer class="bottom-tabbar">
+  <button class="tabbar-item active">
+    <span class="tabbar-icon">🏠</span>
+    <span class="tabbar-label">홈</span>
+  </button>
+  <button class="tabbar-item">
+    <span class="tabbar-icon">📋</span>
+    <span class="tabbar-label">패스</span>
+  </button>
+  <button class="tabbar-item" id="tabbar-giftbox-btn">
+    <span class="tabbar-icon">👤</span>
+    <span class="tabbar-label">선물함</span>
+  </button>
+</footer>
 
   <script src="js/api.js"></script>
+  <script src="js/components.js"></script>
   <script src="js/home.js"></script>
 </body>
 </html>
