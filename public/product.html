@@ -15,14 +15,14 @@
 <body>
 
   <!-- 상단 헤더 -->
-<header class="top-header">
-  <div class="header-left">
-    <button class="icon-btn" onclick="history.back()">←</button>
-    <button class="icon-btn">🛒</button>
-  </div>
-  <h1>선물하기</h1>
-  <button class="icon-btn">🔍</button>
-</header>
+  <header class="top-header">
+    <div class="header-left">
+      <button class="icon-btn" id="back-btn">←</button>
+      <button class="icon-btn">🛒</button>
+    </div>
+    <h1>선물하기</h1>
+    <button class="icon-btn">🔍</button>
+  </header>
 
   <!-- 패스 대표 이미지 -->
   <div class="product-image">
@@ -36,34 +36,35 @@
     <p class="product-price">11% <span>23,000원</span></p>
 
     <!-- 교통 전용 정보 -->
-<section class="transit-info">
-  <h2>이용 안내</h2>
-  <div class="info-row">
-    <span class="info-label">이용 범위</span>
-    <span class="info-value">익산역 · 시내버스터미널 · 원광대학교 등 시내 전 노선</span>
-  </div>
-  <div class="info-row">
-    <span class="info-label">이용 시간</span>
-    <span class="info-value">최초 승차 후 24시간</span>
-  </div>
-  <div class="info-row">
-    <span class="info-label">환승 안내</span>
-    <span class="info-value">이용 시간 내 무제한 환승 가능</span>
-  </div>
-</section>
+    <section class="transit-info">
+      <h2>이용 안내</h2>
+      <div class="info-row">
+        <span class="info-label">이용 범위</span>
+        <span class="info-value">익산역 · 시내버스터미널 · 원광대학교 등 시내 전 노선</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">이용 시간</span>
+        <span class="info-value">최초 승차 후 24시간</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">환승 안내</span>
+        <span class="info-value">이용 시간 내 무제한 환승 가능</span>
+      </div>
+    </section>
 
-<!-- 상세 설명 -->
-<section class="product-description">
-  <h2>상품 설명</h2>
-  <p>익산역 도착 후 24시간 동안 시내 전 노선을 자유롭게 환승하며 이용할 수 있는 1일 자유 환승패스입니다.</p>
-</section>
+    <!-- 상세 설명 -->
+    <section class="product-description">
+      <h2>상품 설명</h2>
+      <p>익산역 도착 후 24시간 동안 시내 전 노선을 자유롭게 환승하며 이용할 수 있는 1일 자유 환승패스입니다.</p>
+    </section>
   </main>
 
   <!-- 하단 고정 버튼 (나에게 선물하기 / 선물하기) -->
   <footer class="bottom-bar-double">
-    <button class="btn-secondary" onclick="location.href='order.html?type=me'">나에게 선물하기</button>
-    <button class="btn-primary" onclick="location.href='order.html?type=gift'">선물하기</button>
+    <button class="btn-secondary" id="gift-me-btn">나에게 선물하기</button>
+    <button class="btn-primary" id="gift-send-btn">선물하기</button>
   </footer>
 
+  <script src="js/product.js"></script>
 </body>
 </html>
