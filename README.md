@@ -317,3 +317,92 @@ FE 입력
 - `npm install`로 `bcrypt`, `express-session`이 설치되어야 합니다.
 - `pm2 restart all`로 서버가 재시작되어야 합니다.
 - EC2의 `.env` DB 접속 정보가 올바르게 설정되어 있어야 합니다.
+
+
+## 세션 기준 선물함 조회 흐름 이해
+
+현재 선물함 API는 URL에 사용자 id를 직접 넣지 않고, 로그인 세션에 저장된 사용자 id를 기준으로 조회합니다.
+
+예전 설계처럼 아래 주소를 사용하면:
+
+```text
+GET /api/users/1/gifts
+```
+
+URL에 `1`이라는 사용자 id가 직접 노출됩니다.
+
+현재 구조는 아래처럼 호출합니다.
+
+```text
+GET /api/gifts?status=unused
+GET /api/gifts?status=used
+```
+
+겉으로는 사용자 id가 보이지 않지만, 서버 내부에서는 로그인 시 세션에 저장한 사용자 id를 사용합니다.
+
+전체 흐름은 아래와 같습니다.
+
+```text
+1. 로그인 요청
+   POST /api/auth/login
+
+2. BE가 DB users 테이블에서 사용자 확인
+   예: users.id = 1
+
+3. 로그인 성공 시 세션에 사용자 정보 저장
+   req.session.user = { id: 1, email: ..., name: ... }
+
+4. 선물함 조회 요청
+   GET /api/gifts?status=unused
+
+5. BE가 URL id가 아니라 세션 id를 확인
+   req.session.user.id
+
+6. 세션의 사용자 id로 gifts 테이블 조회
+   owner_id 또는 receiver_id가 현재 로그인 사용자 id인 선물 조회
+```
+
+즉, DB의 사용자 id를 사용하지 않는 것이 아닙니다.
+
+차이는 아래와 같습니다.
+
+```text
+기존 방식
+→ URL에서 userId를 받음
+→ /api/users/1/gifts
+
+현재 방식
+→ 로그인 세션에서 userId를 꺼냄
+→ /api/gifts
+```
+
+선물함처럼 “내 정보”를 조회하는 API는 현재 방식이 더 자연스럽습니다.
+
+이유는 다음과 같습니다.
+
+- URL에 다른 사용자의 id가 직접 노출되지 않습니다.
+- 사용자가 `/api/users/2/gifts`처럼 id를 바꿔 요청하는 상황을 줄일 수 있습니다.
+- BE는 항상 현재 로그인한 사용자 기준으로 선물함을 조회할 수 있습니다.
+
+로그아웃과 다른 계정 로그인도 세션 기준으로 처리됩니다.
+
+```text
+로그아웃
+→ POST /api/auth/logout
+→ req.session.destroy()
+→ 이후 /api/gifts 요청 시 login_required
+
+다른 계정 로그인
+→ POST /api/auth/login
+→ 새 사용자 id를 세션에 저장
+→ 이후 /api/gifts 요청은 새 사용자 id 기준으로 조회
+```
+
+정리하면 아래와 같습니다.
+
+```text
+로그인/로그아웃 API가 세션 상태를 만들거나 지우고,
+선물함 API는 그 세션에 저장된 사용자 id를 읽어서 DB를 조회합니다.
+```
+
+따라서 `/api/gifts`에 사용자 id가 보이지 않아도, 로그인된 사용자의 선물함을 조회할 수 있습니다.
