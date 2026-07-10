@@ -1,6 +1,60 @@
 <!--
- * 파일: public/login.html
- * 목적: 사용자 로그인 화면
- * 왜 이렇게: 로그인 후 서비스 기능을 이용할 수 있도록 하기 위해
- * 주요: POST /api/auth/login
+  파일: public/login.html
+  목적: 사용자 로그인 화면
+  주요: POST /api/auth/login 연결 예정
 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인 | 익산 환승패스</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-card">
+      <a class="auth-back-link" href="index.html" aria-label="홈으로 돌아가기">‹</a>
+
+      <div class="auth-brand">
+        <img src="img/iksan-logo.svg" alt="익산시 로고">
+        <strong>익산 환승패스</strong>
+      </div>
+
+      <form class="auth-form" action="#" method="post" data-login-form>
+        <div class="auth-field">
+          <label class="sr-only" for="email">이메일</label>
+          <input id="email" name="email" type="email" placeholder="이메일" autocomplete="email" required>
+        </div>
+
+        <div class="auth-field">
+          <label class="sr-only" for="password">비밀번호</label>
+          <input id="password" name="password" type="password" placeholder="비밀번호" autocomplete="current-password" required>
+        </div>
+
+        <label class="auth-check">
+          <input type="checkbox" name="rememberEmail">
+          <span>이메일 저장</span>
+        </label>
+
+        <button class="auth-primary-btn" type="submit">로그인</button>
+        <p class="auth-message" data-auth-message aria-live="polite"></p>
+      </form>
+
+      <nav class="auth-links" aria-label="계정 메뉴">
+        <a href="signup.html">회원가입</a>
+        <a href="#">계정 찾기</a>
+        <a href="#">비밀번호 찾기</a>
+      </nav>
+
+      <footer class="auth-footer">
+        <a href="#">이용약관</a>
+        <a href="#">개인정보 처리방침</a>
+        <span>익산 환승패스</span>
+      </footer>
+    </section>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

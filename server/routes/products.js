@@ -3,9 +3,61 @@ const { pool } = require('../db');
 const { sendSuccess, sendError } = require('../utils/response');
 
 const router = express.Router();
+// DB 연결 전 FE-BE 흐름만 확인할 때 사용하는 임시 옵션입니다.
+// M1/M2 통합 기준에서는 이 값을 끄고 실제 products 테이블을 조회합니다.
+// 로컬에서 MySQL 없이 화면 연동만 확인할 때만 true로 둡니다.
+const useDummyProducts = process.env.USE_DUMMY_PRODUCTS === 'true';
+
+const dummyProductRows = [
+  {
+    id: 1,
+    name: '시내버스 무제한 1일 패스',
+    price: 5000,
+    description: '익산 시내 주요 정류장을 하루 동안 편하게 이동할 수 있는 패스입니다.',
+    thumbnail_url: '/img/iksan-logo.svg',
+    category: 'daily-pass',
+    brand_name: '익산교통',
+    created_at: '2026-07-08T00:00:00.000Z',
+    updated_at: '2026-07-08T00:00:00.000Z',
+  },
+  {
+    id: 2,
+    name: '익산역-시내 환승 1일권',
+    price: 8000,
+    description: '익산역 도착 후 시내 이동과 환승 흐름을 확인하기 위한 패스입니다.',
+    thumbnail_url: '/img/iksan-logo.svg',
+    category: 'transfer-pass',
+    brand_name: '익산시티패스',
+    created_at: '2026-07-08T00:00:00.000Z',
+    updated_at: '2026-07-08T00:00:00.000Z',
+  },
+  {
+    id: 3,
+    name: '광역·시내 통합 환승 10회권',
+    price: 18000,
+    description: '익산 광역 이동과 시내버스 환승을 함께 확인하기 위한 10회권입니다.',
+    thumbnail_url: '/img/iksan-logo.svg',
+    category: 'transfer-pass',
+    brand_name: '익산교통',
+    created_at: '2026-07-08T00:00:00.000Z',
+    updated_at: '2026-07-08T00:00:00.000Z',
+  },
+  {
+    id: 4,
+    name: '익산 관광 순환버스 패스',
+    price: 12000,
+    description: '익산역에서 관광 코스로 이동하는 흐름을 확인하기 위한 순환버스 패스입니다.',
+    thumbnail_url: '/img/iksan-logo.svg',
+    category: 'tour-pass',
+    brand_name: '익산여행패스',
+    created_at: '2026-07-08T00:00:00.000Z',
+    updated_at: '2026-07-08T00:00:00.000Z',
+  },
+];
 
 /**
  * DB snake_case 컬럼을 API camelCase 필드로 변환합니다.
+ * 목록 화면에서는 카드에 필요한 최소 필드만 내려줍니다.
  */
 function toProductListResponse(row) {
   return {
@@ -14,10 +66,10 @@ function toProductListResponse(row) {
     price: row.price,
     thumbnailUrl: row.thumbnail_url,
     category: row.category,
-    createdAt: row.created_at,
   };
 }
 
+// 상세 화면은 목록보다 설명(description)이 추가로 필요합니다.
 function toProductDetailResponse(row) {
   return {
     productId: row.id,
@@ -26,7 +78,6 @@ function toProductDetailResponse(row) {
     description: row.description,
     thumbnailUrl: row.thumbnail_url,
     category: row.category,
-    createdAt: row.created_at,
   };
 }
 
@@ -36,6 +87,11 @@ function toProductDetailResponse(row) {
  */
 router.get('/', async (req, res) => {
   try {
+    if (useDummyProducts) {
+      return sendSuccess(res, 200, 'get_products_success', dummyProductRows.map(toProductListResponse));
+    }
+
+    // SELECT 필드는 실제 응답에 사용하는 값만 조회해 API 응답과 DB 조회 범위를 맞춥니다.
     const [rows] = await pool.query(
       `
       SELECT
@@ -44,8 +100,7 @@ router.get('/', async (req, res) => {
         price,
         description,
         thumbnail_url,
-        category,
-        created_at
+        category
       FROM products
       ORDER BY id ASC
       `
@@ -67,8 +122,19 @@ router.get('/:id', async (req, res) => {
   try {
     const productId = Number(req.params.id);
 
+    // URL path 값은 문자열로 들어오므로 숫자 id인지 먼저 검증합니다.
     if (!Number.isInteger(productId) || productId <= 0) {
       return sendError(res, 400, 'invalid_product_id');
+    }
+
+    if (useDummyProducts) {
+      const product = dummyProductRows.find((row) => row.id === productId);
+
+      if (!product) {
+        return sendError(res, 404, 'not_found_product');
+      }
+
+      return sendSuccess(res, 200, 'get_product_success', toProductDetailResponse(product));
     }
 
     const [rows] = await pool.query(
@@ -79,14 +145,14 @@ router.get('/:id', async (req, res) => {
         price,
         description,
         thumbnail_url,
-        category,
-        created_at
+        category
       FROM products
       WHERE id = ?
       `,
       [productId]
     );
 
+    // id 형식은 맞지만 DB에 해당 상품이 없으면 404로 응답합니다.
     if (rows.length === 0) {
       return sendError(res, 404, 'not_found_product');
     }

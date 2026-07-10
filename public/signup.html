@@ -1,6 +1,83 @@
 <!--
- * 파일: public/signup.html
- * 목적: 회원가입 화면
- * 왜 이렇게: 새로운 사용자가 계정을 생성할 수 있도록 하기 위해
- * 주요: POST /api/auth/signup
+  파일: public/signup.html
+  목적: 회원가입 화면
+  주요: POST /api/auth/signup 연결 예정
 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입 | 익산 환승패스</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-card auth-card-wide">
+      <a class="auth-back-link" href="login.html" aria-label="로그인으로 돌아가기">‹</a>
+
+      <div class="auth-brand">
+        <img src="img/iksan-logo.svg" alt="익산시 로고">
+        <strong>회원가입</strong>
+      </div>
+
+      <form class="auth-form" action="#" method="post" data-signup-form>
+        <div class="auth-field">
+          <label class="sr-only" for="signup-email">이메일</label>
+          <input id="signup-email" name="email" type="email" placeholder="이메일" autocomplete="email" required>
+        </div>
+
+        <div class="auth-field">
+          <label class="sr-only" for="signup-password">비밀번호</label>
+          <input id="signup-password" name="password" type="password" placeholder="비밀번호" autocomplete="new-password" required>
+        </div>
+
+        <div class="auth-field">
+          <label class="sr-only" for="password-confirm">비밀번호 확인</label>
+          <input id="password-confirm" name="passwordConfirm" type="password" placeholder="비밀번호 확인" autocomplete="new-password" required>
+        </div>
+
+        <div class="auth-field">
+          <label class="sr-only" for="name">이름</label>
+          <input id="name" name="name" type="text" placeholder="이름" autocomplete="name" required>
+        </div>
+
+        <div class="auth-field">
+          <label class="sr-only" for="phone">전화번호</label>
+          <input id="phone" name="phone" type="tel" placeholder="전화번호" autocomplete="tel" required>
+        </div>
+
+        <div class="auth-row">
+          <div class="auth-field">
+            <label class="sr-only" for="birth-date">생년월일</label>
+            <input id="birth-date" name="birthDate" type="date">
+          </div>
+
+          <div class="auth-field">
+            <label class="sr-only" for="gender">성별</label>
+            <select id="gender" name="gender">
+              <option value="">성별</option>
+              <option value="M">남성</option>
+              <option value="F">여성</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="auth-check">
+          <input type="checkbox" name="agreeTerms" required>
+          <span>약관 및 개인정보 처리에 동의합니다.</span>
+        </label>
+
+        <button class="auth-primary-btn" type="submit">회원가입</button>
+        <p class="auth-message" data-auth-message aria-live="polite"></p>
+      </form>
+
+      <nav class="auth-links" aria-label="로그인 메뉴">
+        <a href="login.html">이미 계정이 있으신가요?</a>
+      </nav>
+    </section>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/signup.js"></script>
+</body>
+</html>
