@@ -7,6 +7,7 @@ const { requireLogin } = require('../middleware/auth');
 const router = express.Router();
 // 숫자가 높을수록 해시 계산이 오래 걸리지만 보안성이 좋아집니다. 실습용으로 10을 사용합니다.
 const BCRYPT_SALT_ROUNDS = 10;
+const MIN_BIRTH_YEAR = 1900;
 const WEAK_PASSWORDS = new Set([
   'password',
   'password1',
@@ -46,13 +47,24 @@ function isStrongPassword(password, email) {
 }
 
 function isValidBirthDate(value) {
-  const birthDate = new Date(value);
+  // FE 검증은 우회될 수 있으므로, BE에서도 연도 4자리와 실제 존재 날짜를 최종 확인합니다.
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return false;
+  }
+
+  const [year, month, day] = value.split('-').map(Number);
+  const birthDate = new Date(Date.UTC(year, month - 1, day));
+  const today = new Date();
+  const todayDate = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
 
   return (
-    /^\d{4}-\d{2}-\d{2}$/.test(value) &&
+    year >= MIN_BIRTH_YEAR &&
     !Number.isNaN(birthDate.getTime()) &&
+    birthDate.getUTCFullYear() === year &&
+    birthDate.getUTCMonth() === month - 1 &&
+    birthDate.getUTCDate() === day &&
     birthDate.toISOString().slice(0, 10) === value &&
-    birthDate <= new Date()
+    birthDate <= todayDate
   );
 }
 

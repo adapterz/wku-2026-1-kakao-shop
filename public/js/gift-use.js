@@ -41,7 +41,7 @@ document.getElementById('use-complete-btn').addEventListener('click', async () =
 
     selectedGift = response.data;
     renderGiftDetail(selectedGift);
-    alert('사용 완료 처리되었습니다.');
+    alert('패스 사용이 완료되었습니다.');
     location.href = 'giftbox.html';
   } catch (error) {
     console.error('사용 처리 중 오류:', error);
