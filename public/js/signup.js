@@ -7,6 +7,11 @@
 const signupForm = document.querySelector('[data-signup-form]');
 const signupMessage = document.querySelector('[data-auth-message]');
 
+function isValidEmail(email) {
+  // type="email"은 1@1 같은 값도 통과할 수 있어, 도메인 점과 2자 이상 확장자를 추가로 확인합니다.
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+}
+
 function setSignupMessage(message, type = 'info') {
   if (!signupMessage) return;
 
@@ -35,6 +40,11 @@ if (signupForm) {
     // 회원가입 payload는 ERD/API에서 약속한 users 필드 기준으로 구성합니다.
     if (!payload.email || !payload.password || !payload.name || !payload.phone) {
       setSignupMessage('필수 입력값을 확인해주세요.', 'error');
+      return;
+    }
+
+    if (!isValidEmail(payload.email)) {
+      setSignupMessage('이메일 형식을 확인해주세요. 예: name@example.com', 'error');
       return;
     }
 

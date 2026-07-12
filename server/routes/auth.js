@@ -8,6 +8,11 @@ const router = express.Router();
 // 숫자가 높을수록 해시 계산이 오래 걸리지만 보안성이 좋아집니다. 실습용으로 10을 사용합니다.
 const BCRYPT_SALT_ROUNDS = 10;
 
+function isValidEmail(email) {
+  // FE 검증은 우회될 수 있으므로, 가입 식별자인 이메일 형식은 BE에서 최종 검증합니다.
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+}
+
 /**
  * DB 컬럼명(snake_case)을 API 응답 필드(camelCase)로 변환합니다.
  * 비밀번호는 응답에 절대 포함하지 않습니다.
@@ -78,6 +83,10 @@ router.post('/signup', async (req, res) => {
     // FE에서도 입력 검사를 하지만, 최종 검증은 항상 BE에서 한 번 더 해야 합니다.
     if (!normalizedEmail || !password || !name || !phone) {
       return sendError(res, 400, 'missing_required_fields');
+    }
+
+    if (!isValidEmail(normalizedEmail)) {
+      return sendError(res, 400, 'invalid_email_format');
     }
 
     // 같은 이메일로 중복 가입되는 것을 막습니다. deleted_at이 없는 사용자만 실제 가입자로 봅니다.
