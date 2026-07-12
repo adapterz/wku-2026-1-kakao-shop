@@ -6,6 +6,8 @@
 
 const signupForm = document.querySelector('[data-signup-form]');
 const signupMessage = document.querySelector('[data-auth-message]');
+const birthDateInput = document.getElementById('birth-date');
+const MIN_BIRTH_YEAR = 1900;
 const WEAK_PASSWORDS = new Set([
   'password',
   'password1',
@@ -57,12 +59,55 @@ function getPasswordValidationMessage(password, email) {
   return '';
 }
 
+function getTodayDateString() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+function getBirthDateValidationMessage(value) {
+  // 일부 브라우저에서는 date input에 5자리 이상 연도 입력이 가능해, submit 전에 한 번 더 막습니다.
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return '생년월일은 연도 4자리 형식으로 입력해주세요.';
+  }
+
+  const [year, month, day] = value.split('-').map(Number);
+  const birthDate = new Date(year, month - 1, day);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (year < MIN_BIRTH_YEAR) {
+    return `${MIN_BIRTH_YEAR}년 이후 생년월일만 입력할 수 있습니다.`;
+  }
+
+  if (
+    birthDate.getFullYear() !== year ||
+    birthDate.getMonth() !== month - 1 ||
+    birthDate.getDate() !== day
+  ) {
+    return '존재하는 생년월일을 입력해주세요.';
+  }
+
+  if (birthDate > today) {
+    return '미래 날짜는 생년월일로 사용할 수 없습니다.';
+  }
+
+  return '';
+}
+
 function setSignupMessage(message, type = 'info') {
   if (!signupMessage) return;
 
   signupMessage.textContent = message;
   // CSS에서 성공/실패 메시지 색을 구분할 수 있도록 상태값을 data 속성에 남깁니다.
   signupMessage.dataset.type = type;
+}
+
+if (birthDateInput) {
+  birthDateInput.max = getTodayDateString();
 }
 
 if (signupForm) {
@@ -91,6 +136,12 @@ if (signupForm) {
 
     if (!agreedTerms) {
       setSignupMessage('약관 및 개인정보 처리에 동의해주세요.', 'error');
+      return;
+    }
+
+    const birthDateValidationMessage = getBirthDateValidationMessage(payload.birthDate);
+    if (birthDateValidationMessage) {
+      setSignupMessage(birthDateValidationMessage, 'error');
       return;
     }
 
