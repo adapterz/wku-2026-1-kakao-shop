@@ -45,6 +45,21 @@ function isStrongPassword(password, email) {
   );
 }
 
+function isValidBirthDate(value) {
+  const birthDate = new Date(value);
+
+  return (
+    /^\d{4}-\d{2}-\d{2}$/.test(value) &&
+    !Number.isNaN(birthDate.getTime()) &&
+    birthDate.toISOString().slice(0, 10) === value &&
+    birthDate <= new Date()
+  );
+}
+
+function isValidGender(value) {
+  return ['M', 'F'].includes(value);
+}
+
 /**
  * DB 컬럼명(snake_case)을 API 응답 필드(camelCase)로 변환합니다.
  * 비밀번호는 응답에 절대 포함하지 않습니다.
@@ -111,9 +126,11 @@ router.post('/signup', async (req, res) => {
     } = req.body || {};
     // 이메일은 로그인 식별자로 사용하므로 공백 제거 후 소문자로 통일합니다.
     const normalizedEmail = String(email).trim().toLowerCase();
+    const normalizedBirthDate = String(birthDate || '').trim();
+    const normalizedGender = String(gender || '').trim();
 
     // FE에서도 입력 검사를 하지만, 최종 검증은 항상 BE에서 한 번 더 해야 합니다.
-    if (!normalizedEmail || !password || !name || !phone) {
+    if (!normalizedEmail || !password || !name || !phone || !normalizedBirthDate || !normalizedGender) {
       return sendError(res, 400, 'missing_required_fields');
     }
 
@@ -123,6 +140,14 @@ router.post('/signup', async (req, res) => {
 
     if (!isStrongPassword(String(password), normalizedEmail)) {
       return sendError(res, 400, 'weak_password');
+    }
+
+    if (!isValidBirthDate(normalizedBirthDate)) {
+      return sendError(res, 400, 'invalid_birth_date');
+    }
+
+    if (!isValidGender(normalizedGender)) {
+      return sendError(res, 400, 'invalid_gender');
     }
 
     // 같은 이메일로 중복 가입되는 것을 막습니다. deleted_at이 없는 사용자만 실제 가입자로 봅니다.
@@ -147,8 +172,8 @@ router.post('/signup', async (req, res) => {
         passwordHash,
         String(name).trim(),
         String(phone).trim(),
-        birthDate || null,
-        gender || null,
+        normalizedBirthDate,
+        normalizedGender,
       ]
     );
 
