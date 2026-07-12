@@ -31,6 +31,15 @@
     <button class="tab">당일권</button>
   </nav>
 
+  <!-- 로그인 상태에서만 보여주는 친구 선택 안내 -->
+  <section id="friend-select-panel" class="friend-select-panel is-hidden" aria-label="선물할 친구 선택">
+    <button class="friend-select-card" type="button">
+      <span class="friend-plus">+</span>
+      <span class="friend-select-text">환승패스를 선물할 친구를 선택해주세요.</span>
+      <span class="friend-status-dot" aria-hidden="true"></span>
+    </button>
+  </section>
+
   <!-- 선물테마 서브탭 -->
   <nav class="sub-tab-menu">
     <button class="sub-tab active">이동 테마</button>
