@@ -25,19 +25,22 @@
 
     <!-- 메시지 카드 -->
     <section class="message-card">
-      <p class="message-text">나는 내가 챙긴다!<br>소중한 나에게 주는 선물</p>
+      <p class="message-text" id="gift-message-text">나는 내가 챙긴다!
+소중한 나에게 주는 선물</p>
+      <textarea id="gift-message-input" class="message-input" maxlength="80" rows="3" aria-label="선물 메시지 입력" hidden></textarea>
+      <p class="message-guide" id="gift-message-guide" hidden>최대 80자까지 입력할 수 있습니다.</p>
       <div class="message-illustration">🚌💙</div>
-      <button class="message-edit-btn">✏️ 메시지 편집</button>
+      <button class="message-edit-btn" id="message-edit-btn" type="button">✏️ 메시지 편집</button>
     </section>
 
     <!-- 받는 사람 선택 -->
     <section class="order-section">
       <h2>받는 사람</h2>
       <div class="order-row">
-        <button class="option-btn active" id="btn-me">나에게 선물</button>
-        <button class="option-btn" id="btn-friend">친구에게 선물</button>
+        <button class="option-btn active" id="btn-me" type="button" aria-pressed="true">나에게 선물</button>
+        <button class="option-btn" id="btn-friend" type="button" aria-pressed="false">친구에게 선물</button>
       </div>
-      <input type="text" id="receiver-input" placeholder="받는 사람 이메일 또는 아이디" class="text-input">
+      <input type="text" id="receiver-input" placeholder="받는 사람 이메일 또는 아이디" class="text-input" hidden disabled>
     </section>
 
     <!-- 주문 내역 -->

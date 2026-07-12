@@ -7,6 +7,70 @@ const { requireLogin } = require('../middleware/auth');
 const router = express.Router();
 // 숫자가 높을수록 해시 계산이 오래 걸리지만 보안성이 좋아집니다. 실습용으로 10을 사용합니다.
 const BCRYPT_SALT_ROUNDS = 10;
+const MIN_BIRTH_YEAR = 1900;
+const WEAK_PASSWORDS = new Set([
+  'password',
+  'password1',
+  'qwer1234',
+  'qwerty123',
+  '12345678',
+  '11111111',
+  '00000000',
+  'abc12345',
+  'admin1234',
+]);
+
+function isValidEmail(email) {
+  // FE 검증은 우회될 수 있으므로, 가입 식별자인 이메일 형식은 BE에서 최종 검증합니다.
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+    return false;
+  }
+
+  const [localPart, domain] = email.split('@');
+  const domainLabels = domain.split('.');
+  const mainDomain = domainLabels[0] || '';
+
+  return localPart.length >= 2 && mainDomain.length >= 2 && /[a-zA-Z]/.test(mainDomain);
+}
+
+function isStrongPassword(password, email) {
+  const normalizedPassword = String(password).toLowerCase();
+
+  return (
+    String(password).length >= 8 &&
+    /[a-zA-Z]/.test(password) &&
+    /\d/.test(password) &&
+    !/^(.)\1+$/.test(password) &&
+    !WEAK_PASSWORDS.has(normalizedPassword) &&
+    normalizedPassword !== String(email).toLowerCase()
+  );
+}
+
+function isValidBirthDate(value) {
+  // FE 검증은 우회될 수 있으므로, BE에서도 연도 4자리와 실제 존재 날짜를 최종 확인합니다.
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return false;
+  }
+
+  const [year, month, day] = value.split('-').map(Number);
+  const birthDate = new Date(Date.UTC(year, month - 1, day));
+  const today = new Date();
+  const todayDate = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
+
+  return (
+    year >= MIN_BIRTH_YEAR &&
+    !Number.isNaN(birthDate.getTime()) &&
+    birthDate.getUTCFullYear() === year &&
+    birthDate.getUTCMonth() === month - 1 &&
+    birthDate.getUTCDate() === day &&
+    birthDate.toISOString().slice(0, 10) === value &&
+    birthDate <= todayDate
+  );
+}
+
+function isValidGender(value) {
+  return ['M', 'F'].includes(value);
+}
 
 /**
  * DB 컬럼명(snake_case)을 API 응답 필드(camelCase)로 변환합니다.
@@ -74,10 +138,28 @@ router.post('/signup', async (req, res) => {
     } = req.body || {};
     // 이메일은 로그인 식별자로 사용하므로 공백 제거 후 소문자로 통일합니다.
     const normalizedEmail = String(email).trim().toLowerCase();
+    const normalizedBirthDate = String(birthDate || '').trim();
+    const normalizedGender = String(gender || '').trim();
 
     // FE에서도 입력 검사를 하지만, 최종 검증은 항상 BE에서 한 번 더 해야 합니다.
-    if (!normalizedEmail || !password || !name || !phone) {
+    if (!normalizedEmail || !password || !name || !phone || !normalizedBirthDate || !normalizedGender) {
       return sendError(res, 400, 'missing_required_fields');
+    }
+
+    if (!isValidEmail(normalizedEmail)) {
+      return sendError(res, 400, 'invalid_email_format');
+    }
+
+    if (!isStrongPassword(String(password), normalizedEmail)) {
+      return sendError(res, 400, 'weak_password');
+    }
+
+    if (!isValidBirthDate(normalizedBirthDate)) {
+      return sendError(res, 400, 'invalid_birth_date');
+    }
+
+    if (!isValidGender(normalizedGender)) {
+      return sendError(res, 400, 'invalid_gender');
     }
 
     // 같은 이메일로 중복 가입되는 것을 막습니다. deleted_at이 없는 사용자만 실제 가입자로 봅니다.
@@ -102,8 +184,8 @@ router.post('/signup', async (req, res) => {
         passwordHash,
         String(name).trim(),
         String(phone).trim(),
-        birthDate || null,
-        gender || null,
+        normalizedBirthDate,
+        normalizedGender,
       ]
     );
 

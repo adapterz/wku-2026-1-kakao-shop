@@ -49,3 +49,8 @@ async function signupUser(payload) {
     body: JSON.stringify(payload),
   });
 }
+
+async function fetchCurrentUser() {
+  // 세션 쿠키 기준으로 현재 로그인 사용자를 확인합니다. 비로그인 상태면 BE가 401을 내려줍니다.
+  return requestJson('/api/auth/me');
+}

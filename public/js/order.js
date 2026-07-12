@@ -10,6 +10,12 @@ const orderParams = new URLSearchParams(location.search);
 // product.html에서 넘긴 productId로 주문서에 표시할 상품과 주문 생성 대상을 맞춥니다.
 const productId = Number(orderParams.get('productId'));
 let selectedProduct = null;
+let isEditingGiftMessage = false;
+
+const giftMessageText = document.getElementById('gift-message-text');
+const giftMessageInput = document.getElementById('gift-message-input');
+const giftMessageGuide = document.getElementById('gift-message-guide');
+const messageEditBtn = document.getElementById('message-edit-btn');
 
 // 주문서는 로그인 사용자만 접근 가능해야 하므로 화면 로딩 시 세션을 먼저 확인합니다.
 checkLoginBeforeOrder();
@@ -20,22 +26,43 @@ document.getElementById('back-btn').addEventListener('click', () => {
   history.back();
 });
 
+messageEditBtn.addEventListener('click', () => {
+  if (!isEditingGiftMessage) {
+    // 기존 카드 문구를 입력창에 옮겨 사용자가 바로 수정할 수 있게 합니다.
+    giftMessageInput.value = giftMessageText.textContent.trim();
+    setGiftMessageEditMode(true);
+    giftMessageInput.focus();
+    return;
+  }
+
+  const nextMessage = giftMessageInput.value.trim();
+
+  if (!nextMessage) {
+    alert('선물 메시지를 입력해주세요.');
+    giftMessageInput.focus();
+    return;
+  }
+
+  giftMessageText.textContent = nextMessage;
+  setGiftMessageEditMode(false);
+});
+
 // 받는 사람 토글 (나에게 선물 / 친구에게 선물)
 const btnMe = document.getElementById('btn-me');
 const btnFriend = document.getElementById('btn-friend');
 const receiverInput = document.getElementById('receiver-input');
 
 btnMe.addEventListener('click', () => {
-  btnMe.classList.add('active');
-  btnFriend.classList.remove('active');
-  receiverInput.style.display = 'none'; // 나에게 선물이면 받는 사람 입력 불필요
+  setReceiverMode('me');
 });
 
 btnFriend.addEventListener('click', () => {
-  btnFriend.classList.add('active');
-  btnMe.classList.remove('active');
-  receiverInput.style.display = 'block';
+  setReceiverMode('friend');
+  receiverInput.focus();
 });
+
+// M2는 나에게 선물하기가 기본 흐름이므로, 초기 화면에서는 받는 사람 입력칸을 숨깁니다.
+setReceiverMode('me');
 
 // 결제하기 버튼 — 주문 생성(Mock 결제 포함) API 호출
 document.getElementById('checkout-btn').addEventListener('click', async () => {
@@ -55,7 +82,7 @@ document.getElementById('checkout-btn').addEventListener('click', async () => {
   const orderData = {
     productId,
     // M2 명세 기준 요청 필드는 message가 아니라 giftMessage로 통일합니다.
-    giftMessage: document.querySelector('.message-text').textContent.trim().replace(/\s+/g, ' ')
+    giftMessage: getGiftMessage()
   };
 
   try {
@@ -125,6 +152,34 @@ function renderOrderProduct(product) {
   document.getElementById('order-total-price').textContent = productPrice;
   document.getElementById('order-final-price').textContent = productPrice;
   document.getElementById('checkout-btn').textContent = `${productPrice} 결제하기`;
+}
+
+function setGiftMessageEditMode(isEditing) {
+  isEditingGiftMessage = isEditing;
+  giftMessageText.hidden = isEditing;
+  giftMessageInput.hidden = !isEditing;
+  giftMessageGuide.hidden = !isEditing;
+  messageEditBtn.textContent = isEditing ? '메시지 저장' : '✏️ 메시지 편집';
+}
+
+function getGiftMessage() {
+  return giftMessageText.textContent.trim().replace(/\s+/g, ' ');
+}
+
+function setReceiverMode(mode) {
+  const isFriendMode = mode === 'friend';
+
+  btnMe.classList.toggle('active', !isFriendMode);
+  btnFriend.classList.toggle('active', isFriendMode);
+  btnMe.setAttribute('aria-pressed', String(!isFriendMode));
+  btnFriend.setAttribute('aria-pressed', String(isFriendMode));
+
+  receiverInput.hidden = !isFriendMode;
+  receiverInput.disabled = !isFriendMode;
+
+  if (!isFriendMode) {
+    receiverInput.value = '';
+  }
 }
 
 function showOrderProductError(message) {
