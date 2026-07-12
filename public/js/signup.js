@@ -81,10 +81,16 @@ if (signupForm) {
     };
     // passwordConfirm은 화면 검증용 값이라 BE로 보내지 않습니다.
     const passwordConfirm = String(formData.get('passwordConfirm') || '');
+    const agreedTerms = formData.get('agreeTerms') === 'on';
 
     // 회원가입 payload는 ERD/API에서 약속한 users 필드 기준으로 구성합니다.
-    if (!payload.email || !payload.password || !payload.name || !payload.phone) {
+    if (!payload.email || !payload.password || !payload.name || !payload.phone || !payload.birthDate || !payload.gender) {
       setSignupMessage('필수 입력값을 확인해주세요.', 'error');
+      return;
+    }
+
+    if (!agreedTerms) {
+      setSignupMessage('약관 및 개인정보 처리에 동의해주세요.', 'error');
       return;
     }
 
