@@ -7,9 +7,27 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   // HTML이 먼저 그려진 뒤 DOM 요소를 찾기 위해 DOMContentLoaded 이후에 실행합니다.
+  renderFriendSelectPanel();
   loadProducts();
   bindTabbarEvents();
 });
+
+async function renderFriendSelectPanel() {
+  const friendSelectPanel = document.getElementById('friend-select-panel');
+
+  if (!friendSelectPanel) {
+    return;
+  }
+
+  try {
+    // 친구 선택 기능은 아직 정적 UI만 제공하고, 로그인 여부 확인은 기존 /api/auth/me를 재사용합니다.
+    await fetchCurrentUser();
+    friendSelectPanel.classList.remove('is-hidden');
+  } catch (error) {
+    // 비로그인 사용자는 홈을 그대로 볼 수 있어야 하므로, 401은 조용히 숨김 상태로 둡니다.
+    friendSelectPanel.classList.add('is-hidden');
+  }
+}
 
 async function loadProducts() {
   const productList = document.getElementById('product-list');
