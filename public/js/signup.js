@@ -6,10 +6,55 @@
 
 const signupForm = document.querySelector('[data-signup-form]');
 const signupMessage = document.querySelector('[data-auth-message]');
+const WEAK_PASSWORDS = new Set([
+  'password',
+  'password1',
+  'qwer1234',
+  'qwerty123',
+  '12345678',
+  '11111111',
+  '00000000',
+  'abc12345',
+  'admin1234',
+]);
 
-function isValidEmail(email) {
-  // type="email"은 1@1 같은 값도 통과할 수 있어, 도메인 점과 2자 이상 확장자를 추가로 확인합니다.
-  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+function getEmailValidationMessage(email) {
+  // type="email"은 1@1 같은 값도 통과할 수 있어, 도메인 구조를 한 번 더 확인합니다.
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+    return '이메일 형식을 확인해주세요. 예: name@example.com';
+  }
+
+  const [localPart, domain] = email.split('@');
+  const domainLabels = domain.split('.');
+  const mainDomain = domainLabels[0] || '';
+
+  if (localPart.length < 2 || mainDomain.length < 2 || !/[a-zA-Z]/.test(mainDomain)) {
+    return '사용 가능한 이메일 주소를 입력해주세요. 예: name@gmail.com';
+  }
+
+  return '';
+}
+
+function getPasswordValidationMessage(password, email) {
+  const normalizedPassword = password.toLowerCase();
+
+  if (password.length < 8) {
+    return '비밀번호는 8자 이상으로 입력해주세요.';
+  }
+
+  if (!/[a-zA-Z]/.test(password) || !/\d/.test(password)) {
+    return '비밀번호는 영문과 숫자를 함께 포함해야 합니다.';
+  }
+
+  if (/^(.)\1+$/.test(password) || WEAK_PASSWORDS.has(normalizedPassword)) {
+    return '너무 단순한 비밀번호는 사용할 수 없습니다.';
+  }
+
+  if (email && normalizedPassword === email.toLowerCase()) {
+    return '이메일과 같은 비밀번호는 사용할 수 없습니다.';
+  }
+
+  return '';
 }
 
 function setSignupMessage(message, type = 'info') {
@@ -43,8 +88,15 @@ if (signupForm) {
       return;
     }
 
-    if (!isValidEmail(payload.email)) {
-      setSignupMessage('이메일 형식을 확인해주세요. 예: name@example.com', 'error');
+    const emailValidationMessage = getEmailValidationMessage(payload.email);
+    if (emailValidationMessage) {
+      setSignupMessage(emailValidationMessage, 'error');
+      return;
+    }
+
+    const passwordValidationMessage = getPasswordValidationMessage(payload.password, payload.email);
+    if (passwordValidationMessage) {
+      setSignupMessage(passwordValidationMessage, 'error');
       return;
     }
 

@@ -7,10 +7,42 @@ const { requireLogin } = require('../middleware/auth');
 const router = express.Router();
 // 숫자가 높을수록 해시 계산이 오래 걸리지만 보안성이 좋아집니다. 실습용으로 10을 사용합니다.
 const BCRYPT_SALT_ROUNDS = 10;
+const WEAK_PASSWORDS = new Set([
+  'password',
+  'password1',
+  'qwer1234',
+  'qwerty123',
+  '12345678',
+  '11111111',
+  '00000000',
+  'abc12345',
+  'admin1234',
+]);
 
 function isValidEmail(email) {
   // FE 검증은 우회될 수 있으므로, 가입 식별자인 이메일 형식은 BE에서 최종 검증합니다.
-  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+    return false;
+  }
+
+  const [localPart, domain] = email.split('@');
+  const domainLabels = domain.split('.');
+  const mainDomain = domainLabels[0] || '';
+
+  return localPart.length >= 2 && mainDomain.length >= 2 && /[a-zA-Z]/.test(mainDomain);
+}
+
+function isStrongPassword(password, email) {
+  const normalizedPassword = String(password).toLowerCase();
+
+  return (
+    String(password).length >= 8 &&
+    /[a-zA-Z]/.test(password) &&
+    /\d/.test(password) &&
+    !/^(.)\1+$/.test(password) &&
+    !WEAK_PASSWORDS.has(normalizedPassword) &&
+    normalizedPassword !== String(email).toLowerCase()
+  );
 }
 
 /**
@@ -87,6 +119,10 @@ router.post('/signup', async (req, res) => {
 
     if (!isValidEmail(normalizedEmail)) {
       return sendError(res, 400, 'invalid_email_format');
+    }
+
+    if (!isStrongPassword(String(password), normalizedEmail)) {
+      return sendError(res, 400, 'weak_password');
     }
 
     // 같은 이메일로 중복 가입되는 것을 막습니다. deleted_at이 없는 사용자만 실제 가입자로 봅니다.
