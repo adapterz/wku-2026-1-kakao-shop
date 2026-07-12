@@ -814,6 +814,31 @@ body > * {
   color: #333333;
   line-height: 1.5;
   margin-bottom: 16px;
+  white-space: pre-line;
+}
+
+.message-input {
+  width: 100%;
+  min-height: 86px;
+  resize: none;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #333333;
+  margin-bottom: 8px;
+}
+
+.message-input:focus {
+  outline: none;
+  border-color: #005bac;
+}
+
+.message-guide {
+  font-size: 12px;
+  color: #888888;
+  margin-bottom: 12px;
 }
 
 .message-illustration {
