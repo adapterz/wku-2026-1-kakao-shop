@@ -37,10 +37,10 @@
     <section class="order-section">
       <h2>받는 사람</h2>
       <div class="order-row">
-        <button class="option-btn active" id="btn-me">나에게 선물</button>
-        <button class="option-btn" id="btn-friend">친구에게 선물</button>
+        <button class="option-btn active" id="btn-me" type="button" aria-pressed="true">나에게 선물</button>
+        <button class="option-btn" id="btn-friend" type="button" aria-pressed="false">친구에게 선물</button>
       </div>
-      <input type="text" id="receiver-input" placeholder="받는 사람 이메일 또는 아이디" class="text-input">
+      <input type="text" id="receiver-input" placeholder="받는 사람 이메일 또는 아이디" class="text-input" hidden disabled>
     </section>
 
     <!-- 주문 내역 -->

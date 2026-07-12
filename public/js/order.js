@@ -53,16 +53,16 @@ const btnFriend = document.getElementById('btn-friend');
 const receiverInput = document.getElementById('receiver-input');
 
 btnMe.addEventListener('click', () => {
-  btnMe.classList.add('active');
-  btnFriend.classList.remove('active');
-  receiverInput.style.display = 'none'; // 나에게 선물이면 받는 사람 입력 불필요
+  setReceiverMode('me');
 });
 
 btnFriend.addEventListener('click', () => {
-  btnFriend.classList.add('active');
-  btnMe.classList.remove('active');
-  receiverInput.style.display = 'block';
+  setReceiverMode('friend');
+  receiverInput.focus();
 });
+
+// M2는 나에게 선물하기가 기본 흐름이므로, 초기 화면에서는 받는 사람 입력칸을 숨깁니다.
+setReceiverMode('me');
 
 // 결제하기 버튼 — 주문 생성(Mock 결제 포함) API 호출
 document.getElementById('checkout-btn').addEventListener('click', async () => {
@@ -164,6 +164,22 @@ function setGiftMessageEditMode(isEditing) {
 
 function getGiftMessage() {
   return giftMessageText.textContent.trim().replace(/\s+/g, ' ');
+}
+
+function setReceiverMode(mode) {
+  const isFriendMode = mode === 'friend';
+
+  btnMe.classList.toggle('active', !isFriendMode);
+  btnFriend.classList.toggle('active', isFriendMode);
+  btnMe.setAttribute('aria-pressed', String(!isFriendMode));
+  btnFriend.setAttribute('aria-pressed', String(isFriendMode));
+
+  receiverInput.hidden = !isFriendMode;
+  receiverInput.disabled = !isFriendMode;
+
+  if (!isFriendMode) {
+    receiverInput.value = '';
+  }
 }
 
 function showOrderProductError(message) {
