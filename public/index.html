@@ -1,8 +1,9 @@
 <!--
   파일: public/index.html
-  목적: 홈 화면 — 익산 환승패스 상품 목록 보여주기
-  왜: 사용자가 처음 접속했을 때 익산 교통권과 이동 코스를 둘러보는 메인 화면
-  주요: 상단 타이틀, 탭 메뉴, 환승패스 상품 목록
+  목적: 홈 화면 — 공공 교통 앱 스타일로 추천 패스와 이동 정보 보여주기
+  왜: 팀 간 UI/UX 차별화 결정(C안)에 따라 쇼핑몰형 구성을 걷어내고,
+      교통패스·이동 정보 중심의 화면으로 사용자가 필요한 패스를 빠르게 찾도록 함
+  주요: 히어로 안내, 오늘 추천 요약, 빠른 선택, 추천 패스(실제 상품 API), 인기 이동 구간, 하단 탭바
 -->
 <!DOCTYPE html>
 <html lang="ko">
@@ -15,20 +16,33 @@
 <body>
 
   <!-- 상단 헤더 -->
-  <header class="top-header">
-    <button class="icon-btn">🛒</button>
+  <header class="top-header home-top-header">
     <h1><img src="img/iksan-logo.svg" alt="익산시 로고" class="iksan-logo">익산 환승패스</h1>
-    <button class="icon-btn">🔍</button>
+    <button class="icon-btn" aria-label="검색">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/>
+      </svg>
+    </button>
   </header>
 
   <!-- 히어로 안내 영역 -->
-  <section class="hero-content">
-    <div class="hero-banner">
-      <div class="hero-banner-text">
-        <h1>마룡이와 함께<br>익산 여행 시작!</h1>
-      </div>
-      <img class="hero-mascot-img" src="img/mascot-maryong-transparent.png" alt="익산시 마스코트 마룡이" onerror="this.onerror=null;this.src='img/mascot-maryong.jpg'">
+  <section class="hero">
+    <svg class="hero-route-deco" viewBox="0 0 340 60" fill="none" aria-hidden="true">
+      <path d="M8 46 C 90 8, 210 66, 330 22" stroke="rgba(255,255,255,0.35)" stroke-width="2" stroke-dasharray="1 8" stroke-linecap="round"/>
+      <circle cx="8" cy="46" r="4" fill="rgba(255,255,255,0.75)"/>
+      <circle cx="330" cy="22" r="4" fill="rgba(255,255,255,0.75)"/>
+    </svg>
+    <div class="hero-text">
+      <span class="hero-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 16.5V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9.5"/><path d="M2 16.5h20v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2Z"/><path d="M8 9.5h8"/>
+        </svg>
+        익산역 도착 후 바로 이동
+      </span>
+      <h2>선물 받은 패스로<br>익산을 이동하세요</h2>
+      <p>버스·환승·관광 코스를 QR 승차권으로<br>바로 확인하고 탑승할 수 있어요</p>
     </div>
+    <img class="hero-mascot" src="img/mascot-maryong-transparent.png" alt="익산시 마스코트 마룡이" onerror="this.onerror=null;this.src='img/mascot-maryong.jpg'">
   </section>
 
   <!-- 오늘 추천 요약 카드 -->
@@ -54,141 +68,136 @@
     </button>
   </section>
 
-  <!-- 빠른 선택 (카테고리 아이콘 목록) -->
-  <section class="section-head-wrap">
+  <!-- 빠른 선택 -->
+  <section class="home-section">
     <div class="section-head">
       <h2>빠른 선택</h2>
       <a href="#">전체</a>
     </div>
-    <div class="category-icons">
-      <div class="category-item"><div class="category-circle">🚌</div><span>시내 이동</span></div>
-      <div class="category-item"><div class="category-circle">🔁</div><span>환승 패스</span></div>
-      <div class="category-item"><div class="category-circle">🎫</div><span>1일권</span></div>
-      <div class="category-item"><div class="category-circle">🚉</div><span>익산역 도착</span></div>
-      <div class="category-item"><div class="category-circle">🗺️</div><span>관광 코스</span></div>
+    <div class="quick-grid">
+      <button class="quick-item" type="button">
+        <span class="quick-icon qi-blue">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 17V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v11"/><path d="M4 17h16"/><path d="M5 11h14"/><circle cx="8.5" cy="19.5" r="1.5"/><circle cx="15.5" cy="19.5" r="1.5"/>
+          </svg>
+        </span>
+        <span>시내버스</span>
+      </button>
+      <button class="quick-item" type="button">
+        <span class="quick-icon qi-teal">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 8h13"/><path d="m14 4 4 4-4 4"/><path d="M20 16H7"/><path d="m10 12-4 4 4 4"/>
+          </svg>
+        </span>
+        <span>환승</span>
+      </button>
+      <button class="quick-item" type="button">
+        <span class="quick-icon qi-navy">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 4h10a2 2 0 0 1 2 2v7a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V6a2 2 0 0 1 2-2Z"/><path d="M5 10h14"/><path d="m8 21 1.5-4"/><path d="m16 21-1.5-4"/>
+          </svg>
+        </span>
+        <span>KTX 연계</span>
+      </button>
+      <button class="quick-item" type="button">
+        <span class="quick-icon qi-green">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 21s-6.5-5.2-6.5-10a6.5 6.5 0 0 1 13 0c0 4.8-6.5 10-6.5 10Z"/><circle cx="12" cy="11" r="2.4"/>
+          </svg>
+        </span>
+        <span>관광</span>
+      </button>
     </div>
   </section>
 
-  <!-- 추천 이동 코스 -->
-  <section class="brand-section">
-    <h2>추천 이동 코스</h2>
-    <nav class="brand-sub-tab">
-      <button class="sub-tab active">익산역</button>
-      <button class="sub-tab">문화유산</button>
-      <button class="sub-tab">중앙시장</button>
-      <button class="sub-tab">당일여행</button>
-    </nav>
-
-    <div class="ticket-list">
-      <article class="ticket-card">
-        <div class="ticket-meta">
-          <span>TOUR COURSE</span>
-          <h3>익산역 중앙시장 코스</h3>
-        </div>
-        <div class="ticket-price">6,000원</div>
-      </article>
-      <article class="ticket-card green">
-        <div class="ticket-meta">
-          <span>TOUR COURSE</span>
-          <h3>미륵사지 문화유산 코스</h3>
-        </div>
-        <div class="ticket-price">9,000원</div>
-      </article>
-      <article class="ticket-card orange">
-        <div class="ticket-meta">
-          <span>TOUR COURSE</span>
-          <h3>익산 시내 당일 이동권</h3>
-        </div>
-        <div class="ticket-price">5,000원</div>
-      </article>
+  <!-- 추천 패스 (실제 상품 목록 API 연동) -->
+  <section class="home-section">
+    <div class="section-head">
+      <h2>추천 패스</h2>
+      <a href="#">더보기</a>
+    </div>
+    <div id="product-list" class="pass-list">
+      <p class="loading-message">추천 패스를 불러오는 중입니다.</p>
     </div>
   </section>
 
-  <!-- 인기 이용 구간 -->
-  <section class="popular-brand-section">
-    <div class="ranking-title">
-      <h2>인기 이용 구간</h2>
-      <button class="icon-btn small">🔄</button>
+  <!-- 인기 이동 구간 -->
+  <section class="home-section">
+    <div class="section-head">
+      <h2>인기 이동 구간</h2>
+      <a href="#">노선 보기</a>
     </div>
-
-    <div class="filter-row">
-      <button class="filter-btn">전체</button>
-      <button class="filter-btn active">관광</button>
-      <button class="filter-btn">생활</button>
-    </div>
-
-    <div class="timeline">
-      <div class="route"><span class="dot">1</span><strong>익산역 → 중앙시장</strong></div>
-      <div class="route"><span class="dot">2</span><strong>익산역 → 미륵사지</strong></div>
-      <div class="route"><span class="dot">3</span><strong>익산역 → 원광대학교</strong></div>
-      <div class="route"><span class="dot">4</span><strong>익산역 → 보석박물관</strong></div>
-      <div class="route"><span class="dot">5</span><strong>익산역 → 시외버스터미널</strong></div>
-      <div class="route"><span class="dot">6</span><strong>중앙시장 → 문화예술의거리</strong></div>
-      <div class="route"><span class="dot">7</span><strong>원광대학교 → 익산역</strong></div>
-    </div>
-  </section>
-
-  <!-- 익산 이동을 채워주는 패스 -->
-  <section class="daily-gift-section">
-    <div class="ranking-title">
-      <h2>익산 이동을 채워주는 패스</h2>
-    </div>
-
-    <nav class="sub-tab-menu">
-      <button class="sub-tab active">베스트 패스</button>
-      <button class="sub-tab">출퇴근</button>
-      <button class="sub-tab">관광</button>
-      <button class="sub-tab">신규 코스</button>
-    </nav>
-
-    <div class="product-grid">
-      <div class="product-card-grid">
-        <div class="product-thumb">
-          <img src="img/product7.jpg" alt="익산 생활권 5회 환승권" onerror="this.src='img/iksan-logo.svg'">
+    <div class="route-board">
+      <div class="route-row">
+        <span class="route-num">1</span>
+        <div class="route-info">
+          <strong>익산역 → 중앙시장</strong>
+          <small>시내버스 · 환승 없음</small>
         </div>
-        <p class="product-name-grid">익산 생활권 5회 환승권</p>
-        <p class="product-price-grid">10,000원</p>
-        <div class="product-like">
-          <span class="like-icon">❤️</span>
-          <span class="like-count">1,535</span>
-        </div>
+        <span class="route-time">15분</span>
       </div>
-
-      <div class="product-card-grid">
-        <div class="product-thumb">
-          <img src="img/product8.jpg" alt="익산 주말 관광 패스" onerror="this.src='img/iksan-logo.svg'">
+      <div class="route-row">
+        <span class="route-num">2</span>
+        <div class="route-info">
+          <strong>익산역 → 미륵사지</strong>
+          <small>순환버스 · 환승 없음</small>
         </div>
-        <p class="product-name-grid">익산 주말 관광 패스</p>
-        <p class="product-price-grid">추천 <span>15,000원</span></p>
-        <div class="product-like">
-          <span class="like-icon">❤️</span>
-          <span class="like-count">1,535</span>
-        </div>
+        <span class="route-time">25분</span>
       </div>
-    </div>
-
-    <div class="pagination">
-      <button class="page-arrow">‹</button>
-      <span class="page-info">1 / 5</span>
-      <button class="page-arrow">›</button>
+      <div class="route-row">
+        <span class="route-num">3</span>
+        <div class="route-info">
+          <strong>익산역 → 원광대학교</strong>
+          <small>시내버스 · 환승 1회</small>
+        </div>
+        <span class="route-time">20분</span>
+      </div>
+      <div class="route-row">
+        <span class="route-num">4</span>
+        <div class="route-info">
+          <strong>익산역 → 보석박물관</strong>
+          <small>시내버스 · 환승 1회</small>
+        </div>
+        <span class="route-time">30분</span>
+      </div>
+      <div class="route-row">
+        <span class="route-num">5</span>
+        <div class="route-info">
+          <strong>익산역 → 시외버스터미널</strong>
+          <small>시내버스 · 환승 없음</small>
+        </div>
+        <span class="route-time">10분</span>
+      </div>
     </div>
   </section>
 
   <!-- 하단 고정 탭바 -->
-<footer class="bottom-tabbar">
-  <button class="tabbar-item active">
-    <span class="tabbar-icon">🏠</span>
-    <span class="tabbar-label">홈</span>
-  </button>
-  <button class="tabbar-item">
-    <span class="tabbar-icon">📋</span>
-    <span class="tabbar-label">패스</span>
-  </button>
-  <button class="tabbar-item" id="tabbar-giftbox-btn">
-    <span class="tabbar-icon">👤</span>
-    <span class="tabbar-label">선물함</span>
-  </button>
-</footer>
+  <footer class="bottom-tabbar">
+    <button class="tabbar-item active">
+      <span class="tabbar-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 10.5 9-7 9 7"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5"/>
+        </svg>
+      </span>
+      <span class="tabbar-label">홈</span>
+    </button>
+    <button class="tabbar-item">
+      <span class="tabbar-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2.5 2.5 0 0 0 0 5v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2.5 2.5 0 0 0 0-5Z"/><path d="M14 5v2.5"/><path d="M14 11v2"/><path d="M14 16.5V19"/>
+        </svg>
+      </span>
+      <span class="tabbar-label">패스 구매</span>
+    </button>
+    <button class="tabbar-item" id="tabbar-giftbox-btn">
+      <span class="tabbar-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 12v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8"/><path d="M3 7h18v5H3z"/><path d="M12 7v14"/><path d="M12 7s-1.5-4-4.2-4C5.6 3 4.8 4.6 5.6 5.9 6.4 7.2 12 7 12 7Z"/><path d="M12 7s1.5-4 4.2-4c2.2 0 3 1.6 2.2 2.9C17.6 7.2 12 7 12 7Z"/>
+        </svg>
+      </span>
+      <span class="tabbar-label">내 패스</span>
+    </button>
+  </footer>
 
   <script src="js/api.js"></script>
   <script src="js/components.js"></script>

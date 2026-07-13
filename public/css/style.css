@@ -39,15 +39,13 @@ body > * {
   max-width: 430px;
 }
 
-/* 상단 헤더 (공공 교통 그라데이션) */
+/* 상단 헤더 (차분한 교통기관 네이비 톤) */
 .top-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px;
-  background:
-    radial-gradient(circle at 88% 12%, rgba(255, 215, 90, 0.28), transparent 30%),
-    linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, var(--green) 100%);
+  background: linear-gradient(120deg, var(--navy) 0%, #0a4f8f 100%);
 }
 
 .top-header h1 {
@@ -58,6 +56,18 @@ body > * {
   font-weight: bold;
   color: var(--card);
   letter-spacing: -0.2px;
+}
+
+/* 홈 화면 헤더는 검색 버튼이 오른쪽에만 있어도 로고+문구가 항상 중앙에 오도록 절대 배치합니다. */
+.home-top-header {
+  position: relative;
+  justify-content: flex-end;
+}
+
+.home-top-header h1 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .iksan-logo {
@@ -71,41 +81,19 @@ body > * {
 }
 
 .icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   font-size: 20px;
+  color: var(--card);
   cursor: pointer;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
 }
 
 .icon-btn.small {
   font-size: 14px;
-}
-
-/* 탭 메뉴 */
-.tab-menu {
-  display: flex;
-  overflow-x: auto;
-  background-color: var(--card);
-  padding: 8px 16px;
-  gap: 12px;
-  border-bottom: 1px solid var(--line);
-}
-
-.tab {
-  background: none;
-  border: none;
-  padding: 8px 4px;
-  font-size: 14px;
-  color: var(--muted);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.tab.active {
-  color: var(--blue);
-  font-weight: bold;
-  border-bottom: 2px solid var(--blue);
 }
 
 /* 로그인 상태 친구 선택 안내 */
@@ -167,30 +155,10 @@ body > * {
   box-shadow: 0 0 0 3px rgba(39, 196, 107, 0.16);
 }
 
-/* 서브탭 (선물테마/카테고리/추천브랜드) */
-.sub-tab-menu {
-  display: flex;
-  gap: 20px;
-  padding: 4px 0 12px;
-}
-
-.sub-tab {
-  background: none;
-  border: none;
-  font-size: 14px;
-  color: var(--muted);
-  cursor: pointer;
-}
-
-.sub-tab.active {
-  color: var(--blue);
-  font-weight: bold;
-}
-
-/* 빠른 선택 섹션 헤드 (제목 + 전체 링크) */
-.section-head-wrap {
+/* 홈 화면 공통 섹션 래퍼 (제목 + 링크 + 내용) */
+.home-section {
   padding: 0 16px;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
 }
 
 .section-head {
@@ -214,100 +182,59 @@ body > * {
   text-decoration: none;
 }
 
-/* 빠른 선택 - 카드형 카테고리 아이콘 목록 */
-.category-icons {
+/* 빠른 선택 - 이동 목적별 카드 (시내버스/환승/KTX 연계/관광) */
+.quick-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
 }
 
-.category-item {
+.quick-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 7px;
-  padding: 10px 4px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background-color: var(--card);
-  box-shadow: 0 6px 14px rgba(20, 46, 70, 0.05);
-}
-
-.category-circle {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  background-color: rgba(8, 116, 201, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 19px;
-}
-
-.category-item:nth-child(5n+1) .category-circle {
-  background-color: rgba(255, 159, 67, 0.18);
-}
-
-.category-item:nth-child(5n+2) .category-circle {
-  background-color: rgba(8, 116, 201, 0.14);
-}
-
-.category-item:nth-child(5n+3) .category-circle {
-  background-color: rgba(36, 183, 216, 0.18);
-}
-
-.category-item:nth-child(5n+4) .category-circle {
-  background-color: rgba(50, 164, 119, 0.16);
-}
-
-.category-item:nth-child(5n+5) .category-circle {
-  background-color: rgba(6, 54, 95, 0.12);
-}
-
-.category-item span {
-  font-size: 11px;
-  color: var(--muted);
-  text-align: center;
-}
-
-
-.ranking-title {
-  display: flex;
-  align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
-}
-
-.ranking-title h2 {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-/* 필터 공통 */
-.filter-row {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  margin-bottom: 10px;
-  padding-bottom: 4px;
-}
-
-.filter-btn {
-  flex-shrink: 0;
-  padding: 6px 12px;
+  padding: 14px 4px 12px;
   border: 1px solid var(--line);
   border-radius: 16px;
   background-color: var(--card);
-  font-size: 12px;
-  color: var(--muted);
+  box-shadow: 0 6px 14px rgba(20, 46, 70, 0.05);
+  font-family: inherit;
   cursor: pointer;
-  white-space: nowrap;
 }
 
-.filter-btn.active {
-  background-color: var(--blue);
-  color: var(--card);
-  border-color: var(--blue);
+.quick-item > span:last-child {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.quick-icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+}
+
+.quick-icon.qi-blue {
+  background-color: rgba(8, 116, 201, 0.12);
+  color: var(--blue);
+}
+
+.quick-icon.qi-teal {
+  background-color: rgba(36, 183, 216, 0.15);
+  color: #0d94b5;
+}
+
+.quick-icon.qi-navy {
+  background-color: rgba(6, 54, 95, 0.1);
+  color: var(--navy);
+}
+
+.quick-icon.qi-green {
+  background-color: rgba(50, 164, 119, 0.14);
+  color: var(--green);
 }
 
 /* 상품 목록 (세로형 카드, 상세/기타 화면 재사용) */
@@ -341,63 +268,10 @@ body > * {
   gap: 6px;
 }
 
-/* 상품 그리드 2열 (홈 화면용) */
-.product-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.product-card-grid {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background-color: var(--card);
-  box-shadow: 0 6px 14px rgba(20, 46, 70, 0.05);
-}
-
-.product-thumb {
-  position: relative;
-}
-
-.product-thumb img {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 12px;
-  background-color: var(--line);
-}
-
-.bookmark-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(255,255,255,0.8);
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  padding: 4px;
-  cursor: pointer;
-}
-
-.product-brand {
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 6px;
-}
-
+/* 상품명/가격 텍스트 (상세·선물함 화면에서 재사용) */
 .product-name {
   font-size: 14px;
   color: var(--ink);
-}
-
-.product-name-grid {
-  font-size: 13px;
-  color: var(--ink);
-  margin-top: 2px;
 }
 
 .product-price {
@@ -410,65 +284,17 @@ body > * {
   color: var(--ink);
 }
 
-.product-price-grid {
-  font-size: 14px;
-  font-weight: bold;
-  color: var(--navy);
-  margin-top: 4px;
-}
-
-.product-price-grid span {
-  color: var(--ink);
-}
-
-.product-like {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: 6px;
-  font-size: 11px;
-  color: var(--muted);
-}
-
-/* 추천 이동 코스 / 인기 이용 구간 / 일상을 채워주는 패스 공통 */
-.brand-section, .popular-brand-section, .daily-gift-section {
-  padding: 0 16px;
-  margin-bottom: 22px;
-}
-
-.brand-section h2, .popular-brand-section h2, .daily-gift-section h2 {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 12px;
-}
-
-.brand-sub-tab {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  margin-bottom: 12px;
-}
-
-/* 페이지네이션 */
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 16px;
-}
-
-.page-arrow {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  color: var(--muted);
-}
-
-.page-info {
+/* 상품 목록 로딩/비어있음/오류 안내 (홈·선물함 공용) */
+.loading-message,
+.empty-message,
+.error-message {
+  padding: 28px 12px;
+  text-align: center;
   font-size: 13px;
   color: var(--muted);
+  background-color: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
 }
 
 /* 하단 고정 탭바 */
@@ -499,62 +325,82 @@ body > * {
 }
 
 .tabbar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 18px;
+}
+
+.tabbar-icon svg {
+  display: block;
 }
 
 .tabbar-label {
   font-size: 11px;
 }
 
-/* 홈 화면 히어로 (익산역 사진 배경 + 마룡이 + 큰 헤드라인) */
-.hero-content {
+/* 홈 화면 히어로 (교통 그라데이션 + 노선 장식 + 서비스 목적 헤드라인) */
+.hero {
   position: relative;
   overflow: hidden;
+  padding: 26px 16px 42px;
   color: var(--card);
-  background-image:
-    linear-gradient(135deg, rgba(6, 54, 95, 0.88) 0%, rgba(8, 116, 201, 0.74) 55%, rgba(50, 164, 119, 0.6) 100%),
-    url("../img/station.jpg");
-  background-size: cover, cover;
-  background-position: center, center 65%;
-  background-repeat: no-repeat, no-repeat;
+  background:
+    radial-gradient(circle at 85% 18%, rgba(36, 183, 216, 0.35), transparent 46%),
+    linear-gradient(140deg, var(--navy) 0%, #0a55a0 55%, #128f96 100%);
 }
 
-.hero-content::after {
-  content: "";
+.hero-route-deco {
   position: absolute;
-  left: -30px;
-  right: -30px;
-  bottom: -44px;
-  height: 88px;
-  border-radius: 50%;
-  background: var(--bg);
+  left: 0;
+  right: 0;
+  bottom: 6px;
+  width: 100%;
+  height: 60px;
+  pointer-events: none;
 }
 
-.hero-banner {
+.hero-text {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: end;
-  gap: 10px;
-  min-height: 190px;
-  padding: 26px 16px 40px 16px;
+  max-width: 64%;
 }
 
-.hero-banner-text h1 {
-  margin: 0;
-  font-size: 26px;
-  line-height: 1.28;
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.hero-text h2 {
+  margin: 12px 0 0;
+  font-size: 25px;
+  line-height: 1.3;
   font-weight: 900;
-  color: var(--card);
-  text-shadow: 0 3px 12px rgba(0, 20, 40, 0.45);
+  letter-spacing: -0.4px;
 }
 
-.hero-mascot-img {
-  width: 164px;
+.hero-text p {
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.hero-mascot {
+  position: absolute;
+  right: 8px;
+  bottom: 0;
+  z-index: 1;
+  width: 128px;
   height: auto;
-  justify-self: center;
-  filter: drop-shadow(0 14px 22px rgba(0, 15, 30, 0.45));
+  filter: drop-shadow(0 12px 20px rgba(0, 15, 30, 0.4));
 }
 
 /* 오늘 추천 요약 카드 (히어로 하단에 겹쳐지는 통계 카드) */
@@ -564,7 +410,8 @@ body > * {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin: -8px 16px 12px;
+  padding: 0 16px;
+  margin: -22px 0 14px;
 }
 
 .summary {
@@ -599,145 +446,188 @@ body > * {
   font-weight: 900;
 }
 
-/* 추천 이동 코스 - 그라데이션 티켓 카드 */
-.ticket-list {
+/* 추천 패스 - 승차권(보딩패스) 형태의 상품 카드 (API 상품 목록이 여기에 렌더링됨) */
+.pass-list {
   display: grid;
   gap: 12px;
 }
 
-.ticket-card {
+.pass-ticket {
   position: relative;
   overflow: hidden;
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 12px;
-  min-height: 108px;
-  padding: 15px;
+  align-items: stretch;
   border-radius: 18px;
   color: var(--card);
   background:
-    radial-gradient(circle at 92% 10%, rgba(255, 255, 255, 0.22), transparent 24%),
-    linear-gradient(135deg, var(--blue), var(--cyan));
-  box-shadow: 0 12px 26px rgba(8, 105, 181, 0.2);
+    radial-gradient(circle at 90% 8%, rgba(255, 255, 255, 0.2), transparent 30%),
+    linear-gradient(135deg, #0a5ca8, #2493dd);
+  box-shadow: 0 10px 24px rgba(8, 105, 181, 0.18);
+  cursor: pointer;
 }
 
-.ticket-card.green {
+.pass-ticket.theme-teal {
   background:
-    radial-gradient(circle at 92% 10%, rgba(255, 255, 255, 0.24), transparent 24%),
-    linear-gradient(135deg, var(--green), #6bcf9e);
-  box-shadow: 0 12px 26px rgba(47, 159, 114, 0.2);
+    radial-gradient(circle at 90% 8%, rgba(255, 255, 255, 0.22), transparent 30%),
+    linear-gradient(135deg, #1a9c77, #3cc394);
+  box-shadow: 0 10px 24px rgba(26, 156, 119, 0.2);
 }
 
-.ticket-card.orange {
+.pass-ticket.theme-orange {
   background:
-    radial-gradient(circle at 92% 10%, rgba(255, 255, 255, 0.22), transparent 24%),
-    linear-gradient(135deg, var(--orange), var(--yellow));
-  color: #3e2b05;
-  box-shadow: 0 12px 26px rgba(243, 154, 47, 0.22);
+    radial-gradient(circle at 90% 8%, rgba(255, 255, 255, 0.24), transparent 30%),
+    linear-gradient(135deg, #f39a2f, #ffc95c);
+  color: #4a3305;
+  box-shadow: 0 10px 24px rgba(243, 154, 47, 0.22);
 }
 
-.ticket-card::before,
-.ticket-card::after {
+.pass-ticket-main {
+  flex: 1;
+  min-width: 0;
+  padding: 16px;
+}
+
+.pass-badge {
+  display: inline-flex;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.pass-ticket.theme-orange .pass-badge {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.pass-name {
+  margin: 9px 0 0;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.pass-desc {
+  margin: 7px 0 0;
+  font-size: 11px;
+  opacity: 0.82;
+}
+
+/* 절취선 오른쪽의 가격/선물하기 스텁 영역 */
+.pass-ticket-stub {
+  position: relative;
+  flex-shrink: 0;
+  width: 98px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 12px 8px;
+  border-left: 2px dashed rgba(255, 255, 255, 0.42);
+}
+
+/* 절취선 위아래의 반원 펀칭 (overflow hidden으로 반만 보임) */
+.pass-ticket-stub::before,
+.pass-ticket-stub::after {
   content: "";
   position: absolute;
-  top: 50%;
+  left: -11px;
   width: 20px;
   height: 20px;
   border-radius: 50%;
   background: var(--bg);
-  transform: translateY(-50%);
 }
 
-.ticket-card::before {
-  left: -10px;
+.pass-ticket-stub::before {
+  top: -10px;
 }
 
-.ticket-card::after {
-  right: -10px;
+.pass-ticket-stub::after {
+  bottom: -10px;
 }
 
-.ticket-meta {
-  min-width: 0;
-}
-
-.ticket-meta span {
-  display: inline-flex;
-  margin-bottom: 8px;
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.22);
-  font-size: 11px;
-  font-weight: 900;
-}
-
-.ticket-card.orange .ticket-meta span {
-  background: rgba(255, 255, 255, 0.45);
-}
-
-.ticket-meta h3 {
-  margin: 0 0 6px;
+.pass-price {
   font-size: 15px;
-  line-height: 1.35;
-}
-
-.ticket-meta p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 11px;
-  line-height: 1.45;
-}
-
-.ticket-card.orange .ticket-meta p {
-  color: rgba(62, 43, 5, 0.72);
-}
-
-.ticket-price {
-  flex-shrink: 0;
-  text-align: right;
-  font-size: 16px;
   font-weight: 900;
   white-space: nowrap;
 }
 
-/* 인기 이용 구간 - 번호 배지 타임라인 */
-.timeline {
-  display: grid;
+.pass-cta {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.24);
+  font-size: 10.5px;
+  font-weight: 800;
+}
+
+.pass-ticket.theme-orange .pass-cta {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* 인기 이동 구간 - 구간·수단·소요시간 보드 */
+.route-board {
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 18px;
   background: var(--card);
+  box-shadow: 0 6px 14px rgba(20, 46, 70, 0.05);
 }
 
-.route {
-  display: grid;
-  grid-template-columns: 26px 1fr;
-  gap: 10px;
+.route-row {
+  display: flex;
   align-items: center;
+  gap: 12px;
   padding: 13px 14px;
   border-bottom: 1px solid var(--bg);
 }
 
-.route:last-child {
+.route-row:last-child {
   border-bottom: 0;
 }
 
-.route .dot {
+.route-num {
   width: 24px;
   height: 24px;
+  flex-shrink: 0;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  color: var(--card);
-  background: var(--blue);
+  background: rgba(8, 116, 201, 0.12);
+  color: var(--blue);
   font-size: 12px;
   font-weight: 900;
 }
 
-.route strong {
-  font-size: 13px;
+.route-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.route-info strong {
+  display: block;
+  font-size: 13.5px;
   font-weight: 700;
   color: var(--ink);
+}
+
+.route-info small {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.route-time {
+  flex-shrink: 0;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(8, 116, 201, 0.1);
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
 }
 
 /* 로그인 / 회원가입 */
@@ -915,12 +805,6 @@ body > * {
 
 /* product detail */
 
-/* 헤더 왼쪽 아이콘 묶음 (product.html 전용) */
-.header-left {
-  display: flex;
-  gap: 8px;
-}
-
 /* 상품(패스) 상세 이미지 */
 .product-image img {
   width: 100%;
@@ -1088,11 +972,21 @@ body > * {
 }
 
 .message-illustration {
-  font-size: 40px;
-  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  background-color: rgba(8, 116, 201, 0.12);
+  color: var(--blue);
 }
 
 .message-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background-color: var(--card);
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -1218,9 +1112,8 @@ body > * {
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background-color: var(--ink);
+  background-color: var(--green);
   color: var(--card);
-  font-size: 32px;
   display: flex;
   align-items: center;
   justify-content: center;

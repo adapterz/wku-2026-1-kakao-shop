@@ -37,7 +37,7 @@ async function loadProducts() {
   }
 
   try {
-    productList.innerHTML = '<p class="loading-message">상품 정보를 불러오는 중입니다.</p>';
+    productList.innerHTML = '<p class="loading-message">추천 패스를 불러오는 중입니다.</p>';
 
     const response = await fetchProducts();
     // 우리 API 공통 응답은 { status, message, data } 구조이므로 실제 목록은 data에서 꺼냅니다.
@@ -62,10 +62,8 @@ async function loadProducts() {
 }
 
 function bindProductCardEvents(container) {
-  container.querySelectorAll('.product-card-grid').forEach((card) => {
-    card.addEventListener('click', (event) => {
-      // 북마크 버튼 클릭은 상세 이동과 별개 동작이므로 카드 클릭 이벤트에서 제외합니다.
-      if (event.target.closest('.bookmark-btn')) return;
+  container.querySelectorAll('.pass-ticket').forEach((card) => {
+    card.addEventListener('click', () => {
       const productId = card.dataset.productId;
       // 상품마다 HTML을 따로 만들지 않고, id만 넘겨 product.html에서 상세 API를 다시 조회합니다.
       location.href = `product.html?id=${productId}`;

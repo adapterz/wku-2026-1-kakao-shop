@@ -20,13 +20,13 @@ document.getElementById('back-btn').addEventListener('click', () => {
 // 사용 완료 처리 버튼
 document.getElementById('use-complete-btn').addEventListener('click', async () => {
   if (!selectedGift) {
-    alert('선물 정보를 확인할 수 없습니다.');
+    alert('패스 정보를 확인할 수 없습니다.');
     return;
   }
 
   if (selectedGift.status === 'used') {
     // 이미 사용된 선물은 FE에서 한 번 막고, BE에서도 다시 400으로 막아 중복 사용을 방지합니다.
-    alert('이미 사용 완료된 선물입니다.');
+    alert('이미 사용 완료된 패스입니다.');
     return;
   }
 
@@ -51,7 +51,7 @@ document.getElementById('use-complete-btn').addEventListener('click', async () =
 
 async function loadGiftDetail() {
   if (!giftId) {
-    showGiftError('선물 정보를 확인할 수 없습니다.');
+    showGiftError('패스 정보를 확인할 수 없습니다.');
     return;
   }
 
@@ -68,13 +68,13 @@ async function loadGiftDetail() {
       return;
     }
 
-    showGiftError(error.message || '선물 정보를 불러오지 못했습니다.');
+    showGiftError(error.message || '패스 정보를 불러오지 못했습니다.');
   }
 }
 
 function renderGiftDetail(gift) {
   if (!gift) {
-    showGiftError('선물 정보를 찾을 수 없습니다.');
+    showGiftError('패스 정보를 찾을 수 없습니다.');
     return;
   }
 
@@ -103,7 +103,7 @@ function showGiftError(message) {
   document.getElementById('gift-product-name').textContent = message;
   document.getElementById('gift-brand').textContent = '익산 환승패스';
   document.getElementById('gift-barcode').textContent = '-';
-  document.getElementById('gift-status-guide').textContent = '선물함에서 다시 선택해주세요.';
+  document.getElementById('gift-status-guide').textContent = '내 패스에서 다시 선택해주세요.';
   document.getElementById('gift-product-image').src = fallbackImageUrl;
   document.getElementById('use-complete-btn').disabled = true;
 }

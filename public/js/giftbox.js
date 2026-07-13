@@ -38,7 +38,7 @@ document.getElementById('tabbar-home-btn').addEventListener('click', () => {
 
 async function loadGiftbox() {
   try {
-    giftList.innerHTML = '<p class="loading-message">선물함을 불러오는 중입니다.</p>';
+    giftList.innerHTML = '<p class="loading-message">내 패스를 불러오는 중입니다.</p>';
 
     const [unusedResponse, usedResponse] = await Promise.all([
       requestJson('/api/gifts?status=unused'),
@@ -59,7 +59,7 @@ async function loadGiftbox() {
       return;
     }
 
-    giftList.innerHTML = '<p class="error-message">선물함을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</p>';
+    giftList.innerHTML = '<p class="error-message">내 패스를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</p>';
   }
 }
 
@@ -72,7 +72,7 @@ function setActiveStatus(status) {
 }
 
 function updateTabLabels() {
-  tabUnused.textContent = `미사용 선물 ${giftsByStatus.unused.length}`;
+  tabUnused.textContent = `미사용 패스 ${giftsByStatus.unused.length}`;
   tabUsed.textContent = `사용완료 ${giftsByStatus.used.length}`;
 }
 
@@ -119,7 +119,7 @@ function bindGiftCardEvents() {
 }
 
 function getEmptyMessage(status) {
-  return status === 'used' ? '사용완료된 선물이 없습니다.' : '미사용 선물이 없습니다.';
+  return status === 'used' ? '사용완료된 패스가 없습니다.' : '미사용 패스가 없습니다.';
 }
 
 function formatGiftDate(value) {
