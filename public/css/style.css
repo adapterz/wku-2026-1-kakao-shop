@@ -46,6 +46,14 @@ body {
   min-height: 100vh;
   font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   background-color: var(--canvas);
+  /* 넓은 화면에서 앱 프레임 바깥으로 보이는 캔버스가 단색이라 밋밋해서,
+     노선도를 연상시키는 옅은 점 그리드 + 미세한 방향성 그라데이션을 얹음 */
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(6, 54, 95, 0.14) 1px, transparent 0),
+    linear-gradient(165deg, var(--canvas) 0%, #aebfcf 100%);
+  background-size: 22px 22px, 100% 100%;
+  background-repeat: repeat, no-repeat;
+  background-attachment: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;
