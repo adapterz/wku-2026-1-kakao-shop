@@ -506,15 +506,17 @@ body > * {
   font-size: 11px;
 }
 
-/* 홈 화면 히어로 (상단 헤더 아래로 이어지는 안내 영역) */
+/* 홈 화면 히어로 (익산역 사진 배경 + 마룡이 + 큰 헤드라인) */
 .hero-content {
   position: relative;
   overflow: hidden;
-  padding: 20px 16px 30px;
   color: var(--card);
-  background:
-    radial-gradient(circle at 12% 92%, rgba(36, 183, 216, 0.3), transparent 26%),
-    linear-gradient(135deg, var(--navy) 0%, var(--blue) 55%, var(--green) 100%);
+  background-image:
+    linear-gradient(135deg, rgba(6, 54, 95, 0.88) 0%, rgba(8, 116, 201, 0.74) 55%, rgba(50, 164, 119, 0.6) 100%),
+    url("../img/station.jpg");
+  background-size: cover, cover;
+  background-position: center, center 65%;
+  background-repeat: no-repeat, no-repeat;
 }
 
 .hero-content::after {
@@ -528,30 +530,32 @@ body > * {
   background: var(--bg);
 }
 
-.hero-mascot-banner {
+.hero-banner {
   position: relative;
   z-index: 1;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
+  justify-content: space-between;
   gap: 10px;
+  min-height: 190px;
+  padding: 26px 8px 40px 20px;
+}
+
+.hero-banner-text h1 {
+  margin: 0;
+  max-width: 190px;
+  font-size: 26px;
+  line-height: 1.28;
+  font-weight: 900;
+  color: var(--card);
+  text-shadow: 0 3px 12px rgba(0, 20, 40, 0.45);
 }
 
 .hero-mascot-img {
-  width: 190px;
+  width: 164px;
   height: auto;
-  filter: drop-shadow(0 12px 20px rgba(0, 20, 40, 0.35));
-}
-
-.hero-mascot-caption {
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
-  color: var(--navy);
-  font-size: 13px;
-  font-weight: 900;
-  line-height: 1.3;
-  text-align: center;
+  flex-shrink: 0;
+  filter: drop-shadow(0 14px 22px rgba(0, 15, 30, 0.45));
 }
 
 /* 오늘 추천 요약 카드 (히어로 하단에 겹쳐지는 통계 카드) */
