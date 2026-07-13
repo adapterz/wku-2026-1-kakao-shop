@@ -544,6 +544,34 @@ body > * {
   font-weight: 900;
 }
 
+.passes-filter {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.passes-filter-btn {
+  min-width: 0;
+  padding: 9px 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background-color: var(--card);
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.passes-filter-btn.active {
+  border-color: var(--blue);
+  background-color: var(--blue);
+  color: var(--card);
+  box-shadow: 0 5px 12px rgba(8, 116, 201, 0.2);
+}
+
 .pass-ticket {
   position: relative;
   overflow: hidden;

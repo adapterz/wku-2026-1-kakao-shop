@@ -33,6 +33,13 @@
       <span id="passes-count" class="passes-count" aria-live="polite"></span>
     </section>
 
+    <div class="passes-filter" role="group" aria-label="패스 카테고리 필터">
+      <button class="passes-filter-btn active" type="button" data-category="" aria-pressed="true">전체</button>
+      <button class="passes-filter-btn" type="button" data-category="basic" aria-pressed="false">기본 이동</button>
+      <button class="passes-filter-btn" type="button" data-category="transfer" aria-pressed="false">환승·광역</button>
+      <button class="passes-filter-btn" type="button" data-category="special" aria-pressed="false">관광·특수</button>
+    </div>
+
     <section aria-label="전체 패스 상품 목록">
       <div id="passes-list" class="pass-list">
         <p class="loading-message">전체 패스를 불러오는 중입니다.</p>
