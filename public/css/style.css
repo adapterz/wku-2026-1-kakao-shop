@@ -209,11 +209,17 @@ body > * {
   color: var(--ink);
 }
 
-.section-head a {
+.section-head a,
+.section-head button {
+  padding: 0;
+  border: 0;
+  background: none;
   color: var(--blue);
+  font-family: inherit;
   font-size: 12px;
   font-weight: 900;
   text-decoration: none;
+  cursor: pointer;
 }
 
 /* 빠른 선택 - 이동 목적별 카드 (시내버스/환승/KTX 연계/관광) */

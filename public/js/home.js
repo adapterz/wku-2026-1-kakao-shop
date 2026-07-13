@@ -5,6 +5,8 @@
  * 주요: 상품 목록 fetch, 카드 렌더링(components.js 함수 사용), 카드 클릭 시 상세 이동, 하단 탭바 선물함 이동
  */
 
+const INITIAL_PRODUCT_COUNT = 4;
+
 document.addEventListener('DOMContentLoaded', () => {
   // HTML이 먼저 그려진 뒤 DOM 요소를 찾기 위해 DOMContentLoaded 이후에 실행합니다.
   renderFriendSelectPanel();
@@ -31,12 +33,17 @@ async function renderFriendSelectPanel() {
 
 async function loadProducts() {
   const productList = document.getElementById('product-list');
+  const productListToggle = document.getElementById('product-list-toggle');
 
   if (!productList) {
     return;
   }
 
   try {
+    if (productListToggle) {
+      productListToggle.hidden = true;
+    }
+
     productList.innerHTML = '<p class="loading-message">추천 패스를 불러오는 중입니다.</p>';
 
     const response = await fetchProducts();
@@ -48,10 +55,35 @@ async function loadProducts() {
       return;
     }
 
-    productList.innerHTML = products.map(createProductCard).join('');
-    bindProductCardEvents(productList);
+    let isExpanded = false;
+
+    const renderProducts = () => {
+      const visibleProducts = isExpanded ? products : products.slice(0, INITIAL_PRODUCT_COUNT);
+
+      productList.innerHTML = visibleProducts.map(createProductCard).join('');
+      bindProductCardEvents(productList);
+
+      if (productListToggle) {
+        productListToggle.hidden = products.length <= INITIAL_PRODUCT_COUNT;
+        productListToggle.textContent = isExpanded ? '접기' : '더보기';
+        productListToggle.setAttribute('aria-expanded', String(isExpanded));
+      }
+    };
+
+    if (productListToggle) {
+      productListToggle.addEventListener('click', () => {
+        isExpanded = !isExpanded;
+        renderProducts();
+      });
+    }
+
+    renderProducts();
   } catch (error) {
     console.error('Failed to load products:', error);
+
+    if (productListToggle) {
+      productListToggle.hidden = true;
+    }
 
     productList.innerHTML = `
       <p class="error-message">
