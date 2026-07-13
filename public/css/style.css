@@ -493,6 +493,49 @@ body > * {
   gap: 12px;
 }
 
+/* 전체 패스 화면 - 홈 추천 목록과 분리해 모든 판매 상품을 보여줍니다. */
+.passes-top-header .header-spacer {
+  width: 20px;
+  height: 20px;
+}
+
+.passes-page {
+  flex: 1;
+  padding: 20px 16px 28px;
+}
+
+.passes-intro {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.passes-eyebrow {
+  margin-bottom: 5px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.passes-intro h2 {
+  color: var(--ink);
+  font-size: 19px;
+  line-height: 1.35;
+  letter-spacing: -0.3px;
+}
+
+.passes-count {
+  flex-shrink: 0;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(8, 116, 201, 0.1);
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 900;
+}
+
 .pass-ticket {
   position: relative;
   overflow: hidden;
