@@ -383,7 +383,7 @@ body > * {
 .hero {
   position: relative;
   overflow: hidden;
-  padding: 18px 16px 30px;
+  padding: 18px 16px 50px;
   color: var(--card);
   background:
     radial-gradient(circle at 85% 18%, rgba(36, 183, 216, 0.35), transparent 46%),
@@ -400,15 +400,15 @@ body > * {
   pointer-events: none;
 }
 
-/* 미륵사지 석탑 실루엣 - 마스코트 머리 위 빈 그라데이션 영역에 배치해 텍스트와 겹치지 않게 함 */
+/* 미륵사지 석탑 실루엣 - 텍스트/마스코트와 안 겹치는 좌하단 여백에 넓게 배치 */
 .hero-pagoda-deco {
   position: absolute;
-  right: 58px;
-  top: 2px;
+  left: 16px;
+  bottom: 6px;
   z-index: 0;
-  width: 26px;
+  width: 130px;
   height: auto;
-  color: rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.3);
   pointer-events: none;
 }
 
