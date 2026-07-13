@@ -5,6 +5,16 @@
  * 주요: 모바일 폭 설정, 공통 색상, 여백, 폰트, 홈 화면 구성요소 스타일
  */
 
+/* Pretendard Variable (SIL OFL 1.1 라이선스) - 기기별로 다르게 보이던 시스템 폰트 대신
+   전 기기에서 동일하게 보이는 국문 UI 전용 웹폰트를 자체 호스팅합니다. */
+@font-face {
+  font-family: 'Pretendard Variable';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url('../fonts/PretendardVariable.woff2') format('woff2-variations');
+}
+
 :root {
   --navy: #06365f;
   --blue: #0874c9;
@@ -34,7 +44,7 @@ html {
 
 body {
   min-height: 100vh;
-  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   background-color: var(--canvas);
   display: flex;
   flex-direction: column;

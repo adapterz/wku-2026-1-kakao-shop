@@ -55,3 +55,7 @@
 - 왜: "이동해 / 요"처럼 단어 중간에서 줄바꿈되는 문제와, 문구가 짧아지며 생긴 배너 상단 여백을 정리해달라는 요청 반영
 - 다음: 없음 (이번 배너 정리 작업 마무리)
 
+## 2026-07-13 (작성자: ggue1203)
+- 한 일: 전체 화면 폰트를 시스템 폰트('Apple SD Gothic Neo'/'Malgun Gothic')에서 Pretendard Variable 웹폰트로 교체. public/fonts/PretendardVariable.woff2 파일을 프로젝트에 직접 내장(self-host)하고 @font-face로 등록, body font-family 최우선 순위로 적용 (시스템 폰트는 폴백으로 유지)
+- 왜: 기존 방식은 OS마다 실제로 보이는 폰트가 달라서(Windows: 맑은 고딕, macOS/iOS: Apple SD Gothic Neo) 기기별 화면이 달라지는 문제가 있었음. Pretendard는 국문 UI 전용으로 만들어져 작은 글씨 가독성이 좋고, 토스·당근마켓 등에서 검증된 폰트라 공공 교통기관 톤(정보 전달·가독성 우선)에도 맞아 채택. CDN 대신 자체 호스팅을 선택해 외부 네트워크 의존 없이 항상 동작하도록 함
+- 다음: 없음
