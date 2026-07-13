@@ -6,13 +6,18 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  bindPassCategoryFilters();
   loadAllPasses();
   bindPassesNavigation();
 });
 
-async function loadAllPasses() {
+let selectedPassCategory = '';
+let latestPassRequestId = 0;
+
+async function loadAllPasses(category = selectedPassCategory) {
   const passesList = document.getElementById('passes-list');
   const passesCount = document.getElementById('passes-count');
+  const requestId = ++latestPassRequestId;
 
   if (!passesList) {
     return;
@@ -21,8 +26,13 @@ async function loadAllPasses() {
   try {
     passesList.innerHTML = '<p class="loading-message">전체 패스를 불러오는 중입니다.</p>';
 
-    const response = await fetchProducts();
+    const response = await fetchProducts(category);
     const products = Array.isArray(response.data) ? response.data : [];
+
+    // 빠르게 필터를 바꿨을 때 이전 요청 결과가 최신 화면을 덮어쓰지 않도록 합니다.
+    if (requestId !== latestPassRequestId) {
+      return;
+    }
 
     if (passesCount) {
       passesCount.textContent = `총 ${products.length}개`;
@@ -36,6 +46,10 @@ async function loadAllPasses() {
     passesList.innerHTML = products.map(createProductCard).join('');
     bindPassCardEvents(passesList);
   } catch (error) {
+    if (requestId !== latestPassRequestId) {
+      return;
+    }
+
     console.error('Failed to load all passes:', error);
 
     if (passesCount) {
@@ -48,6 +62,30 @@ async function loadAllPasses() {
       </p>
     `;
   }
+}
+
+function bindPassCategoryFilters() {
+  const filterButtons = document.querySelectorAll('.passes-filter-btn');
+
+  filterButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const category = button.dataset.category || '';
+
+      if (category === selectedPassCategory) {
+        return;
+      }
+
+      selectedPassCategory = category;
+
+      filterButtons.forEach((filterButton) => {
+        const isActive = filterButton === button;
+        filterButton.classList.toggle('active', isActive);
+        filterButton.setAttribute('aria-pressed', String(isActive));
+      });
+
+      loadAllPasses(selectedPassCategory);
+    });
+  });
 }
 
 function bindPassCardEvents(container) {

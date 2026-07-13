@@ -26,8 +26,10 @@ async function requestJson(url, options = {}) {
   return data;
 }
 
-async function fetchProducts() {
-  return requestJson('/api/products');
+async function fetchProducts(category = '') {
+  // 전체 조회는 기존 URL을 유지하고, 패스 탭 필터에서만 category 쿼리를 추가합니다.
+  const categoryQuery = category ? `?category=${encodeURIComponent(category)}` : '';
+  return requestJson(`/api/products${categoryQuery}`);
 }
 
 async function fetchProductDetail(productId) {
