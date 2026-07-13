@@ -5,11 +5,25 @@
  * 주요: 교통 티켓형 패스 카드 생성, 카테고리별 색상 테마, 가격 포맷, HTML 이스케이프
  */
 
-// 카테고리별 티켓 색상 테마와 배지 문구 (C안: 상품 이미지 대신 티켓 형태로 통일된 패스 카드)
+// DB category 값에 따라 티켓 색상과 배지를 구분합니다.
 const PASS_THEMES = {
-  'daily-pass': { className: 'theme-blue', badge: 'BUS PASS' },
-  'transfer-pass': { className: 'theme-teal', badge: 'TRANSFER' },
-  'tour-pass': { className: 'theme-orange', badge: 'TOUR COURSE' },
+  daily_pass: { className: 'theme-blue', badge: '1일권' },
+  multi_pass: { className: 'theme-teal', badge: '환승권' },
+  weekend_pass: { className: 'theme-teal', badge: '주말권' },
+  taxi: { className: 'theme-orange', badge: '택시' },
+  monthly_pass: { className: 'theme-blue', badge: '정기권' },
+  bike: { className: 'theme-orange', badge: '공공자전거' },
+  tour_pass: { className: 'theme-orange', badge: '관광권' },
+  youth_pass: { className: 'theme-blue', badge: '청소년' },
+  parking: { className: 'theme-orange', badge: '주차' },
+  welfare_pass: { className: 'theme-blue', badge: '교통약자' },
+  giftcard: { className: 'theme-orange', badge: '충전권' },
+  family_pass: { className: 'theme-blue', badge: '가족권' },
+  night_pass: { className: 'theme-teal', badge: '심야권' },
+  // DB 연결 전 테스트 데이터에서 사용했던 카테고리도 호환합니다.
+  'daily-pass': { className: 'theme-blue', badge: '1일권' },
+  'transfer-pass': { className: 'theme-teal', badge: '환승권' },
+  'tour-pass': { className: 'theme-orange', badge: '관광권' },
 };
 
 function getPassTheme(category) {

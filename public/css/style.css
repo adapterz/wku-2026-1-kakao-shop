@@ -16,7 +16,8 @@
   --ink: #142231;
   --muted: #647486;
   --line: #dbe6ef;
-  --bg: #edf3f8;
+  --canvas: #dce8f0;
+  --bg: #e8f2f8;
   --card: #ffffff;
 }
 
@@ -26,7 +27,13 @@
   box-sizing: border-box;
 }
 
+html {
+  min-height: 100%;
+  background-color: var(--canvas);
+}
+
 body {
+  min-height: 100vh;
   font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   background-color: var(--bg);
   display: flex;
