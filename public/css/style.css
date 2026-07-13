@@ -360,7 +360,7 @@ body > * {
 }
 
 .tabbar-item.active {
-  color: var(--blue);
+  color: var(--green);
   font-weight: bold;
 }
 
