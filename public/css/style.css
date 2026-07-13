@@ -16,7 +16,7 @@
   --ink: #142231;
   --muted: #647486;
   --line: #dbe6ef;
-  --canvas: #dce8f0;
+  --canvas: #c5d2dc;
   --bg: #e8f2f8;
   --card: #ffffff;
 }
@@ -35,7 +35,7 @@ html {
 body {
   min-height: 100vh;
   font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-  background: linear-gradient(90deg, #cfdee8 0%, var(--canvas) 38%, var(--canvas) 62%, #cfdee8 100%);
+  background-color: var(--canvas);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,7 +51,7 @@ body::before {
   transform: translateX(-50%);
   background-color: var(--bg);
   border-inline: 1px solid rgba(6, 54, 95, 0.1);
-  box-shadow: 0 0 32px rgba(6, 54, 95, 0.16);
+  box-shadow: 0 0 24px rgba(6, 54, 95, 0.12);
   pointer-events: none;
   z-index: 0;
 }
