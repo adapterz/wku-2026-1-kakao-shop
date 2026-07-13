@@ -36,6 +36,10 @@ document.getElementById('tabbar-home-btn').addEventListener('click', () => {
   location.href = 'index.html';
 });
 
+document.getElementById('tabbar-pass-btn').addEventListener('click', () => {
+  location.href = 'passes.html';
+});
+
 async function loadGiftbox() {
   try {
     giftList.innerHTML = '<p class="loading-message">내 패스를 불러오는 중입니다.</p>';

@@ -8,6 +8,14 @@ const router = express.Router();
 // 로컬에서 MySQL 없이 화면 연동만 확인할 때만 true로 둡니다.
 const useDummyProducts = process.env.USE_DUMMY_PRODUCTS === 'true';
 
+// API의 상위 필터 코드(basic/transfer/special)를 DB의 세부 상품 카테고리에 연결합니다.
+// DB category 값은 카드 배지와 색상 구분에도 사용하므로 기존 값을 바꾸지 않고 조회 조건만 묶습니다.
+const PRODUCT_CATEGORY_GROUPS = {
+  basic: ['daily_pass', 'monthly_pass', 'youth_pass', 'welfare_pass', 'family_pass', 'daily-pass'],
+  transfer: ['multi_pass', 'weekend_pass', 'night_pass', 'transfer-pass'],
+  special: ['taxi', 'bike', 'tour_pass', 'parking', 'giftcard', 'tour-pass'],
+};
+
 const dummyProductRows = [
   {
     id: 1,
@@ -87,13 +95,26 @@ function toProductDetailResponse(row) {
  */
 router.get('/', async (req, res) => {
   try {
+    const { category } = req.query;
+
+    // category는 API 명세에 정의된 세 그룹만 허용하고, 생략하면 전체 상품을 조회합니다.
+    if (
+      category !== undefined &&
+      (typeof category !== 'string' || !Object.hasOwn(PRODUCT_CATEGORY_GROUPS, category))
+    ) {
+      return sendError(res, 400, 'invalid_category');
+    }
+
     if (useDummyProducts) {
-      return sendSuccess(res, 200, 'get_products_success', dummyProductRows.map(toProductListResponse));
+      const filteredRows = category
+        ? dummyProductRows.filter((row) => PRODUCT_CATEGORY_GROUPS[category].includes(row.category))
+        : dummyProductRows;
+
+      return sendSuccess(res, 200, 'get_products_success', filteredRows.map(toProductListResponse));
     }
 
     // SELECT 필드는 실제 응답에 사용하는 값만 조회해 API 응답과 DB 조회 범위를 맞춥니다.
-    const [rows] = await pool.query(
-      `
+    let query = `
       SELECT
         id,
         name,
@@ -102,9 +123,20 @@ router.get('/', async (req, res) => {
         thumbnail_url,
         category
       FROM products
-      ORDER BY id ASC
-      `
-    );
+    `;
+    const queryParams = [];
+
+    if (category) {
+      const categoryValues = PRODUCT_CATEGORY_GROUPS[category];
+      const placeholders = categoryValues.map(() => '?').join(', ');
+
+      query += `WHERE category IN (${placeholders})\n`;
+      queryParams.push(...categoryValues);
+    }
+
+    query += 'ORDER BY id ASC';
+
+    const [rows] = await pool.query(query, queryParams);
 
     return sendSuccess(res, 200, 'get_products_success', rows.map(toProductListResponse));
   } catch (error) {

@@ -46,6 +46,14 @@ body {
   min-height: 100vh;
   font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   background-color: var(--canvas);
+  /* 넓은 화면에서 앱 프레임 바깥으로 보이는 캔버스가 단색이라 밋밋해서,
+     노선도를 연상시키는 옅은 점 그리드 + 미세한 방향성 그라데이션을 얹음 */
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(6, 54, 95, 0.14) 1px, transparent 0),
+    linear-gradient(165deg, var(--canvas) 0%, #aebfcf 100%);
+  background-size: 22px 22px, 100% 100%;
+  background-repeat: repeat, no-repeat;
+  background-attachment: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -493,6 +501,77 @@ body > * {
   gap: 12px;
 }
 
+/* 전체 패스 화면 - 홈 추천 목록과 분리해 모든 판매 상품을 보여줍니다. */
+.passes-top-header .header-spacer {
+  width: 20px;
+  height: 20px;
+}
+
+.passes-page {
+  flex: 1;
+  padding: 20px 16px 28px;
+}
+
+.passes-intro {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.passes-eyebrow {
+  margin-bottom: 5px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.passes-intro h2 {
+  color: var(--ink);
+  font-size: 19px;
+  line-height: 1.35;
+  letter-spacing: -0.3px;
+}
+
+.passes-count {
+  flex-shrink: 0;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(8, 116, 201, 0.1);
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.passes-filter {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.passes-filter-btn {
+  min-width: 0;
+  padding: 9px 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background-color: var(--card);
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.passes-filter-btn.active {
+  border-color: var(--blue);
+  background-color: var(--blue);
+  color: var(--card);
+  box-shadow: 0 5px 12px rgba(8, 116, 201, 0.2);
+}
+
 .pass-ticket {
   position: relative;
   overflow: hidden;
@@ -654,9 +733,16 @@ body > * {
 }
 
 .route-info small {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   margin-top: 3px;
   font-size: 11px;
+  color: var(--muted);
+}
+
+.route-mode-icon {
+  flex-shrink: 0;
   color: var(--muted);
 }
 
