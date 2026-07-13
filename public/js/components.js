@@ -1,44 +1,56 @@
 /*
  * 파일: public/js/components.js
  * 목적: 여러 화면에서 반복 사용되는 UI 조각 함수 모음
- * 왜: 상품 카드처럼 반복되는 요소를 한 곳에서 관리해 재사용하기 위해
- * 주요: 상품 카드 생성, 가격 포맷, HTML 이스케이프
+ * 왜: 상품(패스) 카드처럼 반복되는 요소를 한 곳에서 관리해 재사용하기 위해
+ * 주요: 교통 티켓형 패스 카드 생성, 카테고리별 색상 테마, 가격 포맷, HTML 이스케이프
  */
+
+// DB category 값에 따라 티켓 색상과 배지를 구분합니다.
+const PASS_THEMES = {
+  daily_pass: { className: 'theme-blue', badge: '1일권' },
+  multi_pass: { className: 'theme-teal', badge: '환승권' },
+  weekend_pass: { className: 'theme-teal', badge: '주말권' },
+  taxi: { className: 'theme-orange', badge: '택시' },
+  monthly_pass: { className: 'theme-blue', badge: '정기권' },
+  bike: { className: 'theme-orange', badge: '공공자전거' },
+  tour_pass: { className: 'theme-orange', badge: '관광권' },
+  youth_pass: { className: 'theme-blue', badge: '청소년' },
+  parking: { className: 'theme-orange', badge: '주차' },
+  welfare_pass: { className: 'theme-blue', badge: '교통약자' },
+  giftcard: { className: 'theme-orange', badge: '충전권' },
+  family_pass: { className: 'theme-blue', badge: '가족권' },
+  night_pass: { className: 'theme-teal', badge: '심야권' },
+  // DB 연결 전 테스트 데이터에서 사용했던 카테고리도 호환합니다.
+  'daily-pass': { className: 'theme-blue', badge: '1일권' },
+  'transfer-pass': { className: 'theme-teal', badge: '환승권' },
+  'tour-pass': { className: 'theme-orange', badge: '관광권' },
+};
+
+function getPassTheme(category) {
+  // seed에 없는 새 카테고리가 들어와도 카드가 깨지지 않도록 기본 테마를 둡니다.
+  return PASS_THEMES[category] || { className: 'theme-blue', badge: 'PASS' };
+}
 
 function createProductCard(product) {
   // API 응답 필드명을 기준으로 카드 UI를 만듭니다. DB 컬럼명은 BE에서 camelCase로 변환됩니다.
-  const imageUrl = getProductImageUrl(product.thumbnailUrl);
-  const brandName = product.brandName || '익산 교통';
+  const theme = getPassTheme(product.category);
   const productName = product.name || '환승패스 상품';
   const price = formatPrice(product.price);
 
   return `
     <!-- data-product-id는 카드 클릭 시 product.html?id=... 로 넘길 상품 식별자입니다. -->
-    <div class="product-card-grid" data-product-id="${product.productId}">
-      <div class="product-thumb">
-        <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(productName)}" onerror="useProductFallbackImage(this);">
-        <button class="bookmark-btn" type="button">🔖</button>
+    <article class="pass-ticket ${theme.className}" data-product-id="${product.productId}">
+      <div class="pass-ticket-main">
+        <span class="pass-badge">${escapeHtml(theme.badge)}</span>
+        <h3 class="pass-name">${escapeHtml(productName)}</h3>
+        <p class="pass-desc">QR 승차권 · 선물 가능</p>
       </div>
-      <p class="product-brand">${escapeHtml(brandName)}</p>
-      <p class="product-name-grid">${escapeHtml(productName)}</p>
-      <p class="product-price-grid">추천 <span>${price}</span></p>
-      <div class="product-like">
-        <span class="like-icon">❤️</span>
-        <span class="like-count">M1</span>
+      <div class="pass-ticket-stub">
+        <span class="pass-price">${price}</span>
+        <span class="pass-cta">선물하기</span>
       </div>
-    </div>
+    </article>
   `;
-}
-
-function getProductImageUrl(thumbnailUrl) {
-  // 현재 DB seed에는 실제 이미지 파일보다 먼저 경로만 들어갈 수 있어 상품 이미지는 공통 로고로 대체합니다.
-  return thumbnailUrl || 'img/iksan-logo.svg';
-}
-
-function useProductFallbackImage(imageElement) {
-  // 상품 이미지가 없거나 경로가 깨졌을 때 화면에 엑박이 보이지 않도록 공통 대체 이미지를 적용합니다.
-  imageElement.onerror = null;
-  imageElement.src = 'img/iksan-logo.svg';
 }
 
 function formatPrice(price) {

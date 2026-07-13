@@ -5,6 +5,8 @@
  * 주요: 상품 목록 fetch, 카드 렌더링(components.js 함수 사용), 카드 클릭 시 상세 이동, 하단 탭바 선물함 이동
  */
 
+const INITIAL_PRODUCT_COUNT = 4;
+
 document.addEventListener('DOMContentLoaded', () => {
   // HTML이 먼저 그려진 뒤 DOM 요소를 찾기 위해 DOMContentLoaded 이후에 실행합니다.
   renderFriendSelectPanel();
@@ -31,13 +33,18 @@ async function renderFriendSelectPanel() {
 
 async function loadProducts() {
   const productList = document.getElementById('product-list');
+  const productListToggle = document.getElementById('product-list-toggle');
 
   if (!productList) {
     return;
   }
 
   try {
-    productList.innerHTML = '<p class="loading-message">상품 정보를 불러오는 중입니다.</p>';
+    if (productListToggle) {
+      productListToggle.hidden = true;
+    }
+
+    productList.innerHTML = '<p class="loading-message">추천 패스를 불러오는 중입니다.</p>';
 
     const response = await fetchProducts();
     // 우리 API 공통 응답은 { status, message, data } 구조이므로 실제 목록은 data에서 꺼냅니다.
@@ -48,10 +55,35 @@ async function loadProducts() {
       return;
     }
 
-    productList.innerHTML = products.map(createProductCard).join('');
-    bindProductCardEvents(productList);
+    let isExpanded = false;
+
+    const renderProducts = () => {
+      const visibleProducts = isExpanded ? products : products.slice(0, INITIAL_PRODUCT_COUNT);
+
+      productList.innerHTML = visibleProducts.map(createProductCard).join('');
+      bindProductCardEvents(productList);
+
+      if (productListToggle) {
+        productListToggle.hidden = products.length <= INITIAL_PRODUCT_COUNT;
+        productListToggle.textContent = isExpanded ? '접기' : '더보기';
+        productListToggle.setAttribute('aria-expanded', String(isExpanded));
+      }
+    };
+
+    if (productListToggle) {
+      productListToggle.addEventListener('click', () => {
+        isExpanded = !isExpanded;
+        renderProducts();
+      });
+    }
+
+    renderProducts();
   } catch (error) {
     console.error('Failed to load products:', error);
+
+    if (productListToggle) {
+      productListToggle.hidden = true;
+    }
 
     productList.innerHTML = `
       <p class="error-message">
@@ -62,10 +94,8 @@ async function loadProducts() {
 }
 
 function bindProductCardEvents(container) {
-  container.querySelectorAll('.product-card-grid').forEach((card) => {
-    card.addEventListener('click', (event) => {
-      // 북마크 버튼 클릭은 상세 이동과 별개 동작이므로 카드 클릭 이벤트에서 제외합니다.
-      if (event.target.closest('.bookmark-btn')) return;
+  container.querySelectorAll('.pass-ticket').forEach((card) => {
+    card.addEventListener('click', () => {
       const productId = card.dataset.productId;
       // 상품마다 HTML을 따로 만들지 않고, id만 넘겨 product.html에서 상세 API를 다시 조회합니다.
       location.href = `product.html?id=${productId}`;
@@ -74,7 +104,15 @@ function bindProductCardEvents(container) {
 }
 
 function bindTabbarEvents() {
+  const passBtn = document.getElementById('tabbar-pass-btn');
   const giftboxBtn = document.getElementById('tabbar-giftbox-btn');
+
+  if (passBtn) {
+    passBtn.addEventListener('click', () => {
+      document.getElementById('pass-section')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
   if (giftboxBtn) {
     giftboxBtn.addEventListener('click', () => {
       location.href = 'giftbox.html';
