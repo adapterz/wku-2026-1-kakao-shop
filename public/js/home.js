@@ -55,25 +55,20 @@ async function loadProducts() {
       return;
     }
 
-    let isExpanded = false;
-
     const renderProducts = () => {
-      const visibleProducts = isExpanded ? products : products.slice(0, INITIAL_PRODUCT_COUNT);
+      const visibleProducts = products.slice(0, INITIAL_PRODUCT_COUNT);
 
       productList.innerHTML = visibleProducts.map(createProductCard).join('');
       bindProductCardEvents(productList);
 
       if (productListToggle) {
         productListToggle.hidden = products.length <= INITIAL_PRODUCT_COUNT;
-        productListToggle.textContent = isExpanded ? '접기' : '더보기';
-        productListToggle.setAttribute('aria-expanded', String(isExpanded));
       }
     };
 
     if (productListToggle) {
       productListToggle.addEventListener('click', () => {
-        isExpanded = !isExpanded;
-        renderProducts();
+        location.href = 'passes.html';
       });
     }
 
@@ -109,7 +104,7 @@ function bindTabbarEvents() {
 
   if (passBtn) {
     passBtn.addEventListener('click', () => {
-      document.getElementById('pass-section')?.scrollIntoView({ behavior: 'smooth' });
+      location.href = 'passes.html';
     });
   }
 
