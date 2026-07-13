@@ -26,7 +26,7 @@
   --ink: #142231;
   --muted: #647486;
   --line: #dbe6ef;
-  --canvas: #dce8f0;
+  --canvas: #c5d2dc;
   --bg: #e8f2f8;
   --card: #ffffff;
 }
@@ -45,15 +45,32 @@ html {
 body {
   min-height: 100vh;
   font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-  background-color: var(--bg);
+  background-color: var(--canvas);
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  isolation: isolate;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0 auto 0 50%;
+  width: min(100%, 430px);
+  transform: translateX(-50%);
+  background-color: var(--bg);
+  border-inline: 1px solid rgba(6, 54, 95, 0.1);
+  box-shadow: 0 0 24px rgba(6, 54, 95, 0.12);
+  pointer-events: none;
+  z-index: 0;
 }
 
 body > * {
   width: 100%;
   max-width: 430px;
+  position: relative;
+  z-index: 1;
 }
 
 /* 상단 헤더 (차분한 교통기관 네이비 톤) */
