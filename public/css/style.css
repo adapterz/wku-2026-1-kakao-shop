@@ -400,6 +400,18 @@ body > * {
   pointer-events: none;
 }
 
+/* 미륵사지 석탑 실루엣 - 마스코트 머리 위 빈 그라데이션 영역에 배치해 텍스트와 겹치지 않게 함 */
+.hero-pagoda-deco {
+  position: absolute;
+  right: 58px;
+  top: 2px;
+  z-index: 0;
+  width: 26px;
+  height: auto;
+  color: rgba(255, 255, 255, 0.28);
+  pointer-events: none;
+}
+
 .hero-text {
   position: relative;
   z-index: 1;
