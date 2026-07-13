@@ -273,11 +273,6 @@ body > * {
 }
 
 
-/* 실시간 랭킹 섹션 */
-.ranking-section {
-  padding: 16px;
-}
-
 .ranking-title {
   display: flex;
   align-items: center;
@@ -290,8 +285,8 @@ body > * {
   font-weight: bold;
 }
 
-/* 필터 공통 (성별, 정렬, 가격대) */
-.filter-row, .sort-row, .price-filter-row {
+/* 필터 공통 */
+.filter-row {
   display: flex;
   gap: 8px;
   overflow-x: auto;
@@ -299,7 +294,7 @@ body > * {
   padding-bottom: 4px;
 }
 
-.filter-btn, .sort-btn, .price-btn {
+.filter-btn {
   flex-shrink: 0;
   padding: 6px 12px;
   border: 1px solid var(--line);
@@ -311,7 +306,7 @@ body > * {
   white-space: nowrap;
 }
 
-.filter-btn.active, .sort-btn.active, .price-btn.active {
+.filter-btn.active {
   background-color: var(--blue);
   color: var(--card);
   border-color: var(--blue);
@@ -430,19 +425,6 @@ body > * {
   margin-top: 6px;
   font-size: 11px;
   color: var(--muted);
-}
-
-/* 더보기 버튼 */
-.more-btn {
-  width: 100%;
-  padding: 12px;
-  margin-top: 16px;
-  background: none;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  color: var(--muted);
-  font-size: 14px;
-  cursor: pointer;
 }
 
 /* 금주의 브랜드 / 인기 브랜드 / 일상을 채워주는 선물 공통 */
