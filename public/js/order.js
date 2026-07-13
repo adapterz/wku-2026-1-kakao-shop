@@ -16,6 +16,7 @@ const giftMessageText = document.getElementById('gift-message-text');
 const giftMessageInput = document.getElementById('gift-message-input');
 const giftMessageGuide = document.getElementById('gift-message-guide');
 const messageEditBtn = document.getElementById('message-edit-btn');
+const messageEditBtnLabel = document.getElementById('message-edit-btn-label');
 
 // 주문서는 로그인 사용자만 접근 가능해야 하므로 화면 로딩 시 세션을 먼저 확인합니다.
 checkLoginBeforeOrder();
@@ -159,7 +160,8 @@ function setGiftMessageEditMode(isEditing) {
   giftMessageText.hidden = isEditing;
   giftMessageInput.hidden = !isEditing;
   giftMessageGuide.hidden = !isEditing;
-  messageEditBtn.textContent = isEditing ? '메시지 저장' : '✏️ 메시지 편집';
+  // 버튼 전체 textContent를 바꾸면 아이콘 SVG까지 지워지므로, 라벨 span만 바꿉니다.
+  messageEditBtnLabel.textContent = isEditing ? '메시지 저장' : '메시지 편집';
 }
 
 function getGiftMessage() {

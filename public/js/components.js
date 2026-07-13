@@ -1,44 +1,42 @@
 /*
  * 파일: public/js/components.js
  * 목적: 여러 화면에서 반복 사용되는 UI 조각 함수 모음
- * 왜: 상품 카드처럼 반복되는 요소를 한 곳에서 관리해 재사용하기 위해
- * 주요: 상품 카드 생성, 가격 포맷, HTML 이스케이프
+ * 왜: 상품(패스) 카드처럼 반복되는 요소를 한 곳에서 관리해 재사용하기 위해
+ * 주요: 교통 티켓형 패스 카드 생성, 카테고리별 색상 테마, 가격 포맷, HTML 이스케이프
  */
+
+// 카테고리별 티켓 색상 테마와 배지 문구 (C안: 상품 이미지 대신 티켓 형태로 통일된 패스 카드)
+const PASS_THEMES = {
+  'daily-pass': { className: 'theme-blue', badge: 'BUS PASS' },
+  'transfer-pass': { className: 'theme-teal', badge: 'TRANSFER' },
+  'tour-pass': { className: 'theme-orange', badge: 'TOUR COURSE' },
+};
+
+function getPassTheme(category) {
+  // seed에 없는 새 카테고리가 들어와도 카드가 깨지지 않도록 기본 테마를 둡니다.
+  return PASS_THEMES[category] || { className: 'theme-blue', badge: 'PASS' };
+}
 
 function createProductCard(product) {
   // API 응답 필드명을 기준으로 카드 UI를 만듭니다. DB 컬럼명은 BE에서 camelCase로 변환됩니다.
-  const imageUrl = getProductImageUrl(product.thumbnailUrl);
-  const brandName = product.brandName || '익산 교통';
+  const theme = getPassTheme(product.category);
   const productName = product.name || '환승패스 상품';
   const price = formatPrice(product.price);
 
   return `
     <!-- data-product-id는 카드 클릭 시 product.html?id=... 로 넘길 상품 식별자입니다. -->
-    <div class="product-card-grid" data-product-id="${product.productId}">
-      <div class="product-thumb">
-        <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(productName)}" onerror="useProductFallbackImage(this);">
-        <button class="bookmark-btn" type="button">🔖</button>
+    <article class="pass-ticket ${theme.className}" data-product-id="${product.productId}">
+      <div class="pass-ticket-main">
+        <span class="pass-badge">${escapeHtml(theme.badge)}</span>
+        <h3 class="pass-name">${escapeHtml(productName)}</h3>
+        <p class="pass-desc">QR 승차권 · 선물 가능</p>
       </div>
-      <p class="product-brand">${escapeHtml(brandName)}</p>
-      <p class="product-name-grid">${escapeHtml(productName)}</p>
-      <p class="product-price-grid">추천 <span>${price}</span></p>
-      <div class="product-like">
-        <span class="like-icon">❤️</span>
-        <span class="like-count">M1</span>
+      <div class="pass-ticket-stub">
+        <span class="pass-price">${price}</span>
+        <span class="pass-cta">선물하기</span>
       </div>
-    </div>
+    </article>
   `;
-}
-
-function getProductImageUrl(thumbnailUrl) {
-  // 현재 DB seed에는 실제 이미지 파일보다 먼저 경로만 들어갈 수 있어 상품 이미지는 공통 로고로 대체합니다.
-  return thumbnailUrl || 'img/iksan-logo.svg';
-}
-
-function useProductFallbackImage(imageElement) {
-  // 상품 이미지가 없거나 경로가 깨졌을 때 화면에 엑박이 보이지 않도록 공통 대체 이미지를 적용합니다.
-  imageElement.onerror = null;
-  imageElement.src = 'img/iksan-logo.svg';
 }
 
 function formatPrice(price) {
