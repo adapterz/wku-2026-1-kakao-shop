@@ -72,7 +72,15 @@ function bindProductCardEvents(container) {
 }
 
 function bindTabbarEvents() {
+  const passBtn = document.getElementById('tabbar-pass-btn');
   const giftboxBtn = document.getElementById('tabbar-giftbox-btn');
+
+  if (passBtn) {
+    passBtn.addEventListener('click', () => {
+      document.getElementById('pass-section')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
   if (giftboxBtn) {
     giftboxBtn.addEventListener('click', () => {
       location.href = 'giftbox.html';
