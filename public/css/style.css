@@ -350,7 +350,7 @@ body > * {
 .hero {
   position: relative;
   overflow: hidden;
-  padding: 26px 16px 42px;
+  padding: 18px 16px 30px;
   color: var(--card);
   background:
     radial-gradient(circle at 85% 18%, rgba(36, 183, 216, 0.35), transparent 46%),
@@ -370,27 +370,16 @@ body > * {
 .hero-text {
   position: relative;
   z-index: 1;
-  max-width: 64%;
-}
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-  font-size: 11px;
-  font-weight: 800;
+  max-width: 68%;
 }
 
 .hero-text h2 {
-  margin: 12px 0 0;
-  font-size: 25px;
+  margin: 0;
+  font-size: 22px;
   line-height: 1.3;
   font-weight: 900;
   letter-spacing: -0.4px;
+  white-space: nowrap;
 }
 
 .hero-text p {
