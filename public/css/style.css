@@ -533,17 +533,16 @@ body > * {
 .hero-banner {
   position: relative;
   z-index: 1;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
   gap: 10px;
   min-height: 190px;
-  padding: 26px 8px 40px 20px;
+  padding: 26px 16px 40px 16px;
 }
 
 .hero-banner-text h1 {
   margin: 0;
-  max-width: 190px;
   font-size: 26px;
   line-height: 1.28;
   font-weight: 900;
@@ -554,7 +553,7 @@ body > * {
 .hero-mascot-img {
   width: 164px;
   height: auto;
-  flex-shrink: 0;
+  justify-self: center;
   filter: drop-shadow(0 14px 22px rgba(0, 15, 30, 0.45));
 }
 
