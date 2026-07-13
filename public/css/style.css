@@ -697,9 +697,16 @@ body > * {
 }
 
 .route-info small {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   margin-top: 3px;
   font-size: 11px;
+  color: var(--muted);
+}
+
+.route-mode-icon {
+  flex-shrink: 0;
   color: var(--muted);
 }
 
