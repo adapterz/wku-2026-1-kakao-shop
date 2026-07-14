@@ -30,6 +30,9 @@
   --bg: #e8f2f8;
   --card: #ffffff;
   --on-accent: #ffffff;
+  --accent-text: var(--blue);
+  --navy-text: var(--navy);
+  --teal-text: #0d94b5;
 }
 
 * {
@@ -46,6 +49,7 @@ html {
 body {
   min-height: 100vh;
   font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  color: var(--ink);
   background-color: var(--canvas);
   /* 넓은 화면에서 앱 프레임 바깥으로 보이는 캔버스가 단색이라 밋밋해서,
      노선도를 연상시키는 옅은 점 그리드 + 미세한 방향성 그라데이션을 얹음 */
@@ -60,6 +64,12 @@ body {
   align-items: center;
   position: relative;
   isolation: isolate;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 1;
 }
 
 body::before {
@@ -223,7 +233,7 @@ body > * {
   padding: 0;
   border: 0;
   background: none;
-  color: var(--blue);
+  color: var(--accent-text);
   font-family: inherit;
   font-size: 12px;
   font-weight: 900;
@@ -268,17 +278,17 @@ body > * {
 
 .quick-icon.qi-blue {
   background-color: rgba(8, 116, 201, 0.12);
-  color: var(--blue);
+  color: var(--accent-text);
 }
 
 .quick-icon.qi-teal {
   background-color: rgba(36, 183, 216, 0.15);
-  color: #0d94b5;
+  color: var(--teal-text);
 }
 
 .quick-icon.qi-navy {
   background-color: rgba(6, 54, 95, 0.1);
-  color: var(--navy);
+  color: var(--navy-text);
 }
 
 .quick-icon.qi-green {
@@ -326,7 +336,7 @@ body > * {
 .product-price {
   font-size: 16px;
   font-weight: bold;
-  color: var(--navy);
+  color: var(--navy-text);
 }
 
 .product-price span {
@@ -491,7 +501,7 @@ body > * {
 .summary small {
   display: block;
   margin-top: 5px;
-  color: var(--blue);
+  color: var(--accent-text);
   font-size: 11px;
   font-weight: 900;
 }
@@ -523,7 +533,7 @@ body > * {
 
 .passes-eyebrow {
   margin-bottom: 5px;
-  color: var(--blue);
+  color: var(--accent-text);
   font-size: 11px;
   font-weight: 900;
 }
@@ -540,7 +550,7 @@ body > * {
   padding: 5px 9px;
   border-radius: 999px;
   background: rgba(8, 116, 201, 0.1);
-  color: var(--blue);
+  color: var(--accent-text);
   font-size: 11px;
   font-weight: 900;
 }
@@ -753,7 +763,7 @@ body > * {
   place-items: center;
   border-radius: 50%;
   background: rgba(8, 116, 201, 0.12);
-  color: var(--blue);
+  color: var(--accent-text);
   font-size: 12px;
   font-weight: 900;
 }
@@ -789,7 +799,7 @@ body > * {
   padding: 5px 10px;
   border-radius: 999px;
   background: rgba(8, 116, 201, 0.1);
-  color: var(--blue);
+  color: var(--accent-text);
   font-size: 12px;
   font-weight: 900;
   white-space: nowrap;
@@ -984,7 +994,7 @@ body > * {
 
 .product-category-tag {
   font-size: 12px;
-  color: var(--blue);
+  color: var(--accent-text);
   font-weight: bold;
   margin-bottom: 6px;
 }
@@ -998,7 +1008,7 @@ body > * {
 .product-price {
   font-size: 20px;
   font-weight: bold;
-  color: var(--navy);
+  color: var(--navy-text);
   margin-bottom: 20px;
 }
 
@@ -1121,6 +1131,7 @@ body > * {
   padding: 12px;
   font-size: 15px;
   line-height: 1.5;
+  background-color: var(--bg);
   color: var(--ink);
   margin-bottom: 8px;
 }
@@ -1145,7 +1156,7 @@ body > * {
   margin: 0 auto 12px;
   border-radius: 50%;
   background-color: rgba(8, 116, 201, 0.12);
-  color: var(--blue);
+  color: var(--accent-text);
 }
 
 .message-edit-btn {
@@ -1193,7 +1204,7 @@ body > * {
 
 .option-btn.active {
   border-color: var(--blue);
-  color: var(--blue);
+  color: var(--accent-text);
   font-weight: bold;
 }
 
@@ -1203,6 +1214,8 @@ body > * {
   border: 1px solid var(--line);
   border-radius: 6px;
   font-size: 14px;
+  background-color: var(--bg);
+  color: var(--ink);
 }
 
 /* 주문 요약 (패스 이미지+정보) */
@@ -1243,7 +1256,7 @@ body > * {
 }
 
 .total-row .info-value {
-  color: var(--blue);
+  color: var(--accent-text);
 }
 
 /* 하단 고정 버튼 (단일 버튼용, product.html과 별개) */
@@ -1293,7 +1306,7 @@ body > * {
 }
 
 .complete-title strong {
-  color: var(--blue);
+  color: var(--accent-text);
 }
 
 .complete-receiver {
@@ -1371,7 +1384,7 @@ body > * {
 }
 
 .giftbox-tab-btn.active {
-  color: var(--blue);
+  color: var(--accent-text);
   font-weight: bold;
   border-bottom: 2px solid var(--blue);
 }
@@ -1487,6 +1500,9 @@ body.dark-theme {
   --line: #26324d;
   --ink: #ffffff;
   --muted: #b3bfd1;
+  --accent-text: #5bbcff;
+  --navy-text: #9bd2ff;
+  --teal-text: #67d9ee;
   background-image:
     radial-gradient(circle at 1px 1px, rgba(179, 191, 209, 0.12) 1px, transparent 0),
     linear-gradient(165deg, var(--canvas) 0%, #111a2c 100%);
@@ -1599,7 +1615,7 @@ body {
 .profile-verified-badge {
   display: inline-flex;
   align-items: center;
-  color: var(--blue);
+  color: var(--accent-text);
   flex-shrink: 0;
 }
 
