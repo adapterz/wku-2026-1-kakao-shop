@@ -2,7 +2,7 @@
  * 파일: public/js/profile.js
  * 목적: 프로필 메인 화면(profile.html) 전용 동작 처리
  * 왜: 사용자 요약 정보와 획득 배지 그리드를 로드하고 설정 화면 이동 처리를 위해
- * 주요: 로그인 정보 조회(임시 우회), 설정(Settings) 라우팅, 로그아웃 API 호출, 하단 탭바 이동
+ * 주요: 로그인 정보 조회(임시 우회), 설정(Settings) 라우팅, 하단 탭바 이동
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -66,27 +66,4 @@ function bindProfileEvents(user) {
     location.href = 'settings.html';
   });
 
-  // 🚪 로그아웃 API 호출 연동 (메인 프로필 단독 버튼)
-  document.getElementById('profile-logout-btn')?.addEventListener('click', async () => {
-    const isLogout = confirm('로그아웃 하시겠습니까?');
-    if (!isLogout) return;
-
-    try {
-      const response = await fetch('/api/auth/logout', { method: 'POST' });
-      if (response.ok) {
-        localStorage.removeItem('profile_display_name');
-        localStorage.removeItem('profile_display_phone');
-        localStorage.removeItem('profile_default_card');
-        localStorage.removeItem('profile_dark_mode');
-        document.body.classList.remove('dark-theme');
-        alert('성공적으로 로그아웃되었습니다.');
-        location.href = 'index.html';
-      } else {
-        alert('로그아웃에 실패했습니다.');
-      }
-    } catch (error) {
-      console.error('Logout error:', error);
-      alert('로그아웃 처리 중 오류가 발생했습니다.');
-    }
-  });
 }

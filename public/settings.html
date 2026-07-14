@@ -2,7 +2,7 @@
   파일: public/settings.html
   목적: 세부 제어 설정 화면
   왜: 다크모드, 푸시 알림, 결제 수단, 회원 정보 수정을 관리하기 위한 세부 폼을 제공하기 위함
-  주요: 미니 퀵 프로필 띠, 다크모드/알림 토글, 통합 정보 수정 폼, 결제수단 퀵 매핑, 로그아웃/탈퇴, 하단 동일 탭바
+  주요: 다크모드/알림 토글, 통합 정보 수정 폼, 결제수단 퀵 매핑, 로그아웃, 하단 동일 탭바
 -->
 <!DOCTYPE html>
 <html lang="ko">
@@ -26,25 +26,7 @@
   </header>
 
   <main class="settings-page">
-    <!-- 1. 퀵 프로필 요약 띠 (Settings Profile Strip) -->
-    <section class="settings-profile-strip-section" aria-label="개인정보 요약">
-      <button id="settings-quick-profile-btn" class="settings-profile-strip" type="button">
-        <div class="strip-profile-info">
-          <img class="strip-avatar" src="img/default-profile.png" alt="미니 프로필">
-          <div class="strip-text-group">
-            <strong id="settings-profile-username">마룡이</strong>
-            <span id="settings-profile-email">guest@maryong.com</span>
-          </div>
-        </div>
-        <span class="strip-arrow">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m9 18 6-6-6-6"/>
-          </svg>
-        </span>
-      </button>
-    </section>
-
-    <!-- 2. 앱 기능 설정 (토글 스위치) -->
+    <!-- 1. 앱 기능 설정 (토글 스위치) -->
     <section class="profile-settings-group" aria-label="앱 기능 설정">
       <h3 class="settings-group-title">앱 설정</h3>
       <div class="settings-card">
@@ -76,7 +58,7 @@
       </div>
     </section>
 
-    <!-- 3. 개인 정보 및 결제 폼 -->
+    <!-- 2. 개인 정보 및 결제 폼 -->
     <section id="info-form-section" class="profile-settings-group" aria-label="개인 정보 설정">
       <h3 class="settings-group-title">개인 정보 수정</h3>
       <div class="settings-card info-form-card">
@@ -110,10 +92,10 @@
       </div>
     </section>
 
-    <!-- 4. 하단 계정 관리 작업 -->
+    <!-- 3. 하단 계정 관리 작업 -->
     <section class="profile-actions-section" aria-label="계정 관리 작업">
       <button id="settings-logout-btn" class="profile-logout-btn" type="button">로그아웃</button>
-      <button id="settings-withdraw-btn" class="profile-withdraw-btn" type="button">회원 탈퇴</button>
+      <button class="profile-withdraw-btn" type="button" disabled>회원 탈퇴 (준비 중)</button>
     </section>
   </main>
 

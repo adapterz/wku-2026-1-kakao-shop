@@ -48,14 +48,18 @@ async function loadAllPasses() {
       }
     });
 
-    const response = await fetchProducts('');
-    const products = Array.isArray(response.data) ? response.data : [];
+    // API가 관리하는 상위 카테고리 그룹을 사용해 각 슬라이드의 상품을 조회합니다.
+    // 상품 응답의 category는 daily_pass 같은 세부 값이므로 FE에서 basic 등과 직접 비교하지 않습니다.
+    const responses = await Promise.all(
+      CATEGORY_MAP.map(category => fetchProducts(category))
+    );
+    const productsByCategory = {};
 
-    // 카테고리별 데이터 필터링 및 카운트 설정
-    categoryCounts[''] = products.length;
-    categoryCounts['basic'] = products.filter(p => p.category === 'basic').length;
-    categoryCounts['transfer'] = products.filter(p => p.category === 'transfer').length;
-    categoryCounts['special'] = products.filter(p => p.category === 'special').length;
+    CATEGORY_MAP.forEach((category, index) => {
+      const products = Array.isArray(responses[index].data) ? responses[index].data : [];
+      productsByCategory[category] = products;
+      categoryCounts[category] = products.length;
+    });
 
     // 초기 활성화된 탭의 카운트 설정
     updatePassesCount();
@@ -64,7 +68,7 @@ async function loadAllPasses() {
     Object.entries(containers).forEach(([category, container]) => {
       if (!container) return;
 
-      const filteredProducts = category ? products.filter(p => p.category === category) : products;
+      const filteredProducts = productsByCategory[category] || [];
 
       if (filteredProducts.length === 0) {
         container.innerHTML = '<p class="empty-message">현재 판매 중인 환승패스가 없습니다.</p>';
