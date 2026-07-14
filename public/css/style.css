@@ -29,6 +29,7 @@
   --canvas: #c5d2dc;
   --bg: #e8f2f8;
   --card: #ffffff;
+  --on-accent: #ffffff;
 }
 
 * {
@@ -96,7 +97,7 @@ body > * {
   gap: 8px;
   font-size: 18px;
   font-weight: bold;
-  color: var(--card);
+  color: var(--on-accent);
   letter-spacing: -0.2px;
 }
 
@@ -129,7 +130,7 @@ body > * {
   background: none;
   border: none;
   font-size: 20px;
-  color: var(--card);
+  color: var(--on-accent);
   cursor: pointer;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
 }
@@ -392,7 +393,7 @@ body > * {
   position: relative;
   overflow: hidden;
   padding: 18px 16px 50px;
-  color: var(--card);
+  color: var(--on-accent);
   background:
     radial-gradient(circle at 85% 18%, rgba(36, 183, 216, 0.35), transparent 46%),
     linear-gradient(140deg, var(--navy) 0%, #0a55a0 55%, #128f96 100%);
@@ -568,7 +569,7 @@ body > * {
 .passes-filter-btn.active {
   border-color: var(--blue);
   background-color: var(--blue);
-  color: var(--card);
+  color: var(--on-accent);
   box-shadow: 0 5px 12px rgba(8, 116, 201, 0.2);
 }
 
@@ -615,7 +616,7 @@ body > * {
   display: flex;
   align-items: stretch;
   border-radius: 18px;
-  color: var(--card);
+  color: var(--on-accent);
   background:
     radial-gradient(circle at 90% 8%, rgba(255, 255, 255, 0.2), transparent 30%),
     linear-gradient(135deg, #0a5ca8, #2493dd);
@@ -904,7 +905,7 @@ body > * {
   border: none;
   border-radius: 6px;
   background-color: var(--blue);
-  color: var(--card);
+  color: var(--on-accent);
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -1078,7 +1079,7 @@ body > * {
   flex: 1;
   padding: 14px;
   background-color: var(--blue);
-  color: var(--card);
+  color: var(--on-accent);
   border: none;
   border-radius: 8px;
   font-size: 15px;
@@ -1258,7 +1259,7 @@ body > * {
   width: 100%;
   padding: 14px;
   background-color: var(--blue);
-  color: var(--card);
+  color: var(--on-accent);
   border: none;
   border-radius: 8px;
   font-size: 16px;
@@ -1277,7 +1278,7 @@ body > * {
   height: 72px;
   border-radius: 50%;
   background-color: var(--green);
-  color: var(--card);
+  color: var(--on-accent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1344,7 +1345,7 @@ body > * {
   flex: 1;
   padding: 14px;
   background-color: var(--blue);
-  color: var(--card);
+  color: var(--on-accent);
   border: none;
   border-radius: 8px;
   font-size: 15px;
@@ -1480,11 +1481,20 @@ body > * {
 
 /* 프로필 페이지 전용 프리미엄 스타일 */
 body.dark-theme {
+  --canvas: #070b14;
   --bg: #0c1222;
   --card: #172036;
   --line: #26324d;
   --ink: #ffffff;
-  --muted: #8f9db3;
+  --muted: #b3bfd1;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(179, 191, 209, 0.12) 1px, transparent 0),
+    linear-gradient(165deg, var(--canvas) 0%, #111a2c 100%);
+}
+
+body.dark-theme::before {
+  border-inline-color: rgba(179, 191, 209, 0.14);
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.35);
 }
 
 /* 다크모드 적용 시 부드러운 페이드 전환 */
