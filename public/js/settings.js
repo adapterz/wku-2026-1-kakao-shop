@@ -1,8 +1,8 @@
 /*
  * 파일: public/js/settings.js
  * 목적: 설정 화면(settings.html) 전용 동작 처리
- * 왜: 개인정보 수정, 결제수단 관리, 알림/다크모드 토글, 로그아웃/탈퇴 등의 제어 처리를 한 곳에서 집약 수행하기 위함
- * 주요: 로그인 정보 조회(임시 우회), 다크모드/알림 토글, 통합 폼 정보 저장, 결제 관리, 로그아웃/탈퇴 API 연동
+ * 왜: 개인정보 수정, 결제수단 관리, 알림/다크모드 토글, 로그아웃 등의 제어 처리를 한 곳에서 집약 수행하기 위함
+ * 주요: 로그인 정보 조회(임시 우회), 다크모드/알림 토글, 통합 폼 정보 저장, 결제 관리, 로그아웃 API 연동
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,8 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function initSettingsPage() {
-  const usernameTitle = document.getElementById('settings-profile-username');
-  const emailSubtitle = document.getElementById('settings-profile-email');
   const usernameInput = document.getElementById('settings-edit-username');
   const emailInput = document.getElementById('settings-edit-email');
   const phoneInput = document.getElementById('settings-edit-phone');
@@ -34,12 +32,9 @@ async function initSettingsPage() {
       return;
     }
 
-    // 1. 설정 퀵 프로필 띠 및 정보 폼 초기 바인딩
+    // 1. 정보 폼 초기 바인딩
     const savedName = localStorage.getItem('profile_display_name') || user.name;
     const savedPhone = localStorage.getItem('profile_display_phone') || user.phone || '010-2411-9988';
-
-    if (usernameTitle) usernameTitle.textContent = savedName;
-    if (emailSubtitle) emailSubtitle.textContent = user.email;
 
     if (usernameInput) usernameInput.value = savedName;
     if (emailInput) emailInput.value = user.email;
@@ -52,7 +47,7 @@ async function initSettingsPage() {
     setupThemeAndToggles();
 
     // 4. 모든 클릭/체인지 이벤트 바인딩
-    bindSettingsEvents(user);
+    bindSettingsEvents();
 
   } catch (error) {
     console.error('Failed to initialize settings page:', error);
@@ -88,7 +83,7 @@ function updatePaymentStatus() {
   }
 }
 
-function bindSettingsEvents(user) {
+function bindSettingsEvents() {
   // 뒤로가기 (프로필 메인으로 귀환)
   document.getElementById('settings-back-btn')?.addEventListener('click', () => {
     location.href = 'profile.html';
@@ -105,15 +100,6 @@ function bindSettingsEvents(user) {
 
   document.getElementById('settings-giftbox-btn')?.addEventListener('click', () => {
     location.href = 'giftbox.html';
-  });
-
-  // 퀵 프로필 띠 클릭 시 아래 수정 폼으로 스크롤 이동
-  document.getElementById('settings-quick-profile-btn')?.addEventListener('click', () => {
-    const targetSection = document.getElementById('info-form-section');
-    if (targetSection) {
-      targetSection.scrollIntoView({ behavior: 'smooth' });
-      document.getElementById('settings-edit-username')?.focus();
-    }
   });
 
   // 🌙 다크 모드 토글 (실시간 전환 및 로컬스토리지 동기화)
@@ -158,8 +144,6 @@ function bindSettingsEvents(user) {
   document.getElementById('settings-save-changes-btn')?.addEventListener('click', () => {
     const usernameInput = document.getElementById('settings-edit-username');
     const phoneInput = document.getElementById('settings-edit-phone');
-    const usernameTitle = document.getElementById('settings-profile-username');
-
     if (!usernameInput || !phoneInput) return;
 
     const newName = usernameInput.value.trim();
@@ -186,10 +170,6 @@ function bindSettingsEvents(user) {
     localStorage.setItem('profile_display_name', newName);
     localStorage.setItem('profile_display_phone', newPhone);
 
-    if (usernameTitle) {
-      usernameTitle.textContent = newName;
-    }
-
     alert('변경사항이 성공적으로 저장되었습니다!');
   });
 
@@ -214,30 +194,6 @@ function bindSettingsEvents(user) {
     } catch (error) {
       console.error('Logout error:', error);
       alert('로그아웃 중 오류가 발생했습니다.');
-    }
-  });
-
-  // ⚠️ 회원 탈퇴
-  document.getElementById('settings-withdraw-btn')?.addEventListener('click', async () => {
-    const confirmWithdraw = confirm('정말로 탈퇴하시겠습니까?\n모든 구매/선물 내역 및 계정 정보가 영구적으로 파괴됩니다.');
-    if (!confirmWithdraw) return;
-
-    try {
-      const response = await fetch('/api/auth/logout', { method: 'POST' });
-      if (response.ok) {
-        localStorage.removeItem('profile_display_name');
-        localStorage.removeItem('profile_display_phone');
-        localStorage.removeItem('profile_default_card');
-        localStorage.removeItem('profile_dark_mode');
-        document.body.classList.remove('dark-theme');
-        alert('회원 탈퇴 처리가 완료되었습니다.\n이용해 주셔서 감사합니다.');
-        location.href = 'index.html';
-      } else {
-        alert('탈퇴 처리 실패');
-      }
-    } catch (error) {
-      console.error('Withdraw error:', error);
-      alert('탈퇴 진행 중 오류가 발생했습니다.');
     }
   });
 }
