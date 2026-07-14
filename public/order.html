@@ -50,6 +50,16 @@
         <button class="option-btn" id="btn-friend" type="button" aria-pressed="false">친구에게 선물</button>
       </div>
       <input
+        type="text"
+        id="receiver-name-input"
+        placeholder="받는 사람 이름"
+        class="text-input"
+        autocomplete="off"
+        maxlength="50"
+        hidden
+        disabled
+      >
+      <input
         type="tel"
         id="receiver-input"
         placeholder="받는 사람 휴대폰 번호 (010-0000-0000)"
@@ -61,7 +71,7 @@
         hidden
         disabled
       >
-      <p class="receiver-guide" id="receiver-guide" hidden>가입 여부와 관계없이 선물받을 휴대폰 번호를 입력해주세요.</p>
+      <p class="receiver-guide" id="receiver-guide" hidden>받는 사람의 이름과 문자로 선물받을 휴대폰 번호를 입력해주세요.</p>
     </section>
 
     <!-- 주문 내역 -->

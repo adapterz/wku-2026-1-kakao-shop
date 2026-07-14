@@ -57,6 +57,7 @@ messageEditBtn.addEventListener('click', () => {
 // 받는 사람 토글 (나에게 선물 / 친구에게 선물)
 const btnMe = document.getElementById('btn-me');
 const btnFriend = document.getElementById('btn-friend');
+const receiverNameInput = document.getElementById('receiver-name-input');
 const receiverInput = document.getElementById('receiver-input');
 const receiverGuide = document.getElementById('receiver-guide');
 
@@ -70,7 +71,7 @@ btnMe.addEventListener('click', () => {
 
 btnFriend.addEventListener('click', () => {
   setReceiverMode('friend');
-  receiverInput.focus();
+  receiverNameInput.focus();
 });
 
 // 상품 상세에서 선택한 선물/구매 버튼에 맞춰 최초 받는 사람 모드를 설정합니다.
@@ -84,7 +85,14 @@ document.getElementById('checkout-btn').addEventListener('click', async () => {
   }
 
   const isGiftToFriend = btnFriend.classList.contains('active');
+  const receiverName = receiverNameInput.value.trim().replace(/\s+/g, ' ');
   const receiverPhone = normalizePhone(receiverInput.value);
+
+  if (isGiftToFriend && !isValidReceiverName(receiverName)) {
+    alert('받는 사람의 이름을 입력해주세요.');
+    receiverNameInput.focus();
+    return;
+  }
 
   if (isGiftToFriend && !isValidMobilePhone(receiverPhone)) {
     alert('받는 사람의 휴대폰 번호를 정확히 입력해주세요.');
@@ -96,7 +104,7 @@ document.getElementById('checkout-btn').addEventListener('click', async () => {
     productId,
     // M2 명세 기준 요청 필드는 message가 아니라 giftMessage로 통일합니다.
     giftMessage: getGiftMessage(),
-    ...(isGiftToFriend ? { receiverPhone } : {})
+    ...(isGiftToFriend ? { receiverName, receiverPhone } : {})
   };
 
   try {
@@ -189,6 +197,8 @@ function setReceiverMode(mode) {
   btnMe.setAttribute('aria-pressed', String(!isFriendMode));
   btnFriend.setAttribute('aria-pressed', String(isFriendMode));
 
+  receiverNameInput.hidden = !isFriendMode;
+  receiverNameInput.disabled = !isFriendMode;
   receiverInput.hidden = !isFriendMode;
   receiverInput.disabled = !isFriendMode;
   receiverGuide.hidden = !isFriendMode;
@@ -198,8 +208,13 @@ function setReceiverMode(mode) {
   }
 
   if (!isFriendMode) {
+    receiverNameInput.value = '';
     receiverInput.value = '';
   }
+}
+
+function isValidReceiverName(value) {
+  return value.length >= 1 && value.length <= 50;
 }
 
 function normalizePhone(value) {
@@ -224,6 +239,7 @@ function formatPhoneInput(value) {
 
 function getOrderErrorMessage(error) {
   const errorMessages = {
+    invalid_receiver_name: '받는 사람의 이름을 입력해주세요.',
     invalid_receiver_phone: '받는 사람의 휴대폰 번호를 정확히 입력해주세요.',
     cannot_gift_to_self_as_friend: '본인 번호는 친구에게 선물하기에서 사용할 수 없습니다.',
   };
