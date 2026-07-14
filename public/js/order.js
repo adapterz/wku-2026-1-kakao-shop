@@ -9,8 +9,13 @@ const fallbackImageUrl = 'img/iksan-logo.svg';
 const orderParams = new URLSearchParams(location.search);
 // product.html에서 넘긴 productId로 주문서에 표시할 상품과 주문 생성 대상을 맞춥니다.
 const productId = Number(orderParams.get('productId'));
+const initialReceiverMode = orderParams.get('type') === 'gift' ? 'friend' : 'me';
 let selectedProduct = null;
 let isEditingGiftMessage = false;
+let isGiftMessageCustomized = false;
+
+const SELF_GIFT_MESSAGE = '나는 내가 챙긴다!\n소중한 나에게 주는 선물';
+const FRIEND_GIFT_MESSAGE = '익산의 편리한 이동을 선물할게요!\n즐거운 하루 보내세요.';
 
 const giftMessageText = document.getElementById('gift-message-text');
 const giftMessageInput = document.getElementById('gift-message-input');
@@ -45,13 +50,20 @@ messageEditBtn.addEventListener('click', () => {
   }
 
   giftMessageText.textContent = nextMessage;
+  isGiftMessageCustomized = true;
   setGiftMessageEditMode(false);
 });
 
 // 받는 사람 토글 (나에게 선물 / 친구에게 선물)
 const btnMe = document.getElementById('btn-me');
 const btnFriend = document.getElementById('btn-friend');
+const receiverNameInput = document.getElementById('receiver-name-input');
 const receiverInput = document.getElementById('receiver-input');
+const receiverGuide = document.getElementById('receiver-guide');
+
+receiverInput.addEventListener('input', () => {
+  receiverInput.value = formatPhoneInput(receiverInput.value);
+});
 
 btnMe.addEventListener('click', () => {
   setReceiverMode('me');
@@ -59,11 +71,11 @@ btnMe.addEventListener('click', () => {
 
 btnFriend.addEventListener('click', () => {
   setReceiverMode('friend');
-  receiverInput.focus();
+  receiverNameInput.focus();
 });
 
-// M2는 나에게 선물하기가 기본 흐름이므로, 초기 화면에서는 받는 사람 입력칸을 숨깁니다.
-setReceiverMode('me');
+// 상품 상세에서 선택한 선물/구매 버튼에 맞춰 최초 받는 사람 모드를 설정합니다.
+setReceiverMode(initialReceiverMode);
 
 // 결제하기 버튼 — 주문 생성(Mock 결제 포함) API 호출
 document.getElementById('checkout-btn').addEventListener('click', async () => {
@@ -73,17 +85,26 @@ document.getElementById('checkout-btn').addEventListener('click', async () => {
   }
 
   const isGiftToFriend = btnFriend.classList.contains('active');
-  const receiverInputValue = receiverInput.value.trim();
+  const receiverName = receiverNameInput.value.trim().replace(/\s+/g, ' ');
+  const receiverPhone = normalizePhone(receiverInput.value);
 
-  if (isGiftToFriend && !receiverInputValue) {
-    alert('받는 사람 이메일 또는 아이디를 입력해주세요.');
+  if (isGiftToFriend && !isValidReceiverName(receiverName)) {
+    alert('받는 사람의 이름을 입력해주세요.');
+    receiverNameInput.focus();
+    return;
+  }
+
+  if (isGiftToFriend && !isValidMobilePhone(receiverPhone)) {
+    alert('받는 사람의 휴대폰 번호를 정확히 입력해주세요.');
+    receiverInput.focus();
     return;
   }
 
   const orderData = {
     productId,
     // M2 명세 기준 요청 필드는 message가 아니라 giftMessage로 통일합니다.
-    giftMessage: getGiftMessage()
+    giftMessage: getGiftMessage(),
+    ...(isGiftToFriend ? { receiverName, receiverPhone } : {})
   };
 
   try {
@@ -100,7 +121,7 @@ document.getElementById('checkout-btn').addEventListener('click', async () => {
     location.href = `complete.html?orderId=${orderId}`;
   } catch (error) {
     console.error('주문 생성 중 오류:', error);
-    alert(error.message || '주문 생성에 실패했습니다. 다시 시도해주세요.');
+    alert(getOrderErrorMessage(error));
   }
 });
 
@@ -176,12 +197,56 @@ function setReceiverMode(mode) {
   btnMe.setAttribute('aria-pressed', String(!isFriendMode));
   btnFriend.setAttribute('aria-pressed', String(isFriendMode));
 
+  receiverNameInput.hidden = !isFriendMode;
+  receiverNameInput.disabled = !isFriendMode;
   receiverInput.hidden = !isFriendMode;
   receiverInput.disabled = !isFriendMode;
+  receiverGuide.hidden = !isFriendMode;
+
+  if (!isGiftMessageCustomized) {
+    giftMessageText.textContent = isFriendMode ? FRIEND_GIFT_MESSAGE : SELF_GIFT_MESSAGE;
+  }
 
   if (!isFriendMode) {
+    receiverNameInput.value = '';
     receiverInput.value = '';
   }
+}
+
+function isValidReceiverName(value) {
+  return value.length >= 1 && value.length <= 50;
+}
+
+function normalizePhone(value) {
+  return String(value || '').replace(/\D/g, '');
+}
+
+function isValidMobilePhone(value) {
+  return /^01[016789]\d{7,8}$/.test(value);
+}
+
+function formatPhoneInput(value) {
+  const numbers = normalizePhone(value).slice(0, 11);
+
+  if (numbers.length <= 3) return numbers;
+  if (numbers.length <= 7) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+  if (numbers.length === 10) {
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 6)}-${numbers.slice(6)}`;
+  }
+
+  return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7)}`;
+}
+
+function getOrderErrorMessage(error) {
+  const errorMessages = {
+    invalid_receiver_name: '받는 사람의 이름을 입력해주세요.',
+    invalid_receiver_phone: '받는 사람의 휴대폰 번호를 정확히 입력해주세요.',
+    cannot_gift_to_self_as_friend: '본인 번호는 친구에게 선물하기에서 사용할 수 없습니다.',
+  };
+
+  return errorMessages[error && error.message]
+    || (error && error.message)
+    || '주문 생성에 실패했습니다. 다시 시도해주세요.';
 }
 
 function showOrderProductError(message) {

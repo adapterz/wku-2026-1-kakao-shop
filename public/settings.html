@@ -2,7 +2,7 @@
   파일: public/settings.html
   목적: 세부 제어 설정 화면
   왜: 다크모드, 푸시 알림, 결제 수단, 회원 정보 수정을 관리하기 위한 세부 폼을 제공하기 위함
-  주요: 다크모드/알림 토글, 통합 정보 수정 폼, 결제수단 퀵 매핑, 로그아웃, 하단 동일 탭바
+  주요: 다크모드/알림 토글, 통합 정보 수정 폼, 결제수단 퀵 매핑, 서비스 정보, 로그아웃, 하단 동일 탭바
 -->
 <!DOCTYPE html>
 <html lang="ko">
@@ -92,7 +92,26 @@
       </div>
     </section>
 
-    <!-- 3. 하단 계정 관리 작업 -->
+    <!-- 3. 현재 구현 범위를 투명하게 안내하는 서비스 정보 -->
+    <section class="profile-settings-group" aria-label="서비스 정보">
+      <h3 class="settings-group-title">서비스 정보</h3>
+      <div class="settings-card service-info-card">
+        <div class="settings-row">
+          <span class="settings-label-group">서비스명</span>
+          <span class="settings-value-text">익산 환승패스</span>
+        </div>
+        <div class="settings-row">
+          <span class="settings-label-group">앱 버전</span>
+          <span class="settings-value-text">1.0.0</span>
+        </div>
+        <div class="settings-row">
+          <span class="settings-label-group">서비스 안내</span>
+          <span class="settings-value-text">교육용 프로젝트</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 하단 계정 관리 작업 -->
     <section class="profile-actions-section" aria-label="계정 관리 작업">
       <button id="settings-logout-btn" class="profile-logout-btn" type="button">로그아웃</button>
       <button class="profile-withdraw-btn" type="button" disabled>회원 탈퇴</button>
