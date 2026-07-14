@@ -41,3 +41,9 @@
 - 원인: nodemon은 자식 node 프로세스가 죽으면 "감시"하고 있다가 자동으로 재시작하는 도구임. taskkill로 node.exe(자식)만 죽이면, 그 부모인 nodemon이 곧바로 새 자식을 다시 띄워버려서 프로세스가 실제로는 안 꺼짐. 이 과정이 여러 세션에 걸쳐 반복되면서 각기 다른 시점의 .env를 읽은 여러 서버 프로세스가 같은 3000번 포트를 두고 계속 남아있게 됨 (그 중 하나만 포트를 실제로 점유하는데, 그게 어떤 시점의 프로세스인지 알 수 없어 원인 파악이 어려움)
 - 해결: `netstat -ano`로 3000번 포트를 실제 점유 중인 PID를 확인 → `wmic process where "commandline like '%server/app.js%'" get ProcessId,ParentProcessId,CommandLine`로 nodemon/cmd까지 이어지는 전체 프로세스 트리를 확인 → 자식(node)이 아니라 최상위 cmd.exe를 `taskkill /F /T /PID <pid>`(트리 전체 종료)로 꺼야 확실하게 없어짐
 - 배운 점: nodemon처럼 "자동 재시작"하는 프로세스 감시 도구가 떠 있을 때는 자식 프로세스 하나만 죽이면 안 된다. 완전히 끄려면 최상위 프로세스를 트리째(/T) 종료해야 하고, 서버가 이상하게 동작할 땐 새로 켜기 전에 항상 포트 점유 프로세스와 관련 프로세스 트리를 먼저 확인하는 게 안전함
+
+## [2026-07-14] PowerShell 실행 정책 제한으로 인한 npm 실행 실패 및 nodemon 의존성 에러
+- 증상: 터미널에서 npm run dev 실행 시, PowerShell 보안 정책(PSSecurityException) 및 UnauthorizedAccess 오류가 발생하며 스크립트가 실행되지 않음
+- 원인: 윈도우 기본 PowerShell 정책상 npm.ps1 등의 외부 스크립트 실행이 차단되어 있음
+- 해결: npm.cmd run dev 와 같이 윈도우 커맨드 스크립트(.cmd)를 명시적으로 호출해 실행 정책 제약을 우회함. 이후 nodemon 부재로 인한 에러는 npm.cmd start(node server/app.js)를 사용하여 nodemon 의존성 없이 서버를 구동해 해결함
+- 배운 점: Windows PowerShell 환경에서는 실행 권한 문제로 CLI 스크립트(.ps1) 실행이 제한될 수 있으므로, .cmd 버전을 직접 호출하거나 실행 정책을 적절히 설정해야 함
