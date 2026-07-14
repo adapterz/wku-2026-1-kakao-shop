@@ -54,7 +54,7 @@
 
 ### 💳 3) `orders` (주문 테이블)
 * **목적:** 거래 트랜잭션 기록 및 Mock 결제 상태 관리
-* **설명:** 수신 번호는 `receiver_phone`에 저장하고, 가입 회원으로 식별될 때만 `receiver_id`를 연결합니다. 따라서 비회원에게도 문자 기반 교통패스를 선물할 수 있습니다.
+* **설명:** 입력한 수신자 이름과 번호는 `receiver_name`, `receiver_phone`에 주문 당시 값으로 저장하고, 가입 회원으로 식별될 때만 `receiver_id`를 연결합니다. 따라서 비회원에게도 문자 기반 교통패스를 선물할 수 있습니다.
 
 | 컬럼명 | 데이터 타입 | 제약조건 | 설명 |
 | :--- | :--- | :--- | :--- |
@@ -62,6 +62,7 @@
 | **buyer_id** | INT | NOT NULL, FK | 결제를 수행한 구매자 ID (`users` 연동) |
 | **receiver_id** | BIGINT | NULL, FK | 가입 수신자 ID. 비회원 문자 선물은 `NULL` |
 | **receiver_phone** | VARCHAR(20) | NULL | 주문 당시 문자 수신 번호 스냅샷. 기존 주문은 `NULL` 가능 |
+| **receiver_name** | VARCHAR(50) | NULL | 주문 당시 입력한 수신자 이름 스냅샷 |
 | **product_id** | INT | NOT NULL, FK | 거래된 대상 상품 ID (`products` 연동) |
 | **gift_message** | TEXT | NULL | 선물과 함께 보내는 메시지 텍스트 |
 | **total_price** | INT | NOT NULL | 할인 등이 적용된 최종 결제 액수 |

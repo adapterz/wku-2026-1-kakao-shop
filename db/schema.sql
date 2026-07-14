@@ -71,6 +71,7 @@ CREATE TABLE orders (
     buyer_id BIGINT NOT NULL,                             -- 결제자 ID (API 응답 내 buyer.userId)
     receiver_id BIGINT NULL,                              -- 가입 수신자 ID, 비회원 문자 선물은 NULL
     receiver_phone VARCHAR(20) NULL,                      -- 문자 선물 수신 번호 스냅샷, 구버전 주문은 NULL 가능
+    receiver_name VARCHAR(50) NULL,                       -- 주문 당시 수신자 이름 스냅샷
     product_id BIGINT NOT NULL,                           -- 구매 상품 번호 (API: productId)
     
     total_price INT NOT NULL,                             -- 최종 결제 금액 (API: totalPrice)
