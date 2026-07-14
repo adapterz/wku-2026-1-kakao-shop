@@ -54,13 +54,14 @@
 
 ### 💳 3) `orders` (주문 테이블)
 * **목적:** 거래 트랜잭션 기록 및 Mock 결제 상태 관리
-* **설명:** 돈을 낸 사람(`buyer_id`)과 받을 사람(`receiver_id`)이 다를 수 있음을 완벽히 지원합니다.
+* **설명:** 수신 번호는 `receiver_phone`에 저장하고, 가입 회원으로 식별될 때만 `receiver_id`를 연결합니다. 따라서 비회원에게도 문자 기반 교통패스를 선물할 수 있습니다.
 
 | 컬럼명 | 데이터 타입 | 제약조건 | 설명 |
 | :--- | :--- | :--- | :--- |
 | **id** | INT | PK, Auto Increment | 주문 고유 번호 (영수증 단위) |
 | **buyer_id** | INT | NOT NULL, FK | 결제를 수행한 구매자 ID (`users` 연동) |
-| **receiver_id** | INT | NOT NULL, FK | 선물을 최종 수신할 대상자 ID (`users` 연동) |
+| **receiver_id** | BIGINT | NULL, FK | 가입 수신자 ID. 비회원 문자 선물은 `NULL` |
+| **receiver_phone** | VARCHAR(20) | NULL | 주문 당시 문자 수신 번호 스냅샷. 기존 주문은 `NULL` 가능 |
 | **product_id** | INT | NOT NULL, FK | 거래된 대상 상품 ID (`products` 연동) |
 | **gift_message** | TEXT | NULL | 선물과 함께 보내는 메시지 텍스트 |
 | **total_price** | INT | NOT NULL | 할인 등이 적용된 최종 결제 액수 |
@@ -78,6 +79,7 @@
 | :--- | :--- | :--- | :--- |
 | **id** | INT | PK, Auto Increment | 모바일 교환권 고유 일련번호 |
 | **order_id** | INT | NOT NULL, FK, UNIQUE | 연동된 원천 주문 내역 ID (1:1 매핑 강제) |
+| **receiver_id** | BIGINT | NULL, FK | 가입 수신자 ID. 비회원 문자 선물은 `NULL` |
 | **barcode** | VARCHAR(50) | NOT NULL, UNIQUE | POS 결제용 유니크 바코드 넘버 |
 | **barcode_image_url** | VARCHAR(255) | NULL | 바코드 이미지 리소스 경로 |
 | **status** | VARCHAR(20) | DEFAULT 'unused' | 쿠폰 사용 상태 (`unused`: 미사용, `used`: 사용됨) |
@@ -90,7 +92,6 @@
 
 > 💡 **주석:** 아래 다이어그램은 `dbdiagram.io`를 바탕으로 생성된 최종 테이블 관계도입니다. `users`와 `products`를 부모로 하여 트랜잭션 데이터인 `orders`와 `gifts`가 유기적으로 연결된 뼈대를 확인할 수 있습니다.
 
-<<<<<<< HEAD
 ![최종 물리 ERD 다이어그램](./erd.png)
 
 
@@ -101,13 +102,10 @@
 - **users (1)** ↔ **(N) orders** : 1명의 회원은 여러 번 주문할 수 있습니다.
 - **products (1)** ↔ **(N) orders** : 1개의 상품은 여러 번 주문될 수 있습니다.
 - **orders (1)** ↔ **(1) gifts** : 1개의 주문이 결제되면, 반드시 1개의 교환권(선물)이 생성됩니다. (UNIQUE 매핑)
-- **users (1)** ↔ **(N) gifts** : 1명의 수신자는 여러 개의 선물을 받을 수 있습니다.
+- **users (0..1)** ↔ **(N) gifts** : 가입 수신자는 선물함에서 확인하며, 비회원 문자 선물은 사용자 연결 없이 발급됩니다.
 
 ## 📋 핵심 테이블 설명
 1. **`users`**: 회원 정보 (email UNIQUE 제약으로 중복 가입 방지, bcrypt 암호화 적용)
 2. **`products`**: 익산 대중교통/환승 패스권 18개 (M2 시드 데이터 세팅 완료)
-3. **`orders`**: 구매자(buyer)와 수신자(receiver)가 기록되는 결제 영수증
-4. **`gifts`**: 실제 매장에서 사용하는 바코드 및 사용 상태(unused/used)를 관리하는 교환권
-=======
-![최종 물리 ERD 다이어그램](./erd.png)
->>>>>>> a60886a003cad68287bdd9ab4fdbab0f9d00f33d
+3. **`orders`**: 구매자와 수신 전화번호를 기록하고, 가입 수신자는 선택적으로 연결하는 결제 영수증
+4. **`gifts`**: 문자로 전달할 바코드와 사용 상태(unused/used)를 관리하는 교환권

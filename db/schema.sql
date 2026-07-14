@@ -69,7 +69,8 @@ CREATE TABLE orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,                 -- 주문 고유 번호 (API: orderId)
     
     buyer_id BIGINT NOT NULL,                             -- 결제자 ID (API 응답 내 buyer.userId)
-    receiver_id BIGINT NOT NULL,                          -- 선물 수신자 ID (API 응답 내 receiver.userId)
+    receiver_id BIGINT NULL,                              -- 가입 수신자 ID, 비회원 문자 선물은 NULL
+    receiver_phone VARCHAR(20) NULL,                      -- 문자 선물 수신 번호 스냅샷, 구버전 주문은 NULL 가능
     product_id BIGINT NOT NULL,                           -- 구매 상품 번호 (API: productId)
     
     total_price INT NOT NULL,                             -- 최종 결제 금액 (API: totalPrice)
@@ -95,7 +96,7 @@ CREATE TABLE gifts (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,                 -- 쿠폰 고유 번호 (API: giftId)
     
     order_id BIGINT NOT NULL UNIQUE,                      -- 원본 주문 ID (1:1 매핑)
-    receiver_id BIGINT NOT NULL,                          -- 선물 받은 소유자 ID (API 조회용)
+    receiver_id BIGINT NULL,                              -- 가입 수신자 ID, 비회원 문자 선물은 NULL
     product_id BIGINT NOT NULL,                           -- 교환할 상품 ID (API 조회용)
     
     barcode VARCHAR(50) NOT NULL UNIQUE,                  -- 매장 포스기 바코드 번호 (API: barcode)
