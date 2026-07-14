@@ -5,6 +5,16 @@
  * 주요: fetch 요청/응답 처리, 에러 핸들링
  */
 
+// 다크모드 전역 초기화 (페이지 이동 시 깜빡임 없이 즉시 반영)
+(function() {
+  const isDarkMode = localStorage.getItem('profile_dark_mode') === 'true';
+  if (isDarkMode) {
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('dark-theme');
+    });
+  }
+})();
+
 async function requestJson(url, options = {}) {
   // GET/POST 등 모든 JSON API 호출에서 공통으로 사용하는 fetch 래퍼입니다.
   const response = await fetch(url, {
