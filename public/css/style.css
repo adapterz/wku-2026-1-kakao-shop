@@ -572,6 +572,43 @@ body > * {
   box-shadow: 0 5px 12px rgba(8, 116, 201, 0.2);
 }
 
+/* 스와이프 슬라이더 스타일 */
+.passes-slider-container {
+  overflow: hidden;
+  width: 100%;
+  margin-left: -16px;
+  margin-right: -16px;
+  width: calc(100% + 32px); /* 좌우 음수 마진 보정 */
+}
+
+.passes-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  cursor: grab;
+}
+
+.passes-slider.active-drag {
+  cursor: grabbing;
+  user-select: none;
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
+.passes-slider::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.passes-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: start;
+  padding: 0 16px; /* 좌우 마진으로 밀어낸 만큼 내부 패딩 부여 */
+}
+
 .pass-ticket {
   position: relative;
   overflow: hidden;
