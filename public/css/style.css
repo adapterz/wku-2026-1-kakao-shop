@@ -103,7 +103,7 @@ body > * {
 /* 홈 화면 헤더는 검색 버튼이 오른쪽에만 있어도 로고+문구가 항상 중앙에 오도록 절대 배치합니다. */
 .home-top-header {
   position: relative;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 .home-top-header h1 {
@@ -1476,5 +1476,544 @@ body > * {
 .qr-guide {
   font-size: 11px;
   color: var(--muted);
+}
+
+/* 프로필 페이지 전용 프리미엄 스타일 */
+body.dark-theme {
+  --bg: #0c1222;
+  --card: #172036;
+  --line: #26324d;
+  --ink: #ffffff;
+  --muted: #8f9db3;
+}
+
+/* 다크모드 적용 시 부드러운 페이드 전환 */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.profile-top-header {
+  justify-content: space-between;
+}
+
+.profile-top-header .header-spacer {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.profile-streak-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
+  padding: 5px 11px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.08);
+}
+
+.streak-icon {
+  fill: currentColor;
+}
+
+.profile-page {
+  flex: 1;
+  padding: 20px 16px 40px;
+}
+
+/* 1. 상단 프로필 요약 카드 */
+.profile-card-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 16px 24px;
+  background-color: var(--card);
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(20, 46, 70, 0.04);
+  text-align: center;
+  margin-bottom: 20px;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  width: 86px;
+  height: 86px;
+  margin-bottom: 16px;
+}
+
+.profile-avatar-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  background-color: var(--bg);
+}
+
+.profile-avatar-edit-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: var(--blue);
+  color: #fff;
+  border: 2px solid var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+}
+
+.profile-name-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 4px;
+}
+
+.profile-username {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.profile-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  color: var(--blue);
+  flex-shrink: 0;
+}
+
+.profile-email-text {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+/* 🎖️ 활동 배지 영역 */
+.profile-badges-container {
+  margin-top: 24px;
+  width: 100%;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+
+.badge-header-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.badge-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--ink);
+  text-align: left;
+  margin-bottom: 0;
+}
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.badge-item {
+  background-color: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.badge-icon {
+  font-size: 24px;
+  position: relative;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* 잠긴 배지 필터 */
+.badge-item.locked {
+  opacity: 0.5;
+}
+
+.badge-item.locked .badge-icon {
+  filter: grayscale(100%);
+}
+
+.lock-overlay {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background-color: #4a5568;
+  color: #fff;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--bg);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+/* 2. 설정 카드 스위치 그룹 */
+.profile-settings-group {
+  margin-bottom: 20px;
+}
+
+.settings-group-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 8px;
+  padding-left: 4px;
+}
+
+.settings-card {
+  background-color: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 16px rgba(20, 46, 70, 0.03);
+  overflow: hidden;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.settings-row:last-child {
+  border-bottom: none;
+}
+
+.settings-label-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink);
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.settings-icon {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+/* 📱 iOS 모던 토글 스위치 */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e1;
+  transition: 0.3s ease;
+  border-radius: 34px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ffffff;
+  transition: 0.3s ease;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-theme .toggle-slider {
+  background-color: #334155;
+}
+
+input:checked + .toggle-slider {
+  background-color: var(--blue);
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}
+
+/* 3. 통합 회원 정보 수정 폼 */
+.info-form-card {
+  padding: 20px 16px;
+}
+
+.info-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.info-input-group label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.info-input {
+  height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.3s, color 0.3s;
+}
+
+.info-input:focus {
+  border-color: var(--blue);
+}
+
+.info-input.disabled-style {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.profile-form-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.profile-form-action-btn:hover {
+  background-color: var(--line);
+}
+
+.btn-label-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-status-label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.profile-submit-btn {
+  width: 100%;
+  height: 46px;
+  background-color: var(--blue);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(14, 131, 230, 0.2);
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.profile-submit-btn:hover {
+  background-color: #0b6cb8;
+}
+
+.profile-submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* 4. 하단 로그아웃 및 탈퇴 */
+.profile-actions-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.profile-logout-btn {
+  width: 100%;
+  padding: 13px;
+  background-color: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.profile-logout-btn:hover {
+  background-color: var(--bg);
+  color: var(--ink);
+  border-color: var(--muted);
+}
+
+.profile-withdraw-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 11.5px;
+  text-decoration: underline;
+  cursor: pointer;
+  opacity: 0.75;
+  font-family: inherit;
+}
+
+.profile-withdraw-btn:hover {
+  opacity: 1;
+  color: var(--red);
+}
+
+/* 다크모드 시 상단 헤더 글씨 및 아이콘 가독성 확보 */
+body.dark-theme .top-header h1,
+body.dark-theme .top-header .icon-btn {
+  color: #ffffff !important;
+}
+
+/* 설정(Settings) 페이지 전용 레이아웃 및 퀵 프로필 띠 스타일 */
+.settings-page {
+  flex: 1;
+  padding: 20px 16px 40px;
+}
+
+.settings-profile-strip-section {
+  margin-bottom: 20px;
+}
+
+.settings-profile-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px;
+  background-color: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(20, 46, 70, 0.03);
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  text-align: left;
+  font-family: inherit;
+}
+
+.settings-profile-strip:hover {
+  background-color: var(--bg);
+}
+
+.strip-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.strip-avatar {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background-color: var(--bg);
+}
+
+.strip-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.strip-text-group strong {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.strip-text-group span {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.strip-arrow {
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+}
+
+/* 프로필 아바타 액티브 닷 배지 */
+.profile-avatar-active-dot {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  border: 2px solid var(--card);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: border-color 0.3s;
 }
 
