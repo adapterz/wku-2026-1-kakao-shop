@@ -9,6 +9,7 @@ const fallbackImageUrl = 'img/iksan-logo.svg';
 const orderParams = new URLSearchParams(location.search);
 // product.html에서 넘긴 productId로 주문서에 표시할 상품과 주문 생성 대상을 맞춥니다.
 const productId = Number(orderParams.get('productId'));
+const initialReceiverMode = orderParams.get('type') === 'gift' ? 'friend' : 'me';
 let selectedProduct = null;
 let isEditingGiftMessage = false;
 let isGiftMessageCustomized = false;
@@ -72,8 +73,8 @@ btnFriend.addEventListener('click', () => {
   receiverInput.focus();
 });
 
-// M2는 나에게 선물하기가 기본 흐름이므로, 초기 화면에서는 받는 사람 입력칸을 숨깁니다.
-setReceiverMode('me');
+// 상품 상세에서 선택한 선물/구매 버튼에 맞춰 최초 받는 사람 모드를 설정합니다.
+setReceiverMode(initialReceiverMode);
 
 // 결제하기 버튼 — 주문 생성(Mock 결제 포함) API 호출
 document.getElementById('checkout-btn').addEventListener('click', async () => {
