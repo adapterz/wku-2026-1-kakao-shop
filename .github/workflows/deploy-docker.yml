@@ -1,0 +1,42 @@
+name: Deploy Docker to EC2
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH 설정
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s' "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$SERVER_HOST" >> ~/.ssh/known_hosts
+
+      - name: EC2 Docker 배포
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+        run: |
+          ssh -i ~/.ssh/id_rsa "$SERVER_USER@$SERVER_HOST" << 'EOF'
+            set -e
+            cd /home/ubuntu/wku-2026-1-kakao-shop
+
+            git fetch origin main
+            git switch main
+            git pull --ff-only origin main
+
+            sudo docker compose config -q
+            sudo docker compose build
+            sudo docker compose up -d
+
+            curl -fsS http://127.0.0.1:3001/api/health
+          EOF
