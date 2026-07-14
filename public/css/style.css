@@ -142,7 +142,125 @@ body > * {
   font-size: 20px;
   color: var(--on-accent);
   cursor: pointer;
+  text-decoration: none;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
+}
+
+.header-spacer {
+  width: 20px;
+  height: 20px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 상품명 검색 화면 */
+.search-page {
+  flex: 1;
+  padding: 20px 16px 40px;
+}
+
+.product-search-form {
+  margin-bottom: 24px;
+}
+
+.product-search-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 7px 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background-color: var(--card);
+  color: var(--muted);
+  box-shadow: 0 6px 16px rgba(20, 46, 70, 0.07);
+}
+
+.product-search-field:focus-within {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(8, 116, 201, 0.12);
+}
+
+.product-search-field input {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.product-search-submit {
+  flex-shrink: 0;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 11px;
+  background-color: var(--blue);
+  color: var(--on-accent);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.search-result-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.search-result-heading h2 {
+  color: var(--ink);
+  font-size: 18px;
+}
+
+.search-guide-message {
+  display: flex;
+  min-height: 190px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 28px 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background-color: var(--card);
+  text-align: center;
+}
+
+.search-guide-icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 5px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(8, 116, 201, 0.1);
+  color: var(--accent-text);
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.search-guide-message strong {
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.search-guide-message p {
+  color: var(--muted);
+  font-size: 13px;
 }
 
 .icon-btn.small {
