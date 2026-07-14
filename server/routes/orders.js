@@ -15,6 +15,35 @@ function createBarcode(orderId) {
   return `IKSAN${timestamp}${paddedOrderId}`;
 }
 
+function normalizePhone(value) {
+  return String(value || '').replace(/\D/g, '');
+}
+
+function isValidMobilePhone(value) {
+  return /^01[016789]\d{7,8}$/.test(value);
+}
+
+function maskPhone(value) {
+  const normalized = normalizePhone(value);
+
+  if (normalized.length < 10) {
+    return '';
+  }
+
+  return `${normalized.slice(0, 3)}-****-${normalized.slice(-4)}`;
+}
+
+function createDeliveryResponse(row) {
+  const isFriendGift = row.receiver_id === null
+    || Number(row.buyer_id) !== Number(row.receiver_id);
+
+  return {
+    channel: isFriendGift ? 'sms' : null,
+    status: isFriendGift ? 'mock_sent' : 'not_required',
+    recipientPhone: isFriendGift ? maskPhone(row.receiver_phone) : null,
+  };
+}
+
 // 주문 상세 화면은 주문, 구매자, 수신자, 상품, 선물 정보를 한 번에 보여줘야 해서 중첩 객체로 정리합니다.
 function toOrderDetailResponse(row) {
   return {
@@ -32,6 +61,7 @@ function toOrderDetailResponse(row) {
       userId: row.receiver_id,
       name: row.receiver_name,
       phone: row.receiver_phone,
+      isMember: row.receiver_id !== null,
     },
     product: {
       productId: row.product_id,
@@ -49,6 +79,7 @@ function toOrderDetailResponse(row) {
       expiredAt: row.expired_at,
       usedAt: row.used_at,
     },
+    delivery: createDeliveryResponse(row),
   };
 }
 
@@ -57,23 +88,73 @@ function toOrderDetailResponse(row) {
  * 로그인한 사용자가 상품을 주문하면 같은 트랜잭션에서 선물 교환권까지 발급합니다.
  */
 router.post('/', requireLogin, async (req, res) => {
-  const { productId, giftMessage = null } = req.body || {};
+  const { productId, giftMessage = null, receiverPhone } = req.body || {};
   const parsedProductId = Number(productId);
   const normalizedGiftMessage = giftMessage ? String(giftMessage).trim() : null;
+  const isFriendGift = receiverPhone !== undefined && receiverPhone !== null;
+  const normalizedReceiverPhone = isFriendGift ? normalizePhone(receiverPhone) : null;
 
   if (!Number.isInteger(parsedProductId) || parsedProductId <= 0) {
     return sendError(res, 400, 'invalid_product_id');
   }
 
+  if (isFriendGift && !isValidMobilePhone(normalizedReceiverPhone)) {
+    return sendError(res, 400, 'invalid_receiver_phone');
+  }
+
   const buyerId = req.session.user.userId;
-  // 현재 M2 범위는 "나에게 선물하기"라서 받는 사람도 로그인 사용자와 동일하게 둡니다.
-  const receiverId = buyerId;
+  let receiverId = buyerId;
+  let receiver = null;
+  let deliveryPhone = null;
   let connection;
 
   try {
     // 주문 생성과 선물 발급은 반드시 같이 성공하거나 같이 실패해야 하므로 트랜잭션을 사용합니다.
     connection = await pool.getConnection();
     await connection.beginTransaction();
+
+    const [buyers] = await connection.query(
+      `
+      SELECT id, name, phone
+      FROM users
+      WHERE id = ?
+        AND deleted_at IS NULL
+      LIMIT 1
+      `,
+      [buyerId]
+    );
+
+    if (buyers.length === 0) {
+      await connection.rollback();
+      return sendError(res, 401, 'login_required');
+    }
+
+    const buyer = buyers[0];
+    deliveryPhone = isFriendGift
+      ? normalizedReceiverPhone
+      : normalizePhone(buyer.phone);
+
+    if (isFriendGift) {
+      // 가입 여부와 관계없이 선물할 수 있으며, 가입 번호가 하나로 식별될 때만 선물함과 연결합니다.
+      const [receivers] = await connection.query(
+        `
+        SELECT id, name, phone
+        FROM users
+        WHERE REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(phone, '-', ''), ' ', ''), '(', ''), ')', ''), '.', '') = ?
+          AND deleted_at IS NULL
+        `,
+        [normalizedReceiverPhone]
+      );
+
+      if (receivers.some((candidate) => Number(candidate.id) === Number(buyerId))) {
+        await connection.rollback();
+        return sendError(res, 400, 'cannot_gift_to_self_as_friend');
+      }
+
+      // 중복 번호는 특정 회원에게 잘못 귀속하지 않고 비회원 문자 선물처럼 처리합니다.
+      receiver = receivers.length === 1 ? receivers[0] : null;
+      receiverId = receiver ? receiver.id : null;
+    }
 
     const [products] = await connection.query(
       `
@@ -98,16 +179,18 @@ router.post('/', requireLogin, async (req, res) => {
       INSERT INTO orders (
         buyer_id,
         receiver_id,
+        receiver_phone,
         product_id,
         total_price,
         payment_status,
         gift_message
       )
-      VALUES (?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
       `,
       [
         buyerId,
         receiverId,
+        deliveryPhone,
         product.id,
         product.price,
         'paid',
@@ -144,6 +227,18 @@ router.post('/', requireLogin, async (req, res) => {
     // 주문과 선물 발급이 모두 성공했을 때만 DB에 최종 반영합니다.
     await connection.commit();
 
+    const delivery = isFriendGift
+      ? {
+          channel: 'sms',
+          status: 'mock_sent',
+          recipientPhone: maskPhone(deliveryPhone),
+        }
+      : {
+          channel: null,
+          status: 'not_required',
+          recipientPhone: null,
+        };
+
     return sendSuccess(res, 201, 'create_order_success', {
       orderId,
       giftId: giftResult.insertId,
@@ -151,6 +246,13 @@ router.post('/', requireLogin, async (req, res) => {
       totalPrice: product.price,
       paymentStatus: 'paid',
       giftMessage: normalizedGiftMessage,
+      receiver: {
+        userId: receiverId,
+        name: receiver ? receiver.name : (isFriendGift ? null : buyer.name),
+        phone: deliveryPhone,
+        isMember: receiverId !== null,
+      },
+      delivery,
     });
   } catch (error) {
     if (connection) {
@@ -192,11 +294,11 @@ router.get('/:id', requireLogin, async (req, res) => {
         o.total_price,
         o.payment_status,
         o.gift_message,
+        o.receiver_phone,
         o.created_at AS order_created_at,
         buyer.name AS buyer_name,
         buyer.phone AS buyer_phone,
         receiver.name AS receiver_name,
-        receiver.phone AS receiver_phone,
         p.name AS product_name,
         p.price AS product_price,
         p.thumbnail_url,
@@ -210,7 +312,7 @@ router.get('/:id', requireLogin, async (req, res) => {
         g.used_at
       FROM orders o
       JOIN users buyer ON buyer.id = o.buyer_id
-      JOIN users receiver ON receiver.id = o.receiver_id
+      LEFT JOIN users receiver ON receiver.id = o.receiver_id
       JOIN products p ON p.id = o.product_id
       LEFT JOIN gifts g ON g.order_id = o.id
       WHERE o.id = ?
