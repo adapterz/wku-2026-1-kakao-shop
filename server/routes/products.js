@@ -16,6 +16,13 @@ const PRODUCT_CATEGORY_GROUPS = {
   special: ['taxi', 'bike', 'tour_pass', 'parking', 'giftcard', 'tour-pass'],
 };
 
+const MAX_SEARCH_KEYWORD_LENGTH = 100;
+
+function escapeLikePattern(value) {
+  // 검색어의 %, _, 역슬래시를 일반 문자로 취급해 의도하지 않은 전체 검색을 막습니다.
+  return value.replace(/[\\%_]/g, '\\$&');
+}
+
 const dummyProductRows = [
   {
     id: 1,
@@ -95,7 +102,8 @@ function toProductDetailResponse(row) {
  */
 router.get('/', async (req, res) => {
   try {
-    const { category } = req.query;
+    const { category, keyword } = req.query;
+    const normalizedKeyword = typeof keyword === 'string' ? keyword.trim() : '';
 
     // category는 API 명세에 정의된 세 그룹만 허용하고, 생략하면 전체 상품을 조회합니다.
     if (
@@ -105,10 +113,21 @@ router.get('/', async (req, res) => {
       return sendError(res, 400, 'invalid_category');
     }
 
+    if (
+      keyword !== undefined &&
+      (typeof keyword !== 'string' || normalizedKeyword.length === 0 || normalizedKeyword.length > MAX_SEARCH_KEYWORD_LENGTH)
+    ) {
+      return sendError(res, 400, 'invalid_keyword');
+    }
+
     if (useDummyProducts) {
-      const filteredRows = category
-        ? dummyProductRows.filter((row) => PRODUCT_CATEGORY_GROUPS[category].includes(row.category))
-        : dummyProductRows;
+      const filteredRows = dummyProductRows.filter((row) => {
+        const matchesCategory = !category || PRODUCT_CATEGORY_GROUPS[category].includes(row.category);
+        const matchesKeyword = !normalizedKeyword || row.name.toLocaleLowerCase('ko-KR')
+          .includes(normalizedKeyword.toLocaleLowerCase('ko-KR'));
+
+        return matchesCategory && matchesKeyword;
+      });
 
       return sendSuccess(res, 200, 'get_products_success', filteredRows.map(toProductListResponse));
     }
@@ -124,14 +143,25 @@ router.get('/', async (req, res) => {
         category
       FROM products
     `;
+    const conditions = [];
     const queryParams = [];
 
     if (category) {
       const categoryValues = PRODUCT_CATEGORY_GROUPS[category];
       const placeholders = categoryValues.map(() => '?').join(', ');
 
-      query += `WHERE category IN (${placeholders})\n`;
+      conditions.push(`category IN (${placeholders})`);
       queryParams.push(...categoryValues);
+    }
+
+    if (normalizedKeyword) {
+      // 사용자 입력은 SQL 문자열에 직접 합치지 않고 ? 바인딩 값으로 전달합니다.
+      conditions.push(`name LIKE ? ESCAPE '\\\\'`);
+      queryParams.push(`%${escapeLikePattern(normalizedKeyword)}%`);
+    }
+
+    if (conditions.length > 0) {
+      query += `WHERE ${conditions.join(' AND ')}\n`;
     }
 
     query += 'ORDER BY id ASC';
