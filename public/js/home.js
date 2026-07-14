@@ -101,6 +101,7 @@ function bindProductCardEvents(container) {
 function bindTabbarEvents() {
   const passBtn = document.getElementById('tabbar-pass-btn');
   const giftboxBtn = document.getElementById('tabbar-giftbox-btn');
+  const profileBtn = document.getElementById('home-profile-btn');
 
   if (passBtn) {
     passBtn.addEventListener('click', () => {
@@ -111,6 +112,12 @@ function bindTabbarEvents() {
   if (giftboxBtn) {
     giftboxBtn.addEventListener('click', () => {
       location.href = 'giftbox.html';
+    });
+  }
+
+  if (profileBtn) {
+    profileBtn.addEventListener('click', () => {
+      location.href = 'profile.html';
     });
   }
 }

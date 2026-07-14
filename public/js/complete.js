@@ -13,12 +13,15 @@ document.getElementById('home-btn').addEventListener('click', () => {
   location.href = 'index.html';
 });
 
+let secondaryDestination = 'giftbox.html';
+let primaryDestination = 'giftbox.html';
+
 document.getElementById('order-history-btn').addEventListener('click', () => {
-  location.href = 'giftbox.html';
+  location.href = secondaryDestination;
 });
 
 document.getElementById('giftbox-btn').addEventListener('click', () => {
-  location.href = 'giftbox.html';
+  location.href = primaryDestination;
 });
 
 async function loadOrderDetail() {
@@ -43,7 +46,7 @@ async function loadOrderDetail() {
 
 function renderOrderDetail(order) {
   // M2의 나에게 선물하기 흐름에서는 받는 사람이 없을 수 있어 기본값을 '나'로 둡니다.
-  const receiverName = order.receiver && order.receiver.name ? order.receiver.name : '나';
+  const receiverName = order.receiver && order.receiver.name ? order.receiver.name : '받는 분';
   const receiverPhone = order.receiver && order.receiver.phone ? order.receiver.phone : '';
   const product = order.product || {};
   const fallbackImageUrl = 'img/iksan-logo.svg';
@@ -55,6 +58,20 @@ function renderOrderDetail(order) {
   document.getElementById('complete-product-brand').textContent = product.brandName || '익산교통';
   document.getElementById('complete-product-name').textContent = product.name || '익산 환승패스';
   document.getElementById('complete-product-quantity').textContent = '수량 : 1개';
+
+  const delivery = order.delivery || {};
+  const isSmsGift = delivery.channel === 'sms' && delivery.status === 'mock_sent';
+  const smsNotice = document.getElementById('sms-delivery-notice');
+
+  smsNotice.hidden = !isSmsGift;
+
+  if (isSmsGift) {
+    document.getElementById('sms-recipient-phone').textContent = delivery.recipientPhone || '받는 사람';
+    document.getElementById('order-history-btn').textContent = '홈으로';
+    document.getElementById('giftbox-btn').textContent = '패스 더 보기';
+    secondaryDestination = 'index.html';
+    primaryDestination = 'passes.html';
+  }
 
   const productImage = document.getElementById('complete-product-image');
   productImage.src = productImageUrl;

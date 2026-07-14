@@ -29,6 +29,10 @@
   --canvas: #c5d2dc;
   --bg: #e8f2f8;
   --card: #ffffff;
+  --on-accent: #ffffff;
+  --accent-text: var(--blue);
+  --navy-text: var(--navy);
+  --teal-text: #0d94b5;
 }
 
 * {
@@ -45,6 +49,7 @@ html {
 body {
   min-height: 100vh;
   font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  color: var(--ink);
   background-color: var(--canvas);
   /* 넓은 화면에서 앱 프레임 바깥으로 보이는 캔버스가 단색이라 밋밋해서,
      노선도를 연상시키는 옅은 점 그리드 + 미세한 방향성 그라데이션을 얹음 */
@@ -59,6 +64,12 @@ body {
   align-items: center;
   position: relative;
   isolation: isolate;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 1;
 }
 
 body::before {
@@ -96,14 +107,14 @@ body > * {
   gap: 8px;
   font-size: 18px;
   font-weight: bold;
-  color: var(--card);
+  color: var(--on-accent);
   letter-spacing: -0.2px;
 }
 
 /* 홈 화면 헤더는 검색 버튼이 오른쪽에만 있어도 로고+문구가 항상 중앙에 오도록 절대 배치합니다. */
 .home-top-header {
   position: relative;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 .home-top-header h1 {
@@ -129,7 +140,7 @@ body > * {
   background: none;
   border: none;
   font-size: 20px;
-  color: var(--card);
+  color: var(--on-accent);
   cursor: pointer;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
 }
@@ -222,7 +233,7 @@ body > * {
   padding: 0;
   border: 0;
   background: none;
-  color: var(--blue);
+  color: var(--accent-text);
   font-family: inherit;
   font-size: 12px;
   font-weight: 900;
@@ -267,17 +278,17 @@ body > * {
 
 .quick-icon.qi-blue {
   background-color: rgba(8, 116, 201, 0.12);
-  color: var(--blue);
+  color: var(--accent-text);
 }
 
 .quick-icon.qi-teal {
   background-color: rgba(36, 183, 216, 0.15);
-  color: #0d94b5;
+  color: var(--teal-text);
 }
 
 .quick-icon.qi-navy {
   background-color: rgba(6, 54, 95, 0.1);
-  color: var(--navy);
+  color: var(--navy-text);
 }
 
 .quick-icon.qi-green {
@@ -325,7 +336,7 @@ body > * {
 .product-price {
   font-size: 16px;
   font-weight: bold;
-  color: var(--navy);
+  color: var(--navy-text);
 }
 
 .product-price span {
@@ -392,7 +403,7 @@ body > * {
   position: relative;
   overflow: hidden;
   padding: 18px 16px 50px;
-  color: var(--card);
+  color: var(--on-accent);
   background:
     radial-gradient(circle at 85% 18%, rgba(36, 183, 216, 0.35), transparent 46%),
     linear-gradient(140deg, var(--navy) 0%, #0a55a0 55%, #128f96 100%);
@@ -490,7 +501,7 @@ body > * {
 .summary small {
   display: block;
   margin-top: 5px;
-  color: var(--blue);
+  color: var(--accent-text);
   font-size: 11px;
   font-weight: 900;
 }
@@ -522,7 +533,7 @@ body > * {
 
 .passes-eyebrow {
   margin-bottom: 5px;
-  color: var(--blue);
+  color: var(--accent-text);
   font-size: 11px;
   font-weight: 900;
 }
@@ -539,7 +550,7 @@ body > * {
   padding: 5px 9px;
   border-radius: 999px;
   background: rgba(8, 116, 201, 0.1);
-  color: var(--blue);
+  color: var(--accent-text);
   font-size: 11px;
   font-weight: 900;
 }
@@ -568,8 +579,45 @@ body > * {
 .passes-filter-btn.active {
   border-color: var(--blue);
   background-color: var(--blue);
-  color: var(--card);
+  color: var(--on-accent);
   box-shadow: 0 5px 12px rgba(8, 116, 201, 0.2);
+}
+
+/* 스와이프 슬라이더 스타일 */
+.passes-slider-container {
+  overflow: hidden;
+  width: 100%;
+  margin-left: -16px;
+  margin-right: -16px;
+  width: calc(100% + 32px); /* 좌우 음수 마진 보정 */
+}
+
+.passes-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  cursor: grab;
+}
+
+.passes-slider.active-drag {
+  cursor: grabbing;
+  user-select: none;
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
+.passes-slider::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.passes-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: start;
+  padding: 0 16px; /* 좌우 마진으로 밀어낸 만큼 내부 패딩 부여 */
 }
 
 .pass-ticket {
@@ -578,7 +626,7 @@ body > * {
   display: flex;
   align-items: stretch;
   border-radius: 18px;
-  color: var(--card);
+  color: var(--on-accent);
   background:
     radial-gradient(circle at 90% 8%, rgba(255, 255, 255, 0.2), transparent 30%),
     linear-gradient(135deg, #0a5ca8, #2493dd);
@@ -715,7 +763,7 @@ body > * {
   place-items: center;
   border-radius: 50%;
   background: rgba(8, 116, 201, 0.12);
-  color: var(--blue);
+  color: var(--accent-text);
   font-size: 12px;
   font-weight: 900;
 }
@@ -751,7 +799,7 @@ body > * {
   padding: 5px 10px;
   border-radius: 999px;
   background: rgba(8, 116, 201, 0.1);
-  color: var(--blue);
+  color: var(--accent-text);
   font-size: 12px;
   font-weight: 900;
   white-space: nowrap;
@@ -867,7 +915,7 @@ body > * {
   border: none;
   border-radius: 6px;
   background-color: var(--blue);
-  color: var(--card);
+  color: var(--on-accent);
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -946,7 +994,7 @@ body > * {
 
 .product-category-tag {
   font-size: 12px;
-  color: var(--blue);
+  color: var(--accent-text);
   font-weight: bold;
   margin-bottom: 6px;
 }
@@ -960,7 +1008,7 @@ body > * {
 .product-price {
   font-size: 20px;
   font-weight: bold;
-  color: var(--navy);
+  color: var(--navy-text);
   margin-bottom: 20px;
 }
 
@@ -1041,7 +1089,7 @@ body > * {
   flex: 1;
   padding: 14px;
   background-color: var(--blue);
-  color: var(--card);
+  color: var(--on-accent);
   border: none;
   border-radius: 8px;
   font-size: 15px;
@@ -1083,6 +1131,7 @@ body > * {
   padding: 12px;
   font-size: 15px;
   line-height: 1.5;
+  background-color: var(--bg);
   color: var(--ink);
   margin-bottom: 8px;
 }
@@ -1107,7 +1156,7 @@ body > * {
   margin: 0 auto 12px;
   border-radius: 50%;
   background-color: rgba(8, 116, 201, 0.12);
-  color: var(--blue);
+  color: var(--accent-text);
 }
 
 .message-edit-btn {
@@ -1155,7 +1204,7 @@ body > * {
 
 .option-btn.active {
   border-color: var(--blue);
-  color: var(--blue);
+  color: var(--accent-text);
   font-weight: bold;
 }
 
@@ -1165,6 +1214,8 @@ body > * {
   border: 1px solid var(--line);
   border-radius: 6px;
   font-size: 14px;
+  background-color: var(--bg);
+  color: var(--ink);
 }
 
 /* 주문 요약 (패스 이미지+정보) */
@@ -1205,7 +1256,7 @@ body > * {
 }
 
 .total-row .info-value {
-  color: var(--blue);
+  color: var(--accent-text);
 }
 
 /* 하단 고정 버튼 (단일 버튼용, product.html과 별개) */
@@ -1221,7 +1272,7 @@ body > * {
   width: 100%;
   padding: 14px;
   background-color: var(--blue);
-  color: var(--card);
+  color: var(--on-accent);
   border: none;
   border-radius: 8px;
   font-size: 16px;
@@ -1240,7 +1291,7 @@ body > * {
   height: 72px;
   border-radius: 50%;
   background-color: var(--green);
-  color: var(--card);
+  color: var(--on-accent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1255,11 +1306,66 @@ body > * {
 }
 
 .complete-title strong {
-  color: var(--blue);
+  color: var(--accent-text);
 }
 
 .complete-receiver {
   text-align: left;
+}
+
+.receiver-guide {
+  margin: 8px 2px 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.sms-delivery-notice {
+  display: flex;
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 16px;
+  border: 1px solid color-mix(in srgb, var(--primary) 28%, var(--line));
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--primary) 9%, var(--card));
+  color: var(--ink);
+  text-align: left;
+}
+
+.sms-delivery-notice[hidden] {
+  display: none;
+}
+
+.sms-delivery-icon {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  padding: 5px 7px;
+  border-radius: 8px;
+  background: var(--primary);
+  color: var(--on-accent, #fff);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.sms-delivery-notice strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.sms-delivery-notice p,
+.sms-delivery-notice small {
+  display: block;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.sms-delivery-notice small {
+  margin-top: 4px;
+  font-size: 11px;
 }
 
 .receiver-name {
@@ -1307,7 +1413,7 @@ body > * {
   flex: 1;
   padding: 14px;
   background-color: var(--blue);
-  color: var(--card);
+  color: var(--on-accent);
   border: none;
   border-radius: 8px;
   font-size: 15px;
@@ -1333,7 +1439,7 @@ body > * {
 }
 
 .giftbox-tab-btn.active {
-  color: var(--blue);
+  color: var(--accent-text);
   font-weight: bold;
   border-bottom: 2px solid var(--blue);
 }
@@ -1439,5 +1545,695 @@ body > * {
 .qr-guide {
   font-size: 11px;
   color: var(--muted);
+}
+
+/* 프로필 페이지 전용 프리미엄 스타일 */
+body.dark-theme {
+  --canvas: #070b14;
+  --bg: #0c1222;
+  --card: #172036;
+  --line: #26324d;
+  --ink: #ffffff;
+  --muted: #b3bfd1;
+  --accent-text: #5bbcff;
+  --navy-text: #9bd2ff;
+  --teal-text: #67d9ee;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(179, 191, 209, 0.12) 1px, transparent 0),
+    linear-gradient(165deg, var(--canvas) 0%, #111a2c 100%);
+}
+
+body.dark-theme::before {
+  border-inline-color: rgba(179, 191, 209, 0.14);
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.35);
+}
+
+/* 다크모드 적용 시 부드러운 페이드 전환 */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.profile-top-header {
+  justify-content: space-between;
+}
+
+.profile-top-header .header-spacer {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.profile-streak-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
+  padding: 5px 11px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.08);
+}
+
+.streak-icon {
+  fill: currentColor;
+}
+
+.profile-page {
+  flex: 1;
+  padding: 20px 16px 40px;
+}
+
+/* 1. 상단 프로필 요약 카드 */
+.profile-card-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 16px 24px;
+  background-color: var(--card);
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(20, 46, 70, 0.04);
+  text-align: center;
+  margin-bottom: 20px;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  width: 112px;
+  height: 112px;
+  margin-bottom: 18px;
+}
+
+.profile-avatar-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  background-color: var(--bg);
+}
+
+.profile-avatar-edit-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: var(--blue);
+  color: #fff;
+  border: 2px solid var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+}
+
+.profile-name-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 4px;
+}
+
+.profile-username {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.profile-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  color: var(--accent-text);
+  flex-shrink: 0;
+}
+
+.profile-email-text {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+/* 🎖️ 활동 배지 영역 */
+.profile-badges-container {
+  margin-top: 24px;
+  width: 100%;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+
+.badge-header-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.badge-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--ink);
+  text-align: left;
+  margin-bottom: 0;
+}
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.badge-item {
+  background-color: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.badge-icon {
+  font-size: 24px;
+  position: relative;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* 잠긴 배지 필터 */
+.badge-item.locked {
+  opacity: 0.5;
+}
+
+.badge-item.locked .badge-icon {
+  filter: grayscale(100%);
+}
+
+.lock-overlay {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background-color: #4a5568;
+  color: #fff;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--bg);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+/* 실제 선물함 데이터를 보여주는 프로필 이용 현황·최근 패스 카드 */
+.profile-content-section {
+  margin-bottom: 16px;
+  padding: 18px 16px;
+  background-color: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(20, 46, 70, 0.04);
+}
+
+.profile-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.profile-section-header h2 {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.profile-section-header button {
+  padding: 4px;
+  border: 0;
+  background: none;
+  color: var(--accent-text);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.profile-stat-item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 14px 6px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background-color: var(--bg);
+}
+
+.profile-stat-item strong {
+  color: var(--accent-text);
+  font-size: 21px;
+  line-height: 1;
+}
+
+.profile-stat-item span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.profile-recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-recent-item {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: 11px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-recent-item img {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background-color: var(--card);
+  object-fit: cover;
+}
+
+.profile-recent-info {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-recent-info strong {
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-recent-info small {
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+.profile-recent-status {
+  flex-shrink: 0;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background-color: rgba(50, 164, 119, 0.14);
+  color: var(--green);
+  font-size: 10.5px;
+  font-weight: 800;
+}
+
+.profile-recent-status.is-used {
+  background-color: var(--line);
+  color: var(--muted);
+}
+
+/* 2. 설정 카드 스위치 그룹 */
+.profile-settings-group {
+  margin-bottom: 20px;
+}
+
+.settings-group-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 8px;
+  padding-left: 4px;
+}
+
+.settings-card {
+  background-color: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 16px rgba(20, 46, 70, 0.03);
+  overflow: hidden;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.settings-row:last-child {
+  border-bottom: none;
+}
+
+.settings-label-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink);
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.settings-icon {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.settings-value-text {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* 📱 iOS 모던 토글 스위치 */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e1;
+  transition: 0.3s ease;
+  border-radius: 34px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ffffff;
+  transition: 0.3s ease;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-theme .toggle-slider {
+  background-color: #334155;
+}
+
+input:checked + .toggle-slider {
+  background-color: var(--blue);
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}
+
+/* 3. 통합 회원 정보 수정 폼 */
+.info-form-card {
+  padding: 20px 16px;
+}
+
+.info-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.info-input-group label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.info-input {
+  height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.3s, color 0.3s;
+}
+
+.info-input:focus {
+  border-color: var(--blue);
+}
+
+.info-input.disabled-style {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.profile-form-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.profile-form-action-btn:hover {
+  background-color: var(--line);
+}
+
+.btn-label-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-status-label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.profile-submit-btn {
+  width: 100%;
+  height: 46px;
+  background-color: var(--blue);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(14, 131, 230, 0.2);
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.profile-submit-btn:hover {
+  background-color: #0b6cb8;
+}
+
+.profile-submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* 4. 하단 로그아웃 및 탈퇴 */
+.profile-actions-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.profile-logout-btn {
+  width: 100%;
+  padding: 13px;
+  background-color: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.profile-logout-btn:hover {
+  background-color: var(--bg);
+  color: var(--ink);
+  border-color: var(--muted);
+}
+
+.profile-withdraw-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 11.5px;
+  text-decoration: underline;
+  cursor: pointer;
+  opacity: 0.75;
+  font-family: inherit;
+}
+
+.profile-withdraw-btn:hover {
+  opacity: 1;
+  color: var(--red);
+}
+
+/* 다크모드 시 상단 헤더 글씨 및 아이콘 가독성 확보 */
+body.dark-theme .top-header h1,
+body.dark-theme .top-header .icon-btn {
+  color: #ffffff !important;
+}
+
+/* 설정(Settings) 페이지 전용 레이아웃 및 퀵 프로필 띠 스타일 */
+.settings-page {
+  flex: 1;
+  padding: 20px 16px 40px;
+}
+
+.settings-profile-strip-section {
+  margin-bottom: 20px;
+}
+
+.settings-profile-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px;
+  background-color: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(20, 46, 70, 0.03);
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  text-align: left;
+  font-family: inherit;
+}
+
+.settings-profile-strip:hover {
+  background-color: var(--bg);
+}
+
+.strip-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.strip-avatar {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background-color: var(--bg);
+}
+
+.strip-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.strip-text-group strong {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.strip-text-group span {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.strip-arrow {
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+}
+
+/* 프로필 아바타 액티브 닷 배지 */
+.profile-avatar-active-dot {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  border: 2px solid var(--card);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: border-color 0.3s;
 }
 

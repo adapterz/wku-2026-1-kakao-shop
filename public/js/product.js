@@ -89,12 +89,12 @@ async function goToOrderIfLoggedIn(type) {
   }
 }
 
-// 나에게 선물하기 버튼
+// 선물하기 버튼은 주문서를 친구 선물 모드로 엽니다.
 document.getElementById('gift-me-btn').addEventListener('click', () => {
-  goToOrderIfLoggedIn('me');
+  goToOrderIfLoggedIn('gift');
 });
 
-// 선물하기 버튼
+// 구매하기 버튼은 로그인 사용자 본인이 사용하는 구매 모드로 엽니다.
 document.getElementById('gift-send-btn').addEventListener('click', () => {
-  goToOrderIfLoggedIn('gift');
+  goToOrderIfLoggedIn('me');
 });

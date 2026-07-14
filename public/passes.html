@@ -40,9 +40,32 @@
       <button class="passes-filter-btn" type="button" data-category="special" aria-pressed="false">관광·특수</button>
     </div>
 
-    <section aria-label="전체 패스 상품 목록">
-      <div id="passes-list" class="pass-list">
-        <p class="loading-message">전체 패스를 불러오는 중입니다.</p>
+    <section class="passes-slider-container" aria-label="패스 상품 목록 슬라이더">
+      <div id="passes-slider" class="passes-slider">
+        <!-- 전체 탭 슬라이드 -->
+        <div class="passes-slide" data-index="0" data-category="">
+          <div id="passes-list-all" class="pass-list">
+            <p class="loading-message">전체 패스를 불러오는 중입니다.</p>
+          </div>
+        </div>
+        <!-- 기본 이동 탭 슬라이드 -->
+        <div class="passes-slide" data-index="1" data-category="basic">
+          <div id="passes-list-basic" class="pass-list">
+            <p class="loading-message">기본 이동 패스를 불러오는 중입니다.</p>
+          </div>
+        </div>
+        <!-- 환승·광역 탭 슬라이드 -->
+        <div class="passes-slide" data-index="2" data-category="transfer">
+          <div id="passes-list-transfer" class="pass-list">
+            <p class="loading-message">환승·광역 패스를 불러오는 중입니다.</p>
+          </div>
+        </div>
+        <!-- 관광·특수 탭 슬라이드 -->
+        <div class="passes-slide" data-index="3" data-category="special">
+          <div id="passes-list-special" class="pass-list">
+            <p class="loading-message">관광·특수 패스를 불러오는 중입니다.</p>
+          </div>
+        </div>
       </div>
     </section>
   </main>
