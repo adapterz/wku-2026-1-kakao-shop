@@ -2,7 +2,7 @@
   파일: public/profile.html
   목적: 사용자 프로필 메인 화면 (마이페이지)
   왜: 사용자 요약 정보와 활동 배지 컬렉션을 시각적으로 돋보이게 렌더링하기 위함
-  주요: 마룡이 프로필 요약, 획득 활동 배지 그리드, 설정(Settings) 라우팅 버튼, 하단 탭바
+  주요: 사용자 프로필 요약, 활동 배지, 패스 이용 현황, 최근 패스 내역, 설정 라우팅, 하단 탭바
 -->
 <!DOCTYPE html>
 <html lang="ko">
@@ -80,6 +80,38 @@
             <span class="badge-label">익산탐험</span>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- 2. 실제 선물함 데이터를 활용한 패스 이용 현황 -->
+    <section class="profile-content-section" aria-labelledby="profile-stats-title">
+      <div class="profile-section-header">
+        <h2 id="profile-stats-title">패스 이용 현황</h2>
+      </div>
+      <div class="profile-stats-grid" aria-live="polite">
+        <div class="profile-stat-item">
+          <strong id="profile-unused-count">-</strong>
+          <span>보유 패스</span>
+        </div>
+        <div class="profile-stat-item">
+          <strong id="profile-used-count">-</strong>
+          <span>사용 완료</span>
+        </div>
+        <div class="profile-stat-item">
+          <strong id="profile-total-count">-</strong>
+          <span>받은 선물</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 최근 받은·사용한 패스 -->
+    <section class="profile-content-section" aria-labelledby="profile-recent-title">
+      <div class="profile-section-header">
+        <h2 id="profile-recent-title">최근 패스</h2>
+        <button id="profile-all-gifts-btn" type="button">전체보기</button>
+      </div>
+      <div id="profile-recent-list" class="profile-recent-list" aria-live="polite">
+        <p class="loading-message">최근 패스를 불러오는 중입니다.</p>
       </div>
     </section>
 

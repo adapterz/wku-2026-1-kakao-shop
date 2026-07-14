@@ -1313,6 +1313,61 @@ body > * {
   text-align: left;
 }
 
+.receiver-guide {
+  margin: 8px 2px 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.sms-delivery-notice {
+  display: flex;
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 16px;
+  border: 1px solid color-mix(in srgb, var(--primary) 28%, var(--line));
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--primary) 9%, var(--card));
+  color: var(--ink);
+  text-align: left;
+}
+
+.sms-delivery-notice[hidden] {
+  display: none;
+}
+
+.sms-delivery-icon {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  padding: 5px 7px;
+  border-radius: 8px;
+  background: var(--primary);
+  color: var(--on-accent, #fff);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.sms-delivery-notice strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.sms-delivery-notice p,
+.sms-delivery-notice small {
+  display: block;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.sms-delivery-notice small {
+  margin-top: 4px;
+  font-size: 11px;
+}
+
 .receiver-name {
   font-size: 14px;
   font-weight: bold;
@@ -1567,9 +1622,9 @@ body {
 
 .profile-avatar-wrapper {
   position: relative;
-  width: 86px;
-  height: 86px;
-  margin-bottom: 16px;
+  width: 112px;
+  height: 112px;
+  margin-bottom: 18px;
 }
 
 .profile-avatar-wrapper img {
@@ -1709,6 +1764,138 @@ body {
   box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 
+/* 실제 선물함 데이터를 보여주는 프로필 이용 현황·최근 패스 카드 */
+.profile-content-section {
+  margin-bottom: 16px;
+  padding: 18px 16px;
+  background-color: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(20, 46, 70, 0.04);
+}
+
+.profile-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.profile-section-header h2 {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.profile-section-header button {
+  padding: 4px;
+  border: 0;
+  background: none;
+  color: var(--accent-text);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.profile-stat-item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 14px 6px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background-color: var(--bg);
+}
+
+.profile-stat-item strong {
+  color: var(--accent-text);
+  font-size: 21px;
+  line-height: 1;
+}
+
+.profile-stat-item span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.profile-recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-recent-item {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: 11px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-recent-item img {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background-color: var(--card);
+  object-fit: cover;
+}
+
+.profile-recent-info {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-recent-info strong {
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-recent-info small {
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+.profile-recent-status {
+  flex-shrink: 0;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background-color: rgba(50, 164, 119, 0.14);
+  color: var(--green);
+  font-size: 10.5px;
+  font-weight: 800;
+}
+
+.profile-recent-status.is-used {
+  background-color: var(--line);
+  color: var(--muted);
+}
+
 /* 2. 설정 카드 스위치 그룹 */
 .profile-settings-group {
   margin-bottom: 20px;
@@ -1755,6 +1942,13 @@ body {
 .settings-icon {
   color: var(--muted);
   flex-shrink: 0;
+}
+
+.settings-value-text {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: right;
 }
 
 /* 📱 iOS 모던 토글 스위치 */

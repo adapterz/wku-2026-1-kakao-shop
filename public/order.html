@@ -49,7 +49,19 @@
         <button class="option-btn active" id="btn-me" type="button" aria-pressed="true">나에게 선물</button>
         <button class="option-btn" id="btn-friend" type="button" aria-pressed="false">친구에게 선물</button>
       </div>
-      <input type="text" id="receiver-input" placeholder="받는 사람 이메일 또는 아이디" class="text-input" hidden disabled>
+      <input
+        type="tel"
+        id="receiver-input"
+        placeholder="받는 사람 휴대폰 번호 (010-0000-0000)"
+        class="text-input"
+        inputmode="numeric"
+        autocomplete="tel"
+        maxlength="13"
+        aria-describedby="receiver-guide"
+        hidden
+        disabled
+      >
+      <p class="receiver-guide" id="receiver-guide" hidden>가입 여부와 관계없이 선물받을 휴대폰 번호를 입력해주세요.</p>
     </section>
 
     <!-- 주문 내역 -->
