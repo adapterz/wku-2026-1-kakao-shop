@@ -19,6 +19,14 @@ function normalizePhone(value) {
   return String(value || '').replace(/\D/g, '');
 }
 
+function normalizeReceiverName(value) {
+  return String(value || '').trim().replace(/\s+/g, ' ');
+}
+
+function isValidReceiverName(value) {
+  return value.length >= 1 && value.length <= 50;
+}
+
 function isValidMobilePhone(value) {
   return /^01[016789]\d{7,8}$/.test(value);
 }
@@ -88,10 +96,11 @@ function toOrderDetailResponse(row) {
  * 로그인한 사용자가 상품을 주문하면 같은 트랜잭션에서 선물 교환권까지 발급합니다.
  */
 router.post('/', requireLogin, async (req, res) => {
-  const { productId, giftMessage = null, receiverPhone } = req.body || {};
+  const { productId, giftMessage = null, receiverName, receiverPhone } = req.body || {};
   const parsedProductId = Number(productId);
   const normalizedGiftMessage = giftMessage ? String(giftMessage).trim() : null;
   const isFriendGift = receiverPhone !== undefined && receiverPhone !== null;
+  const normalizedReceiverName = isFriendGift ? normalizeReceiverName(receiverName) : null;
   const normalizedReceiverPhone = isFriendGift ? normalizePhone(receiverPhone) : null;
 
   if (!Number.isInteger(parsedProductId) || parsedProductId <= 0) {
@@ -102,9 +111,14 @@ router.post('/', requireLogin, async (req, res) => {
     return sendError(res, 400, 'invalid_receiver_phone');
   }
 
+  if (isFriendGift && !isValidReceiverName(normalizedReceiverName)) {
+    return sendError(res, 400, 'invalid_receiver_name');
+  }
+
   const buyerId = req.session.user.userId;
   let receiverId = buyerId;
   let receiver = null;
+  let deliveryName = null;
   let deliveryPhone = null;
   let connection;
 
@@ -130,6 +144,7 @@ router.post('/', requireLogin, async (req, res) => {
     }
 
     const buyer = buyers[0];
+    deliveryName = isFriendGift ? normalizedReceiverName : buyer.name;
     deliveryPhone = isFriendGift
       ? normalizedReceiverPhone
       : normalizePhone(buyer.phone);
@@ -180,17 +195,19 @@ router.post('/', requireLogin, async (req, res) => {
         buyer_id,
         receiver_id,
         receiver_phone,
+        receiver_name,
         product_id,
         total_price,
         payment_status,
         gift_message
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
         buyerId,
         receiverId,
         deliveryPhone,
+        deliveryName,
         product.id,
         product.price,
         'paid',
@@ -248,7 +265,7 @@ router.post('/', requireLogin, async (req, res) => {
       giftMessage: normalizedGiftMessage,
       receiver: {
         userId: receiverId,
-        name: receiver ? receiver.name : (isFriendGift ? null : buyer.name),
+        name: deliveryName,
         phone: deliveryPhone,
         isMember: receiverId !== null,
       },
@@ -295,10 +312,10 @@ router.get('/:id', requireLogin, async (req, res) => {
         o.payment_status,
         o.gift_message,
         o.receiver_phone,
+        COALESCE(o.receiver_name, receiver.name) AS receiver_name,
         o.created_at AS order_created_at,
         buyer.name AS buyer_name,
         buyer.phone AS buyer_phone,
-        receiver.name AS receiver_name,
         p.name AS product_name,
         p.price AS product_price,
         p.thumbnail_url,
