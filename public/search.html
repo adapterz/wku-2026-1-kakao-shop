@@ -1,0 +1,56 @@
+<!--
+  파일: public/search.html
+  목적: 환승패스 상품명 검색과 결과 목록 표시
+  주요: 검색어 입력, 상품 카드 결과, 검색 결과 없음 및 오류 안내
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상품 검색 - 익산 환승패스</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="top-header">
+    <button class="icon-btn" id="search-back-btn" type="button" aria-label="뒤로가기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m15 18-6-6 6-6"/>
+      </svg>
+    </button>
+    <h1>상품 검색</h1>
+    <span class="header-spacer" aria-hidden="true"></span>
+  </header>
+
+  <main class="search-page">
+    <form id="search-form" class="product-search-form" role="search">
+      <label class="sr-only" for="search-input">상품명 검색</label>
+      <div class="product-search-field">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/>
+        </svg>
+        <input id="search-input" type="search" name="keyword" maxlength="100" autocomplete="off" placeholder="찾고 싶은 패스 상품명을 입력하세요">
+        <button class="product-search-submit" type="submit">검색</button>
+      </div>
+    </form>
+
+    <section class="search-result-section" aria-labelledby="search-result-title">
+      <div class="search-result-heading">
+        <h2 id="search-result-title">검색 결과</h2>
+        <span id="search-result-count" class="passes-count" aria-live="polite"></span>
+      </div>
+      <div id="search-result-list" class="pass-list">
+        <div class="search-guide-message">
+          <span class="search-guide-icon" aria-hidden="true">⌕</span>
+          <strong>상품명을 검색해보세요</strong>
+          <p>예: 시내버스, KTX, 정기권</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/search.js"></script>
+</body>
+</html>

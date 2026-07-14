@@ -42,6 +42,10 @@ async function fetchProducts(category = '') {
   return requestJson(`/api/products${categoryQuery}`);
 }
 
+async function searchProducts(keyword) {
+  return requestJson(`/api/products?keyword=${encodeURIComponent(keyword)}`);
+}
+
 async function fetchProductDetail(productId) {
   return requestJson(`/api/products/${productId}`);
 }
