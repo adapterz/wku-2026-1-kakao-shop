@@ -5,7 +5,6 @@
  * 주요: 선물함 API 조회, 상태 탭 전환, 선물 카드 클릭 시 gift-use.html 이동, 홈 탭 이동
  */
 
-const fallbackImageUrl = 'img/iksan-logo.svg';
 const giftList = document.getElementById('gift-list');
 const tabUnused = document.getElementById('tab-unused');
 const tabUsed = document.getElementById('tab-used');
@@ -96,12 +95,11 @@ function createGiftCard(gift) {
   const productName = gift.productName || '익산 환승패스';
   const brandName = gift.brandName || '익산 교통';
   const senderName = gift.senderName || '나';
-  const imageUrl = gift.thumbnailUrl || fallbackImageUrl;
   const giftDate = formatGiftDate(activeStatus === 'used' ? gift.usedAt : gift.createdAt);
 
   return `
     <div class="gift-card" data-gift-id="${gift.giftId}">
-      <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(productName)}" onerror="this.onerror=null; this.src='${fallbackImageUrl}';">
+      ${createPassThumbnail(gift)}
       <div class="gift-info">
         <p class="order-brand">${escapeHtml(brandName)}</p>
         <p class="product-name">${escapeHtml(productName)}</p>
