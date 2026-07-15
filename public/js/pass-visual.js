@@ -66,15 +66,17 @@ function createPassVisual(pass = {}, variant = 'hero') {
   `;
 }
 
-function createPassThumbnail(pass = {}) {
+function createPassThumbnail(pass = {}, isUsed = false) {
   const name = pass.name || pass.productName || '익산 환승패스';
   const definition = getPassVisualDefinition(pass.category, name);
+  const usedClass = isUsed ? 'is-used' : '';
 
   return `
-    <div class="pass-thumbnail pass-thumbnail--${definition.theme}" aria-hidden="true">
+    <div class="pass-thumbnail pass-thumbnail--${definition.theme} ${usedClass}" aria-hidden="true">
       <span class="pass-thumbnail-icon">${getPassVisualIcon(definition.icon)}</span>
       <strong>${escapePassVisualText(definition.label)}</strong>
       <small>IKSAN PASS</small>
+      ${isUsed ? '<div class="pass-thumbnail-overlay"><span>사용완료</span></div>' : ''}
     </div>
   `;
 }

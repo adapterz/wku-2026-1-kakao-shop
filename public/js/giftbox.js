@@ -93,10 +93,11 @@ function createGiftCard(gift) {
   const brandName = gift.brandName || '익산 교통';
   const senderName = gift.senderName || '나';
   const giftDate = formatGiftDate(activeStatus === 'used' ? gift.usedAt : gift.createdAt);
+  const cardClass = activeStatus === 'used' ? 'gift-card is-used' : 'gift-card';
 
   return `
-    <div class="gift-card" data-gift-id="${gift.giftId}">
-      ${createPassThumbnail(gift)}
+    <div class="${cardClass}" data-gift-id="${gift.giftId}">
+      ${createPassThumbnail(gift, activeStatus === 'used')}
       <div class="gift-info">
         <p class="order-brand">${escapeHtml(brandName)}</p>
         <p class="product-name">${escapeHtml(productName)}</p>
@@ -108,6 +109,10 @@ function createGiftCard(gift) {
 }
 
 function bindGiftCardEvents() {
+  if (activeStatus === 'used') {
+    return;
+  }
+
   giftList.querySelectorAll('.gift-card').forEach((card) => {
     card.addEventListener('click', () => {
       const giftId = card.dataset.giftId;
