@@ -1671,8 +1671,8 @@ body > * {
   color: var(--muted);
 }
 
-/* 프로필 페이지 전용 프리미엄 스타일 */
-body.dark-theme {
+/* 전체 페이지 다크모드 색상 토큰과 배경 */
+html.dark-theme {
   --canvas: #070b14;
   --bg: #0c1222;
   --card: #172036;
@@ -1682,14 +1682,40 @@ body.dark-theme {
   --accent-text: #5bbcff;
   --navy-text: #9bd2ff;
   --teal-text: #67d9ee;
+  background-color: var(--canvas);
+}
+
+html.dark-theme body {
   background-image:
     radial-gradient(circle at 1px 1px, rgba(179, 191, 209, 0.12) 1px, transparent 0),
     linear-gradient(165deg, var(--canvas) 0%, #111a2c 100%);
 }
 
-body.dark-theme::before {
+html.dark-theme body::before {
   border-inline-color: rgba(179, 191, 209, 0.14);
   box-shadow: 0 0 24px rgba(0, 0, 0, 0.35);
+}
+
+/* 스캔 가독성을 위해 다크모드에서도 바코드 영역은 흰색으로 유지합니다. */
+html.dark-theme .gift-use-card .qr-box {
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #ffffff;
+}
+
+html.dark-theme .gift-use-card .barcode-image {
+  object-fit: contain;
+  border-color: #e5e7eb;
+  background-color: #ffffff;
+}
+
+html.dark-theme .gift-use-card .qr-number {
+  color: #334155;
+}
+
+html.dark-theme .gift-use-card .qr-guide {
+  color: #64748b;
 }
 
 /* 다크모드 적용 시 부드러운 페이드 전환 */
@@ -2115,7 +2141,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-body.dark-theme .toggle-slider {
+html.dark-theme .toggle-slider {
   background-color: #334155;
 }
 
@@ -2273,8 +2299,8 @@ input:checked + .toggle-slider:before {
 }
 
 /* 다크모드 시 상단 헤더 글씨 및 아이콘 가독성 확보 */
-body.dark-theme .top-header h1,
-body.dark-theme .top-header .icon-btn {
+html.dark-theme .top-header h1,
+html.dark-theme .top-header .icon-btn {
   color: #ffffff !important;
 }
 
