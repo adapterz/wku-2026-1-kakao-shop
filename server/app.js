@@ -6,6 +6,7 @@ const productsRouter = require('./routes/products');
 const authRouter = require('./routes/auth');
 const ordersRouter = require('./routes/orders');
 const giftsRouter = require('./routes/gifts');
+const { requireLoginForHtmlPage } = require('./middleware/pageAuth');
 
 const app = express();
 
@@ -32,8 +33,9 @@ app.use(
   })
 );
 
-// public 정적 파일 제공
-// index.html, login.html, css, js 파일을 Express가 직접 내려주기 위한 설정입니다.
+// 보호 HTML은 브라우저에 보내기 전에 로그인 여부를 확인합니다.
+// 공개 목록에 없는 신규 HTML도 기본적으로 보호한 뒤 정적 파일을 제공합니다.
+app.use(requireLoginForHtmlPage);
 app.use(express.static(path.join(__dirname, '../public')));
 
 // API 라우터
