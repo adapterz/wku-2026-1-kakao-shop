@@ -142,10 +142,10 @@
   <section class="home-section">
     <div class="section-head">
       <h2>인기 이동 구간</h2>
-      <a href="#">노선 보기</a>
+      <span class="section-hint">구간을 선택해보세요</span>
     </div>
     <div class="route-board">
-      <div class="route-row">
+      <div class="route-row" role="button" tabindex="0" data-route-id="market" aria-label="익산역에서 중앙시장 구간 추천 패스 보기">
         <span class="route-num">1</span>
         <div class="route-info">
           <strong>익산역 → 중앙시장</strong>
@@ -156,7 +156,7 @@
         </div>
         <span class="route-time">15분</span>
       </div>
-      <div class="route-row">
+      <div class="route-row" role="button" tabindex="0" data-route-id="mireuksaji" aria-label="익산역에서 미륵사지 구간 추천 패스 보기">
         <span class="route-num">2</span>
         <div class="route-info">
           <strong>익산역 → 미륵사지</strong>
@@ -167,7 +167,7 @@
         </div>
         <span class="route-time">25분</span>
       </div>
-      <div class="route-row">
+      <div class="route-row" role="button" tabindex="0" data-route-id="wku" aria-label="익산역에서 원광대학교 구간 추천 패스 보기">
         <span class="route-num">3</span>
         <div class="route-info">
           <strong>익산역 → 원광대학교</strong>
@@ -178,7 +178,7 @@
         </div>
         <span class="route-time">20분</span>
       </div>
-      <div class="route-row">
+      <div class="route-row" role="button" tabindex="0" data-route-id="jewel" aria-label="익산역에서 보석박물관 구간 추천 패스 보기">
         <span class="route-num">4</span>
         <div class="route-info">
           <strong>익산역 → 보석박물관</strong>
@@ -189,7 +189,7 @@
         </div>
         <span class="route-time">30분</span>
       </div>
-      <div class="route-row">
+      <div class="route-row" role="button" tabindex="0" data-route-id="terminal" aria-label="익산역에서 시외버스터미널 구간 추천 패스 보기">
         <span class="route-num">5</span>
         <div class="route-info">
           <strong>익산역 → 시외버스터미널</strong>
@@ -202,6 +202,32 @@
       </div>
     </div>
   </section>
+
+  <div class="route-recommendation-layer" id="route-recommendation-layer" aria-hidden="true">
+    <button class="route-recommendation-backdrop" id="route-recommendation-backdrop" type="button" aria-label="추천 안내 닫기"></button>
+    <section class="route-recommendation-sheet" role="dialog" aria-modal="true" aria-labelledby="route-recommendation-title">
+      <div class="route-sheet-handle" aria-hidden="true"></div>
+      <div class="route-sheet-head">
+        <div>
+          <span class="route-sheet-eyebrow">선택한 이동 구간</span>
+          <h3 id="route-recommendation-title">익산역 → 중앙시장</h3>
+        </div>
+        <button class="route-sheet-close" id="route-sheet-close" type="button" aria-label="닫기">×</button>
+      </div>
+      <div class="route-sheet-summary">
+        <span id="route-summary-mode">시내버스</span>
+        <span id="route-summary-transfer">환승 없음</span>
+        <strong id="route-summary-time">약 15분</strong>
+      </div>
+      <div class="route-sheet-flow" id="route-sheet-flow">익산역 정류장 → 시내버스 → 중앙시장</div>
+      <div class="route-pass-recommendation">
+        <span id="route-pass-label">전용 패스 없음 · 연계 가능 패스</span>
+        <strong id="route-pass-name">익산 시내버스 무제한 1일 패스</strong>
+        <p id="route-pass-reason">하루 동안 시내 여러 구간을 이동할 때 적합해요.</p>
+      </div>
+      <button class="route-pass-detail-btn" id="route-pass-detail-btn" type="button">연계 패스 보기</button>
+    </section>
+  </div>
 
   <!-- 하단 고정 탭바 -->
   <footer class="bottom-tabbar">
