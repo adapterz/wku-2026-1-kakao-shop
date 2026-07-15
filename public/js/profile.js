@@ -47,12 +47,9 @@ async function loadProfileActivity() {
   const recentList = document.getElementById('profile-recent-list');
 
   try {
-    const [unusedResponse, usedResponse] = await Promise.all([
-      requestJson('/api/gifts?status=unused'),
-      requestJson('/api/gifts?status=used'),
-    ]);
-    const unusedGifts = Array.isArray(unusedResponse.data) ? unusedResponse.data : [];
-    const usedGifts = Array.isArray(usedResponse.data) ? usedResponse.data : [];
+    const gifts = await fetchGiftCollections();
+    const unusedGifts = gifts.unused;
+    const usedGifts = gifts.used;
 
     if (unusedCount) unusedCount.textContent = String(unusedGifts.length);
     if (usedCount) usedCount.textContent = String(usedGifts.length);

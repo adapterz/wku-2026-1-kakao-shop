@@ -118,6 +118,7 @@ document.getElementById('checkout-btn').addEventListener('click', async () => {
       throw new Error('주문 번호를 확인할 수 없습니다.');
     }
 
+    clearGiftCollectionsCache();
     location.href = `complete.html?orderId=${orderId}`;
   } catch (error) {
     console.error('주문 생성 중 오류:', error);
