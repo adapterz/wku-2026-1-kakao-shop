@@ -123,6 +123,41 @@ body > * {
   transform: translateX(-50%);
 }
 
+.home-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.home-theme-toggle {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+  color: #111827;
+  background-color: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.14);
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+}
+
+.home-theme-toggle:active {
+  transform: scale(0.92);
+}
+
+.home-theme-toggle:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+html.dark-theme .home-theme-toggle {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
 .iksan-logo {
   width: 36px;
   height: 36px;
@@ -2584,5 +2619,67 @@ html.dark-theme .top-header .icon-btn {
   border: 2px solid var(--card);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
   transition: border-color 0.3s;
+}
+
+/* 🎫 주문서 및 결제완료 화면용 패스 썸네일 크기 최적화 (60px) */
+.order-summary .pass-thumbnail {
+  flex: 0 0 60px;
+  width: 60px;
+  height: 60px;
+  padding: 6px;
+  border-radius: 8px;
+  gap: 2px;
+}
+
+.order-summary .pass-thumbnail-icon {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 1px;
+  border-radius: 5px;
+}
+
+.order-summary .pass-thumbnail-icon svg {
+  width: 13px;
+  height: 13px;
+}
+
+.order-summary .pass-thumbnail strong {
+  font-size: 9px;
+  line-height: 1.1;
+}
+
+.order-summary .pass-thumbnail small {
+  font-size: 6px;
+}
+
+/* 🎫 프로필 최근 이용 내역용 패스 썸네일 크기 최적화 (46px) */
+.profile-recent-item .pass-thumbnail {
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  gap: 1px;
+}
+
+.profile-recent-item .pass-thumbnail-icon {
+  width: 14px;
+  height: 14px;
+  margin-bottom: 0px;
+  border-radius: 4px;
+}
+
+.profile-recent-item .pass-thumbnail-icon svg {
+  width: 10px;
+  height: 10px;
+}
+
+.profile-recent-item .pass-thumbnail strong {
+  font-size: 8px;
+  line-height: 1;
+}
+
+.profile-recent-item .pass-thumbnail small {
+  display: none;
 }
 

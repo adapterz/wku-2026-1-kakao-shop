@@ -173,6 +173,7 @@ function bindSettingsEvents() {
     try {
       const response = await fetch('/api/auth/logout', { method: 'POST' });
       if (response.ok) {
+        clearGiftCollectionsCache();
         localStorage.removeItem('profile_display_name');
         localStorage.removeItem('profile_display_phone');
         localStorage.removeItem('profile_default_card');
