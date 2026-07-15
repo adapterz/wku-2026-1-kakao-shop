@@ -6,11 +6,13 @@
  */
 
 const INITIAL_PRODUCT_COUNT = 4;
+const availableProductsById = new Map();
+let productsLoadPromise = Promise.resolve();
 
 document.addEventListener('DOMContentLoaded', () => {
   // HTML이 먼저 그려진 뒤 DOM 요소를 찾기 위해 DOMContentLoaded 이후에 실행합니다.
   renderFriendSelectPanel();
-  loadProducts();
+  productsLoadPromise = loadProducts();
   bindHomeThemeToggle();
   bindTabbarEvents();
   bindPopularRouteEvents();
@@ -24,7 +26,7 @@ const POPULAR_ROUTE_RECOMMENDATIONS = {
     time: '약 15분',
     flow: '익산역 정류장 → 시내버스 → 중앙시장',
     productId: 1,
-    productName: '익산 시내버스 무제한 1일 패스',
+    hasDedicatedPass: false,
     reason: '시장 방문 전후로 시내 여러 구간을 이동할 때 적합해요.',
   },
   mireuksaji: {
@@ -34,7 +36,7 @@ const POPULAR_ROUTE_RECOMMENDATIONS = {
     time: '약 25분',
     flow: '익산역 관광안내소 → 시티투어 순환버스 → 미륵사지',
     productId: 14,
-    productName: '익산 시티투어 순환형 승차권 (성인)',
+    hasDedicatedPass: true,
     reason: '주요 관광지를 자유롭게 오가며 하루 여행하기 좋아요.',
   },
   wku: {
@@ -44,7 +46,7 @@ const POPULAR_ROUTE_RECOMMENDATIONS = {
     time: '약 20분',
     flow: '익산역 정류장 → 시내버스 → 대학로 환승 → 원광대학교',
     productId: 5,
-    productName: '원광대 학생 전용 통학버스 1달 정기권',
+    hasDedicatedPass: true,
     reason: '등하교 구간을 반복 이용하는 학생에게 적합해요.',
   },
   jewel: {
@@ -54,7 +56,7 @@ const POPULAR_ROUTE_RECOMMENDATIONS = {
     time: '약 30분',
     flow: '익산역 정류장 → 시내버스 → 왕궁면 환승 → 보석박물관',
     productId: 17,
-    productName: '보석박물관 연계 시내버스 왕복권',
+    hasDedicatedPass: true,
     reason: '보석박물관 방문에 필요한 왕복 이동을 한 번에 준비할 수 있어요.',
   },
   terminal: {
@@ -64,7 +66,7 @@ const POPULAR_ROUTE_RECOMMENDATIONS = {
     time: '약 10분',
     flow: '익산역 정류장 → 시내버스 → 시외버스터미널',
     productId: 1,
-    productName: '익산 시내버스 무제한 1일 패스',
+    hasDedicatedPass: false,
     reason: '역과 터미널을 포함한 시내 연계 이동에 활용하기 좋아요.',
   },
 };
@@ -82,18 +84,29 @@ function bindPopularRouteEvents() {
     document.body.classList.remove('route-sheet-open');
   };
 
-  const openRecommendation = (routeId) => {
+  const openRecommendation = async (routeId) => {
     const route = POPULAR_ROUTE_RECOMMENDATIONS[routeId];
     if (!route) return;
 
-    selectedProductId = route.productId;
+    await productsLoadPromise;
+    const linkedProduct = availableProductsById.get(route.productId);
+    selectedProductId = linkedProduct ? route.productId : null;
     document.getElementById('route-recommendation-title').textContent = route.title;
     document.getElementById('route-summary-mode').textContent = route.mode;
     document.getElementById('route-summary-transfer').textContent = route.transfer;
     document.getElementById('route-summary-time').textContent = route.time;
     document.getElementById('route-sheet-flow').textContent = route.flow;
-    document.getElementById('route-pass-name').textContent = route.productName;
-    document.getElementById('route-pass-reason').textContent = route.reason;
+    document.getElementById('route-pass-label').textContent = linkedProduct
+      ? (route.hasDedicatedPass ? '이 구간에 맞는 판매 패스' : '전용 패스 없음 · 연계 가능 패스')
+      : '현재 연계 가능한 판매 패스 없음';
+    document.getElementById('route-pass-name').textContent = linkedProduct
+      ? linkedProduct.name
+      : '판매 중인 패스 목록을 확인해주세요';
+    document.getElementById('route-pass-reason').textContent = linkedProduct
+      ? route.reason
+      : '현재 상품 API에서 연결할 수 있는 패스를 찾지 못했습니다.';
+    detailButton.disabled = !linkedProduct;
+    detailButton.textContent = linkedProduct ? '연계 패스 보기' : '연계 패스 없음';
 
     layer.classList.add('is-open');
     layer.setAttribute('aria-hidden', 'false');
@@ -182,6 +195,10 @@ async function loadProducts() {
     const response = await fetchProducts();
     // 우리 API 공통 응답은 { status, message, data } 구조이므로 실제 목록은 data에서 꺼냅니다.
     const products = Array.isArray(response.data) ? response.data : [];
+    availableProductsById.clear();
+    products.forEach((product) => {
+      availableProductsById.set(Number(product.productId), product);
+    });
 
     if (products.length === 0) {
       productList.innerHTML = '<p class="empty-message">표시할 환승패스 상품이 없습니다.</p>';

@@ -1153,6 +1153,12 @@ body.route-sheet-open {
   cursor: pointer;
 }
 
+.route-pass-detail-btn:disabled {
+  background-color: var(--line);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
 /* 로그인 / 회원가입 */
 .auth-page {
   min-height: 100vh;
