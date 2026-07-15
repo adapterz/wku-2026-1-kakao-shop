@@ -80,13 +80,12 @@ function renderRecentGifts(container, gifts) {
   }
 
   container.innerHTML = gifts.map((gift) => {
-    const imageUrl = gift.thumbnailUrl || 'img/iksan-logo.svg';
     const productName = gift.productName || '익산 환승패스';
     const isUsed = gift.profileStatus === '사용 완료';
 
     return `
       <button class="profile-recent-item" type="button" data-gift-id="${escapeProfileText(gift.giftId)}">
-        <img src="${escapeProfileText(imageUrl)}" alt="" onerror="this.onerror=null; this.src='img/iksan-logo.svg';">
+        ${createPassThumbnail(gift)}
         <span class="profile-recent-info">
           <strong>${escapeProfileText(productName)}</strong>
           <small>${escapeProfileText(formatProfileDate(gift.profileDate))}</small>

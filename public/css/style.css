@@ -2621,3 +2621,65 @@ html.dark-theme .top-header .icon-btn {
   transition: border-color 0.3s;
 }
 
+/* 🎫 주문서 및 결제완료 화면용 패스 썸네일 크기 최적화 (60px) */
+.order-summary .pass-thumbnail {
+  flex: 0 0 60px;
+  width: 60px;
+  height: 60px;
+  padding: 6px;
+  border-radius: 8px;
+  gap: 2px;
+}
+
+.order-summary .pass-thumbnail-icon {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 1px;
+  border-radius: 5px;
+}
+
+.order-summary .pass-thumbnail-icon svg {
+  width: 13px;
+  height: 13px;
+}
+
+.order-summary .pass-thumbnail strong {
+  font-size: 9px;
+  line-height: 1.1;
+}
+
+.order-summary .pass-thumbnail small {
+  font-size: 6px;
+}
+
+/* 🎫 프로필 최근 이용 내역용 패스 썸네일 크기 최적화 (46px) */
+.profile-recent-item .pass-thumbnail {
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  gap: 1px;
+}
+
+.profile-recent-item .pass-thumbnail-icon {
+  width: 14px;
+  height: 14px;
+  margin-bottom: 0px;
+  border-radius: 4px;
+}
+
+.profile-recent-item .pass-thumbnail-icon svg {
+  width: 10px;
+  height: 10px;
+}
+
+.profile-recent-item .pass-thumbnail strong {
+  font-size: 8px;
+  line-height: 1;
+}
+
+.profile-recent-item .pass-thumbnail small {
+  display: none;
+}
+
