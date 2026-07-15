@@ -47,6 +47,10 @@ async function fetchProductDetail(productId) {
   return requestJson(`/api/products/${productId}`);
 }
 
+async function fetchSentOrders() {
+  return requestJson('/api/orders/sent');
+}
+
 async function loginUser(payload) {
   // 로그인 성공 시 서버가 세션을 만들고, 이후 같은 브라우저 요청에서 로그인 상태가 유지됩니다.
   return requestJson('/api/auth/login', {
