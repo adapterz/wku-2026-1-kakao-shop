@@ -6,12 +6,6 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 앱 구동 시 기존에 저장된 다크모드 설정이 있다면 로드 시 즉시 활성화 (화면 깜빡임 방지)
-  const isDarkMode = localStorage.getItem('profile_dark_mode') === 'true';
-  if (isDarkMode) {
-    document.body.classList.add('dark-theme');
-  }
-
   initProfilePage();
 });
 
