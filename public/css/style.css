@@ -1645,13 +1645,12 @@ body > * {
   padding-top: 16px;
 }
 
-.qr-image {
+.barcode-image {
   display: block;
-  width: min(220px, 72vw);
-  aspect-ratio: 1;
+  width: min(420px, 100%);
+  aspect-ratio: 3 / 2;
   object-fit: contain;
   margin: 0 auto 12px;
-  padding: 8px;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   background: #fff;

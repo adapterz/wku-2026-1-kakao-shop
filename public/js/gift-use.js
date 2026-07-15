@@ -6,7 +6,7 @@
  */
 
 const fallbackImageUrl = 'img/iksan-logo.svg';
-const fallbackQrImageUrl = 'images/qr/mock-pass-qr.svg';
+const fallbackBarcodeImageUrl = 'images/barcodes/default-barcode.png';
 // giftbox.html에서 gift-use.html?giftId=... 로 넘긴 값을 선물 상세 조회 기준으로 사용합니다.
 const giftId = Number(new URLSearchParams(location.search).get('giftId'));
 let selectedGift = null;
@@ -81,7 +81,7 @@ function renderGiftDetail(gift) {
 
   const productName = gift.productName || '익산 환승패스';
   const productImage = document.getElementById('gift-product-image');
-  const qrImage = document.getElementById('gift-qr-image');
+  const barcodeImage = document.getElementById('gift-barcode-image');
 
   // 상품 이미지가 아직 없거나 경로가 깨져도 화면 확인이 가능하도록 공통 대체 이미지를 사용합니다.
   productImage.src = gift.thumbnailUrl || fallbackImageUrl;
@@ -91,11 +91,11 @@ function renderGiftDetail(gift) {
     productImage.src = fallbackImageUrl;
   };
 
-  // API에 실제 QR 이미지가 있으면 사용하고, 현재 목업 경로가 없거나 깨지면 시연용 QR로 대체합니다.
-  qrImage.src = gift.barcodeImageUrl || fallbackQrImageUrl;
-  qrImage.onerror = () => {
-    qrImage.onerror = null;
-    qrImage.src = fallbackQrImageUrl;
+  // API 이미지가 없거나 깨지면 제공받은 테스트용 바코드 이미지로 대체합니다.
+  barcodeImage.src = gift.barcodeImageUrl || fallbackBarcodeImageUrl;
+  barcodeImage.onerror = () => {
+    barcodeImage.onerror = null;
+    barcodeImage.src = fallbackBarcodeImageUrl;
   };
 
   document.getElementById('gift-brand').textContent = gift.brandName || '익산 교통';
@@ -114,7 +114,7 @@ function showGiftError(message) {
   document.getElementById('gift-barcode').textContent = '-';
   document.getElementById('gift-status-guide').textContent = '내 패스에서 다시 선택해주세요.';
   document.getElementById('gift-product-image').src = fallbackImageUrl;
-  document.getElementById('gift-qr-image').src = fallbackQrImageUrl;
+  document.getElementById('gift-barcode-image').src = fallbackBarcodeImageUrl;
   document.getElementById('use-complete-btn').disabled = true;
 }
 
