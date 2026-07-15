@@ -92,14 +92,16 @@ function createGiftCard(gift) {
   const productName = gift.productName || '익산 환승패스';
   const brandName = gift.brandName || '익산 교통';
   const senderName = gift.senderName || '나';
-  const giftDate = formatGiftDate(activeStatus === 'used' ? gift.usedAt : gift.createdAt);
+  const isUsed = activeStatus === 'used';
+  const giftDate = formatGiftDate(isUsed ? gift.usedAt : gift.createdAt);
 
   return `
-    <div class="gift-card" data-gift-id="${gift.giftId}">
+    <div class="gift-card${isUsed ? ' is-used' : ''}" data-gift-id="${gift.giftId}">
       ${createPassThumbnail(gift)}
       <div class="gift-info">
         <p class="order-brand">${escapeHtml(brandName)}</p>
         <p class="product-name">${escapeHtml(productName)}</p>
+        ${isUsed ? '<span class="gift-status-badge">사용완료</span>' : ''}
         <p class="gift-sender">from. ${escapeHtml(senderName)}</p>
         <p class="gift-date">${escapeHtml(giftDate)}</p>
       </div>
