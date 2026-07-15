@@ -478,10 +478,12 @@ body > * {
 .bottom-tabbar {
   position: sticky;
   bottom: 0;
+  margin-top: auto;
   display: flex;
   background-color: var(--card);
   border-top: 1px solid var(--line);
   padding: 8px 0;
+  z-index: 20;
 }
 
 .tabbar-item {
