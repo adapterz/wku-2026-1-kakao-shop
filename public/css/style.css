@@ -898,12 +898,30 @@ html.dark-theme .home-theme-toggle {
   box-shadow: 0 6px 14px rgba(20, 46, 70, 0.05);
 }
 
+.section-hint {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
 .route-row {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 13px 14px;
   border-bottom: 1px solid var(--bg);
+  cursor: pointer;
+  transition: background-color 0.18s ease, transform 0.18s ease;
+}
+
+.route-row:hover,
+.route-row:focus-visible {
+  background-color: var(--bg);
+  outline: none;
+}
+
+.route-row:active {
+  transform: scale(0.99);
 }
 
 .route-row:last-child {
@@ -958,6 +976,181 @@ html.dark-theme .home-theme-toggle {
   font-size: 12px;
   font-weight: 900;
   white-space: nowrap;
+}
+
+body.route-sheet-open {
+  overflow: hidden;
+}
+
+.route-recommendation-layer {
+  position: fixed;
+  inset: 0 auto 0 50%;
+  z-index: 50;
+  display: flex;
+  width: min(100%, 430px);
+  max-width: 430px;
+  align-items: flex-end;
+  visibility: hidden;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.route-recommendation-layer.is-open {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.route-recommendation-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border: 0;
+  background: rgba(4, 19, 34, 0.56);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.route-recommendation-layer.is-open .route-recommendation-backdrop {
+  opacity: 1;
+}
+
+.route-recommendation-sheet {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 10px 18px 22px;
+  border-radius: 24px 24px 0 0;
+  background-color: var(--card);
+  box-shadow: 0 -12px 30px rgba(4, 19, 34, 0.2);
+  transform: translateY(105%);
+  transition: transform 0.24s ease;
+}
+
+.route-recommendation-layer.is-open .route-recommendation-sheet {
+  transform: translateY(0);
+}
+
+.route-sheet-handle {
+  width: 42px;
+  height: 4px;
+  margin: 0 auto 15px;
+  border-radius: 999px;
+  background-color: var(--line);
+}
+
+.route-sheet-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.route-sheet-eyebrow {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--accent-text);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.route-sheet-head h3 {
+  color: var(--ink);
+  font-size: 20px;
+  letter-spacing: -0.5px;
+}
+
+.route-sheet-close {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background-color: var(--bg);
+  color: var(--muted);
+  font-size: 23px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.route-sheet-summary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 16px;
+}
+
+.route-sheet-summary span,
+.route-sheet-summary strong {
+  padding: 6px 9px;
+  border-radius: 999px;
+  background-color: var(--bg);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.route-sheet-summary strong {
+  margin-left: auto;
+  background-color: rgba(8, 116, 201, 0.12);
+  color: var(--accent-text);
+}
+
+.route-sheet-flow {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.route-pass-recommendation {
+  margin-top: 14px;
+  padding: 15px;
+  border: 1px solid rgba(8, 116, 201, 0.2);
+  border-radius: 15px;
+  background: linear-gradient(135deg, rgba(8, 116, 201, 0.1), rgba(36, 183, 216, 0.08));
+}
+
+.route-pass-recommendation span {
+  display: block;
+  color: var(--accent-text);
+  font-size: 10.5px;
+  font-weight: 800;
+}
+
+.route-pass-recommendation strong {
+  display: block;
+  margin-top: 5px;
+  color: var(--ink);
+  font-size: 15px;
+}
+
+.route-pass-recommendation p {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.route-pass-detail-btn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 14px;
+  border: 0;
+  border-radius: 12px;
+  background-color: var(--blue);
+  color: var(--on-accent);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
 }
 
 /* 로그인 / 회원가입 */

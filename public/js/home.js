@@ -13,7 +13,114 @@ document.addEventListener('DOMContentLoaded', () => {
   loadProducts();
   bindHomeThemeToggle();
   bindTabbarEvents();
+  bindPopularRouteEvents();
 });
+
+const POPULAR_ROUTE_RECOMMENDATIONS = {
+  market: {
+    title: '익산역 → 중앙시장',
+    mode: '시내버스',
+    transfer: '환승 없음',
+    time: '약 15분',
+    flow: '익산역 정류장 → 시내버스 → 중앙시장',
+    productId: 1,
+    productName: '익산 시내버스 무제한 1일 패스',
+    reason: '시장 방문 전후로 시내 여러 구간을 이동할 때 적합해요.',
+  },
+  mireuksaji: {
+    title: '익산역 → 미륵사지',
+    mode: '순환버스',
+    transfer: '환승 없음',
+    time: '약 25분',
+    flow: '익산역 관광안내소 → 시티투어 순환버스 → 미륵사지',
+    productId: 14,
+    productName: '익산 시티투어 순환형 승차권 (성인)',
+    reason: '주요 관광지를 자유롭게 오가며 하루 여행하기 좋아요.',
+  },
+  wku: {
+    title: '익산역 → 원광대학교',
+    mode: '시내·통학버스',
+    transfer: '환승 1회',
+    time: '약 20분',
+    flow: '익산역 정류장 → 시내버스 → 대학로 환승 → 원광대학교',
+    productId: 5,
+    productName: '원광대 학생 전용 통학버스 1달 정기권',
+    reason: '등하교 구간을 반복 이용하는 학생에게 적합해요.',
+  },
+  jewel: {
+    title: '익산역 → 보석박물관',
+    mode: '시내버스',
+    transfer: '환승 1회',
+    time: '약 30분',
+    flow: '익산역 정류장 → 시내버스 → 왕궁면 환승 → 보석박물관',
+    productId: 17,
+    productName: '보석박물관 연계 시내버스 왕복권',
+    reason: '보석박물관 방문에 필요한 왕복 이동을 한 번에 준비할 수 있어요.',
+  },
+  terminal: {
+    title: '익산역 → 시외버스터미널',
+    mode: '시내버스',
+    transfer: '환승 없음',
+    time: '약 10분',
+    flow: '익산역 정류장 → 시내버스 → 시외버스터미널',
+    productId: 1,
+    productName: '익산 시내버스 무제한 1일 패스',
+    reason: '역과 터미널을 포함한 시내 연계 이동에 활용하기 좋아요.',
+  },
+};
+
+function bindPopularRouteEvents() {
+  const layer = document.getElementById('route-recommendation-layer');
+  const detailButton = document.getElementById('route-pass-detail-btn');
+  let selectedProductId = null;
+
+  if (!layer || !detailButton) return;
+
+  const closeRecommendation = () => {
+    layer.classList.remove('is-open');
+    layer.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('route-sheet-open');
+  };
+
+  const openRecommendation = (routeId) => {
+    const route = POPULAR_ROUTE_RECOMMENDATIONS[routeId];
+    if (!route) return;
+
+    selectedProductId = route.productId;
+    document.getElementById('route-recommendation-title').textContent = route.title;
+    document.getElementById('route-summary-mode').textContent = route.mode;
+    document.getElementById('route-summary-transfer').textContent = route.transfer;
+    document.getElementById('route-summary-time').textContent = route.time;
+    document.getElementById('route-sheet-flow').textContent = route.flow;
+    document.getElementById('route-pass-name').textContent = route.productName;
+    document.getElementById('route-pass-reason').textContent = route.reason;
+
+    layer.classList.add('is-open');
+    layer.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('route-sheet-open');
+    document.getElementById('route-sheet-close')?.focus();
+  };
+
+  document.querySelectorAll('.route-row[data-route-id]').forEach((row) => {
+    row.addEventListener('click', () => openRecommendation(row.dataset.routeId));
+    row.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openRecommendation(row.dataset.routeId);
+      }
+    });
+  });
+
+  document.getElementById('route-recommendation-backdrop')?.addEventListener('click', closeRecommendation);
+  document.getElementById('route-sheet-close')?.addEventListener('click', closeRecommendation);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && layer.classList.contains('is-open')) closeRecommendation();
+  });
+
+  detailButton.addEventListener('click', () => {
+    if (selectedProductId) location.href = `product.html?id=${selectedProductId}`;
+  });
+}
 
 function bindHomeThemeToggle() {
   const themeToggle = document.getElementById('home-theme-toggle');
