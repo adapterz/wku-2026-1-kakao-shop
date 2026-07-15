@@ -1,112 +1,365 @@
-# 📊 데이터베이스 엔티티 관계도 (ERD) 최종 설계안
+# 📊 데이터베이스 설계서 (ERD)
 
-본 데이터베이스 설계는 카카오톡 '선물하기' 클론 프로젝트의 M2 마일스톤(한 바퀴 완주)을 완벽하게 지원하기 위해 작성되었습니다. API 명세서의 데이터 규격과 100% 동기화된 4개의 핵심 테이블 구조를 가집니다.
+익산 철도·버스 환승패스 기반 **카카오톡 선물하기 클론 프로젝트**의 데이터베이스 모델과 물리 스키마를 정의한 문서입니다.
 
----
-
-## 📌 1. 데이터베이스 구조 설계 전략
-
-1. **중복 데이터 최소화 (정규화)**
-   - `gifts` 테이블에 수신자나 상품 정보를 굳이 다시 적지 않고 오직 `order_id`만 남겨두었습니다. 
-   - 백엔드는 조인(JOIN)을 사용해 `gifts` ➡️ `orders` ➡️ `users`/`products` 구조로 데이터를 영리하게 찾아옵니다.
-2. **트랜잭션 무결성 확보**
-   - `gifts` 테이블의 `order_id`에 `UNIQUE` 제약조건을 걸어, 하나의 결제(order)에서 선물 교환권이 중복으로 2개씩 무한 복사되는 시스템 버그를 원천 차단했습니다.
-3. **가짜(Mock) 결제 인프라 최적화**
-   - 결제 상태 처리를 위한 별도의 Payment 테이블을 파지 않고, `orders` 테이블 내에서 `payment_status`와 `payment_method` 컬럼으로 한 번에 관리하여 개발 속도를 높였습니다.
-
-   
+본 문서는 프로젝트에서 사용하는 **MySQL 데이터베이스(`kakao_gift`)**의 실제 스키마를 기준으로 작성되었으며, 데이터 모델, 테이블 구조, 관계, 제약조건 및 무결성 보장 전략을 설명합니다.
 
 ---
 
-## 📌 2. 테이블 상세 명세서 (Data Dictionary)
+# 📌 1. 설계 목표
 
-### 👤 1) `users` (회원 테이블)
-* **목적:** 가입자 식별, 로그인 세션 인증 관리
-* **설명:** 비밀번호는 평문 저장을 막기 위해 암호화 처리되며, 탈퇴 시 데이터 유실을 막는 소프트 딜리트(`deleted_at`)가 적용되었습니다.
+본 프로젝트의 데이터베이스는 다음과 같은 목표를 기반으로 설계되었습니다.
 
-| 컬럼명 | 데이터 타입 | 제약조건 | 설명 |
-| :--- | :--- | :--- | :--- |
-| **id** | INT | PK, Auto Increment | 회원 고유 식별 번호 |
-| **email** | VARCHAR(100) | NOT NULL, UNIQUE | 사용자 인증용 이메일 아이디 |
-| **password** | VARCHAR(255) | NOT NULL | 암호화된 비밀번호 저장소 |
-| **name** | VARCHAR(50) | NOT NULL | 사용자 실명 또는 화면 닉네임 |
-| **phone** | VARCHAR(20) | NOT NULL | 연락처 번호 |
-| **birth_date** | DATE | NULL | 생년월일 |
-| **gender** | VARCHAR(10) | NULL | 성별 (M / F) |
-
-<br>
-
-### 🛍️ 2) `products` (상품 테이블)
-* **목적:** 홈 화면 리스트 렌더링 및 상세 조회용 마스터 데이터
-* **설명:** 화면 UI에 필요한 썸네일과 브랜드 이름까지 모두 관리합니다.
-
-| 컬럼명 | 데이터 타입 | 제약조건 | 설명 |
-| :--- | :--- | :--- | :--- |
-| **id** | INT | PK, Auto Increment | 상품 고유 번호 |
-| **name** | VARCHAR(255) | NOT NULL | 상품 공식 노출 명칭 |
-| **price** | INT | NOT NULL | 실제 결제 기준 단가 |
-| **description** | TEXT | NULL | 상품 상세 설명 문단 |
-| **thumbnail_url** | VARCHAR(255) | NOT NULL | 상품 메인 이미지 URL |
-| **category** | VARCHAR(50) | NULL | 상품 분류 코드 (coffee, food 등) |
-| **brand_name** | VARCHAR(100) | NULL | 브랜드 이름 |
-
-<br>
-
-### 💳 3) `orders` (주문 테이블)
-* **목적:** 거래 트랜잭션 기록 및 Mock 결제 상태 관리
-* **설명:** 입력한 수신자 이름과 번호는 `receiver_name`, `receiver_phone`에 주문 당시 값으로 저장하고, 가입 회원으로 식별될 때만 `receiver_id`를 연결합니다. 따라서 비회원에게도 문자 기반 교통패스를 선물할 수 있습니다.
-
-| 컬럼명 | 데이터 타입 | 제약조건 | 설명 |
-| :--- | :--- | :--- | :--- |
-| **id** | INT | PK, Auto Increment | 주문 고유 번호 (영수증 단위) |
-| **buyer_id** | INT | NOT NULL, FK | 결제를 수행한 구매자 ID (`users` 연동) |
-| **receiver_id** | BIGINT | NULL, FK | 가입 수신자 ID. 비회원 문자 선물은 `NULL` |
-| **receiver_phone** | VARCHAR(20) | NULL | 주문 당시 문자 수신 번호 스냅샷. 기존 주문은 `NULL` 가능 |
-| **receiver_name** | VARCHAR(50) | NULL | 주문 당시 입력한 수신자 이름 스냅샷 |
-| **product_id** | INT | NOT NULL, FK | 거래된 대상 상품 ID (`products` 연동) |
-| **gift_message** | TEXT | NULL | 선물과 함께 보내는 메시지 텍스트 |
-| **total_price** | INT | NOT NULL | 할인 등이 적용된 최종 결제 액수 |
-| **payment_status** | VARCHAR(20) | DEFAULT 'pending' | Mock 결제 트래킹 상태 (성공 시 'paid') |
-| **payment_method** | VARCHAR(50) | NULL | 결제 수단 (예: 'mock') |
-| **paid_at** | TIMESTAMP | NULL | 실제 결제 성공 판정 일시 |
-
-<br>
-
-### 🎫 4) `gifts` (선물/교환권 테이블)
-* **목적:** 수신자의 '선물함' 화면 노출 및 바코드 사용 트랜잭션 제어
-* **설명:** `orders`에 종속된 교환권 자산이며, 바코드를 사용하면 `status`가 변경됩니다.
-
-| 컬럼명 | 데이터 타입 | 제약조건 | 설명 |
-| :--- | :--- | :--- | :--- |
-| **id** | INT | PK, Auto Increment | 모바일 교환권 고유 일련번호 |
-| **order_id** | INT | NOT NULL, FK, UNIQUE | 연동된 원천 주문 내역 ID (1:1 매핑 강제) |
-| **receiver_id** | BIGINT | NULL, FK | 가입 수신자 ID. 비회원 문자 선물은 `NULL` |
-| **barcode** | VARCHAR(50) | NOT NULL, UNIQUE | POS 결제용 유니크 바코드 넘버 |
-| **barcode_image_url** | VARCHAR(255) | NULL | 바코드 이미지 리소스 경로 |
-| **status** | VARCHAR(20) | DEFAULT 'unused' | 쿠폰 사용 상태 (`unused`: 미사용, `used`: 사용됨) |
-| **used_at** | TIMESTAMP | NULL | 매장 등에서 바코드 사용 처리를 완료한 시각 |
-| **expired_at** | TIMESTAMP | NULL | 모바일 교환권 유효기간 만료 시각 |
+- 회원 및 비회원 모두에게 선물 전송 가능
+- 주문 정보의 영속성 및 추적성 보장
+- 데이터 무결성 유지
+- 빠른 조회를 위한 인덱스 최적화
+- 주문과 교환권 발급의 트랜잭션 보장
 
 ---
 
-## 📈 3. 물리 ERD 시각화 자료 (Diagram)
+# 📌 2. 핵심 설계 원칙
 
-> 💡 **주석:** 아래 다이어그램은 `dbdiagram.io`를 바탕으로 생성된 최종 테이블 관계도입니다. `users`와 `products`를 부모로 하여 트랜잭션 데이터인 `orders`와 `gifts`가 유기적으로 연결된 뼈대를 확인할 수 있습니다.
+## 2.1 비회원 문자 선물 지원
 
-![최종 물리 ERD 다이어그램](./erd.png)
+기존 서비스는 회원 간 선물만 가능했지만, 실제 카카오 선물하기처럼 비회원에게도 선물을 보낼 수 있도록 설계했습니다.
 
+이를 위해
 
-# 📊 카카오톡 선물하기 클론 - M2 ERD (익산 환승패스 테마)
+- `orders.receiver_id`
+- `gifts.receiver_id`
 
-## 🗄️ 테이블 관계도 (Entity Relationship Diagram)
+컬럼은 **NULL 허용(Nullable FK)** 구조를 사용합니다.
 
-- **users (1)** ↔ **(N) orders** : 1명의 회원은 여러 번 주문할 수 있습니다.
-- **products (1)** ↔ **(N) orders** : 1개의 상품은 여러 번 주문될 수 있습니다.
-- **orders (1)** ↔ **(1) gifts** : 1개의 주문이 결제되면, 반드시 1개의 교환권(선물)이 생성됩니다. (UNIQUE 매핑)
-- **users (0..1)** ↔ **(N) gifts** : 가입 수신자는 선물함에서 확인하며, 비회원 문자 선물은 사용자 연결 없이 발급됩니다.
+### 회원 선물
 
-## 📋 핵심 테이블 설명
-1. **`users`**: 회원 정보 (email UNIQUE 제약으로 중복 가입 방지, bcrypt 암호화 적용)
-2. **`products`**: 익산 대중교통/환승 패스권 18개 (M2 시드 데이터 세팅 완료)
-3. **`orders`**: 구매자와 수신 전화번호를 기록하고, 가입 수신자는 선택적으로 연결하는 결제 영수증
-4. **`gifts`**: 문자로 전달할 바코드와 사용 상태(unused/used)를 관리하는 교환권
+```text
+receiver_id → users.id
+```
+
+즉시 선물함과 연결됩니다.
+
+### 비회원 선물
+
+```text
+receiver_id = NULL
+receiver_phone 저장
+```
+
+SMS 또는 카카오 알림톡을 통해 교환권을 전달하며, 이후 동일한 전화번호로 회원가입하면 선물을 자동 연결할 수 있도록 설계했습니다.
+
+---
+
+## 2.2 주문 당시 수신자 정보 Snapshot 보존
+
+회원 정보는 언제든 변경될 수 있습니다.
+
+이를 방지하기 위해 주문 시점의 정보를 별도로 저장합니다.
+
+| 컬럼 | 목적 |
+|------|------|
+| receiver_name | 주문 당시 수신자 이름 |
+| receiver_phone | 주문 당시 수신자 전화번호 |
+
+이를 통해
+
+- 영수증 보존
+- 감사(Audit)
+- 분쟁 대응
+- 데이터 불변성(Immutability)
+
+을 보장합니다.
+
+---
+
+## 2.3 주문과 교환권의 1:1 관계
+
+교환권은 주문 하나당 반드시 하나만 존재해야 합니다.
+
+이를 위해
+
+```text
+gifts.order_id
+```
+
+에 **UNIQUE 제약조건**을 적용했습니다.
+
+```
+Orders 1
+        │
+        │
+        │
+        1
+      Gifts
+```
+
+중복 발급은 DB 레벨에서 차단됩니다.
+
+---
+
+# 📌 3. 테이블 물리 명세
+
+---
+
+## 👤 users
+
+회원 계정 및 인증 정보를 저장하는 테이블입니다.
+
+| 컬럼명 | 타입 | NULL | 제약조건 | 기본값 | 설명 |
+|--------|------|------|----------|---------|------|
+| id | BIGINT | NO | PK, AUTO_INCREMENT | - | 회원 ID |
+| email | VARCHAR(100) | NO | UNIQUE | - | 로그인 이메일 |
+| password | VARCHAR(255) | NO | | | bcrypt 암호화 비밀번호 |
+| name | VARCHAR(50) | NO | | | 사용자 이름 |
+| phone | VARCHAR(20) | NO | | | 휴대전화 |
+| birth_date | DATE | YES | | NULL | 생년월일 |
+| gender | VARCHAR(10) | YES | | NULL | 성별 |
+| created_at | DATETIME | NO | | CURRENT_TIMESTAMP | 생성일 |
+| updated_at | DATETIME | NO | | CURRENT_TIMESTAMP | 수정일 |
+| deleted_at | DATETIME | YES | | NULL | 탈퇴일 |
+
+---
+
+## 🛍 products
+
+상품 정보를 저장하는 마스터 테이블입니다.
+
+| 컬럼명 | 타입 | NULL | 제약조건 | 기본값 | 설명 |
+|--------|------|------|----------|---------|------|
+| id | BIGINT | NO | PK | | 상품 ID |
+| name | VARCHAR(255) | NO | | | 상품명 |
+| price | INT | NO | | | 가격 |
+| description | TEXT | YES | | NULL | 상품 설명 |
+| thumbnail_url | VARCHAR(255) | NO | | | 썸네일 |
+| category | VARCHAR(50) | NO | | | 상품 분류 |
+| brand_name | VARCHAR(100) | NO | | | 브랜드 |
+| created_at | DATETIME | NO | | CURRENT_TIMESTAMP | 생성일 |
+| updated_at | DATETIME | NO | | CURRENT_TIMESTAMP | 수정일 |
+
+---
+
+## 💳 orders
+
+구매 내역과 결제 정보를 저장하는 테이블입니다.
+
+| 컬럼명 | 타입 | NULL | 제약조건 | 기본값 | 설명 |
+|--------|------|------|----------|---------|------|
+| id | BIGINT | NO | PK | | 주문 ID |
+| buyer_id | BIGINT | NO | FK | | 구매자 |
+| receiver_id | BIGINT | YES | FK | NULL | 수신자 |
+| receiver_phone | VARCHAR(20) | YES | | NULL | Snapshot 전화번호 |
+| receiver_name | VARCHAR(50) | YES | | NULL | Snapshot 이름 |
+| product_id | BIGINT | NO | FK | | 상품 |
+| total_price | INT | NO | | | 결제금액 |
+| payment_status | VARCHAR(20) | NO | | paid | 결제상태 |
+| gift_message | TEXT | YES | | NULL | 메시지 |
+| created_at | DATETIME | NO | | CURRENT_TIMESTAMP | 생성일 |
+| updated_at | DATETIME | NO | | CURRENT_TIMESTAMP | 수정일 |
+
+---
+
+## 🎫 gifts
+
+실제 교환권을 저장하는 테이블입니다.
+
+| 컬럼명 | 타입 | NULL | 제약조건 | 기본값 | 설명 |
+|--------|------|------|----------|---------|------|
+| id | BIGINT | NO | PK | | 교환권 ID |
+| order_id | BIGINT | NO | FK, UNIQUE | | 주문 |
+| receiver_id | BIGINT | YES | FK | NULL | 수신자 |
+| product_id | BIGINT | NO | FK | | 상품 |
+| barcode | VARCHAR(50) | NO | UNIQUE | | 바코드 |
+| barcode_image_url | VARCHAR(255) | NO | | | QR/Barcode 이미지 |
+| status | VARCHAR(20) | NO | | unused | 사용 여부 |
+| expired_at | DATETIME | NO | | | 만료일 |
+| used_at | DATETIME | YES | | NULL | 사용일 |
+| created_at | DATETIME | NO | | CURRENT_TIMESTAMP | 생성일 |
+| updated_at | DATETIME | NO | | CURRENT_TIMESTAMP | 수정일 |
+
+---
+
+# 📌 4. ERD(Entity Relationship)
+
+## Mermaid ERD
+
+```mermaid
+erDiagram
+
+USERS {
+    BIGINT id PK
+    VARCHAR email
+    VARCHAR password
+    VARCHAR name
+    VARCHAR phone
+}
+
+PRODUCTS {
+    BIGINT id PK
+    VARCHAR name
+    INT price
+}
+
+ORDERS {
+    BIGINT id PK
+    BIGINT buyer_id FK
+    BIGINT receiver_id FK
+    BIGINT product_id FK
+    INT total_price
+}
+
+GIFTS {
+    BIGINT id PK
+    BIGINT order_id FK
+    BIGINT receiver_id FK
+    BIGINT product_id FK
+    VARCHAR barcode
+}
+
+USERS ||--o{ ORDERS : purchases
+USERS ||--o{ GIFTS : owns
+PRODUCTS ||--o{ ORDERS : ordered
+PRODUCTS ||--o{ GIFTS : gifted
+ORDERS ||--|| GIFTS : generates
+```
+
+---
+
+## 관계 구조
+
+```text
++-----------+             +-------------+             +-----------+
+|   USERS   |             |  PRODUCTS   |             |   USERS   |
+| (Buyer)   |             |             |             |(Receiver) |
++-----+-----+             +------+------+\            +-----+-----+
+      |                           |                         |
+      | 1                         | 1                       | 0..1
+      |                           |                         |
+      | N                         | N                       | N
++-----v---------------------------v-------------------------v------+
+|                              ORDERS                             |
++------------------------------+----------------------------------+
+                               |
+                               | 1
+                               |
+                               | 1 (UNIQUE)
++------------------------------v----------------------------------+
+|                               GIFTS                             |
++-----------------------------------------------------------------+
+```
+
+---
+
+# 📌 5. 관계 및 제약조건
+
+## users ↔ orders
+
+- 1명의 회원은 여러 주문을 생성할 수 있습니다.
+- `buyer_id`는 NOT NULL입니다.
+
+---
+
+## users ↔ gifts
+
+- 회원은 여러 개의 교환권을 보유할 수 있습니다.
+- 비회원 선물은 `receiver_id = NULL`입니다.
+
+---
+
+## products ↔ orders
+
+- 하나의 상품은 여러 주문에서 사용됩니다.
+
+---
+
+## products ↔ gifts
+
+- 하나의 상품은 여러 교환권으로 발급될 수 있습니다.
+
+---
+
+## orders ↔ gifts
+
+- 주문 하나당 교환권 하나만 존재합니다.
+- `gifts.order_id UNIQUE`로 강제합니다.
+
+---
+
+# 📌 6. 인덱스 전략
+
+## 일반 인덱스(B-Tree)
+
+외래키 컬럼에는 MySQL InnoDB 기본 B-Tree 인덱스를 적용합니다.
+
+- buyer_id
+- receiver_id
+- product_id
+
+이를 통해
+
+- 주문 조회
+- 선물함 조회
+- 상품 조회
+
+성능을 향상시킵니다.
+
+---
+
+## UNIQUE 인덱스
+
+### gifts.order_id
+
+주문당 교환권 하나만 생성되도록 보장합니다.
+
+### gifts.barcode
+
+바코드 조회 시 빠른 검색과 중복 방지를 제공합니다.
+
+---
+
+# 📌 7. 트랜잭션 및 데이터 무결성
+
+주문 생성과 교환권 발급은 하나의 데이터베이스 트랜잭션으로 처리합니다.
+
+```text
+BEGIN
+
+INSERT INTO orders
+
+↓
+
+INSERT INTO gifts
+
+↓
+
+COMMIT
+```
+
+둘 중 하나라도 실패하면
+
+```text
+ROLLBACK
+```
+
+을 수행하여 데이터 불일치를 방지합니다.
+
+본 프로젝트는 ACID 원칙 중 다음을 보장하도록 설계되었습니다.
+
+- Atomicity (원자성)
+- Consistency (일관성)
+- Isolation (격리성)
+- Durability (지속성)
+
+---
+
+# 📌 8. 요약
+
+본 데이터베이스는 다음과 같은 특징을 갖습니다.
+
+- 비회원 문자 선물 지원
+- 주문 Snapshot 저장
+- 주문 ↔ 교환권 1:1 관계 보장
+- 외래키 기반 참조 무결성 유지
+- B-Tree 인덱스를 통한 조회 성능 향상
+- UNIQUE 제약조건으로 중복 데이터 방지
+- ACID 기반 트랜잭션 처리
+- 실제 MySQL 물리 스키마 기준 설계
