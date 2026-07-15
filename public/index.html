@@ -18,11 +18,18 @@
 
   <!-- 상단 헤더 -->
   <header class="top-header home-top-header">
-    <button class="icon-btn" id="home-profile-btn" type="button" aria-label="프로필 설정">
-      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-      </svg>
-    </button>
+    <div class="home-header-actions">
+      <button class="icon-btn" id="home-profile-btn" type="button" aria-label="프로필 설정">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+      </button>
+      <button class="home-theme-toggle" id="home-theme-toggle" type="button" aria-label="다크모드 켜기" aria-pressed="false" title="다크모드 켜기">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.6 6.6 0 0 0 21 12.8Z"/>
+        </svg>
+      </button>
+    </div>
     <h1><img src="img/iksan-logo.svg" alt="익산시 로고" class="iksan-logo">익산 환승패스</h1>
     <a class="icon-btn" href="search.html" aria-label="상품 검색">
       <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -226,6 +233,6 @@
 
   <script src="js/api.js"></script>
   <script src="js/components.js"></script>
-  <script src="js/home.js"></script>
+  <script src="js/home.js?v=20260715-theme-toggle"></script>
 </body>
 </html>
