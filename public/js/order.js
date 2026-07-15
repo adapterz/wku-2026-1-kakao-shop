@@ -5,7 +5,6 @@
  * 주요: 상품 조회, 뒤로가기, 나에게/친구에게 선물 토글, 결제하기 클릭 시 주문 생성 API 호출
  */
 
-const fallbackImageUrl = 'img/iksan-logo.svg';
 const orderParams = new URLSearchParams(location.search);
 // product.html에서 넘긴 productId로 주문서에 표시할 상품과 주문 생성 대상을 맞춥니다.
 const productId = Number(orderParams.get('productId'));
@@ -118,6 +117,7 @@ document.getElementById('checkout-btn').addEventListener('click', async () => {
       throw new Error('주문 번호를 확인할 수 없습니다.');
     }
 
+    clearGiftCollectionsCache();
     location.href = `complete.html?orderId=${orderId}`;
   } catch (error) {
     console.error('주문 생성 중 오류:', error);
