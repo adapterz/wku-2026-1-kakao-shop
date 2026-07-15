@@ -91,6 +91,36 @@ function toOrderDetailResponse(row) {
   };
 }
 
+function toSentOrderResponse(row) {
+  return {
+    orderId: row.order_id,
+    totalPrice: row.total_price,
+    paymentStatus: row.payment_status,
+    giftMessage: row.gift_message,
+    createdAt: row.order_created_at,
+    receiver: {
+      userId: row.receiver_id,
+      name: row.receiver_name,
+      phone: row.receiver_phone,
+      isMember: row.receiver_id !== null,
+    },
+    product: {
+      productId: row.product_id,
+      name: row.product_name,
+      thumbnailUrl: row.thumbnail_url,
+      category: row.category,
+      brandName: row.brand_name,
+    },
+    gift: {
+      giftId: row.gift_id,
+      status: row.gift_status,
+      expiredAt: row.expired_at,
+      usedAt: row.used_at,
+    },
+    delivery: createDeliveryResponse(row),
+  };
+}
+
 /**
  * POST /api/orders
  * 로그인한 사용자가 상품을 주문하면 같은 트랜잭션에서 선물 교환권까지 발급합니다.
@@ -284,6 +314,59 @@ router.post('/', requireLogin, async (req, res) => {
     if (connection) {
       connection.release();
     }
+  }
+});
+
+/**
+ * GET /api/orders/sent
+ * 로그인 사용자가 자신이 아닌 수신자에게 보낸 선물 주문을 최신순으로 조회합니다.
+ */
+router.get('/sent', requireLogin, async (req, res) => {
+  const buyerId = req.session.user.userId;
+
+  try {
+    const [orders] = await pool.query(
+      `
+      SELECT
+        o.id AS order_id,
+        o.buyer_id,
+        o.receiver_id,
+        o.receiver_phone,
+        COALESCE(o.receiver_name, receiver.name, '받는 분') AS receiver_name,
+        o.product_id,
+        o.total_price,
+        o.payment_status,
+        o.gift_message,
+        o.created_at AS order_created_at,
+        p.name AS product_name,
+        p.thumbnail_url,
+        p.category,
+        p.brand_name,
+        g.id AS gift_id,
+        g.status AS gift_status,
+        g.expired_at,
+        g.used_at
+      FROM orders o
+      LEFT JOIN users receiver ON receiver.id = o.receiver_id
+      JOIN products p ON p.id = o.product_id
+      LEFT JOIN gifts g ON g.order_id = o.id
+      WHERE o.buyer_id = ?
+        AND (o.receiver_id IS NULL OR o.receiver_id <> o.buyer_id)
+      ORDER BY o.created_at DESC, o.id DESC
+      `,
+      [buyerId]
+    );
+
+    return sendSuccess(
+      res,
+      200,
+      'get_sent_orders_success',
+      orders.map(toSentOrderResponse)
+    );
+  } catch (error) {
+    console.error('GET /api/orders/sent error:', error);
+
+    return sendError(res, 500, 'internal_server_error');
   }
 });
 
