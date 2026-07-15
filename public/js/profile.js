@@ -149,6 +149,10 @@ function bindProfileEvents() {
     location.href = 'giftbox.html';
   });
 
+  document.getElementById('profile-sent-gifts-btn')?.addEventListener('click', () => {
+    location.href = 'sent-gifts.html';
+  });
+
   // ⚙️ 설정 화면(settings.html) 이동 라우팅
   document.getElementById('profile-settings-btn')?.addEventListener('click', () => {
     location.href = 'settings.html';
