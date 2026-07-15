@@ -1,7 +1,7 @@
 # 🛠️ [TROUBLESHOOTING LOG] 익산 연계교통 환승패스 카카오 선물하기
 
-**작성자:** 윤성준  
-**담당 분야:** Backend Architecture · Database Modeling  
+**작성자:** 윤성준
+**담당 분야:** Backend Architecture · Database Modeling
 **핵심 키워드:** 도메인 엔티티 설계, 데이터 불변성(Immutability), 무결성 제약조건(Constraints), DDL 시퀀스
 
 ---

@@ -6,12 +6,6 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 앱 구동 시 기존에 저장된 다크모드 설정이 있다면 로드 시 즉시 활성화 (화면 깜빡임 방지)
-  const isDarkMode = localStorage.getItem('profile_dark_mode') === 'true';
-  if (isDarkMode) {
-    document.body.classList.add('dark-theme');
-  }
-
   initProfilePage();
 });
 
@@ -49,20 +43,15 @@ async function initProfilePage() {
 async function loadProfileActivity() {
   const unusedCount = document.getElementById('profile-unused-count');
   const usedCount = document.getElementById('profile-used-count');
-  const totalCount = document.getElementById('profile-total-count');
   const recentList = document.getElementById('profile-recent-list');
 
   try {
-    const [unusedResponse, usedResponse] = await Promise.all([
-      requestJson('/api/gifts?status=unused'),
-      requestJson('/api/gifts?status=used'),
-    ]);
-    const unusedGifts = Array.isArray(unusedResponse.data) ? unusedResponse.data : [];
-    const usedGifts = Array.isArray(usedResponse.data) ? usedResponse.data : [];
+    const gifts = await fetchGiftCollections();
+    const unusedGifts = gifts.unused;
+    const usedGifts = gifts.used;
 
     if (unusedCount) unusedCount.textContent = String(unusedGifts.length);
     if (usedCount) usedCount.textContent = String(usedGifts.length);
-    if (totalCount) totalCount.textContent = String(unusedGifts.length + usedGifts.length);
 
     const recentGifts = [
       ...unusedGifts.map((gift) => ({ ...gift, profileStatus: '사용 가능', profileDate: gift.createdAt })),
@@ -89,13 +78,12 @@ function renderRecentGifts(container, gifts) {
   }
 
   container.innerHTML = gifts.map((gift) => {
-    const imageUrl = gift.thumbnailUrl || 'img/iksan-logo.svg';
     const productName = gift.productName || '익산 환승패스';
     const isUsed = gift.profileStatus === '사용 완료';
 
     return `
       <button class="profile-recent-item" type="button" data-gift-id="${escapeProfileText(gift.giftId)}">
-        <img src="${escapeProfileText(imageUrl)}" alt="" onerror="this.onerror=null; this.src='img/iksan-logo.svg';">
+        ${createPassThumbnail(gift)}
         <span class="profile-recent-info">
           <strong>${escapeProfileText(productName)}</strong>
           <small>${escapeProfileText(formatProfileDate(gift.profileDate))}</small>

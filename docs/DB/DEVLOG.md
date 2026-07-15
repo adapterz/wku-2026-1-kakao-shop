@@ -1,10 +1,10 @@
 ````markdown
 # 📖 [DEVLOG] 익산 연계교통 환승패스 기반 카카오 선물하기
 
-**프로젝트명:** 익산 연계교통 환승패스 기반 카카오 선물하기 (지역 특화 교통/모바일 커머스 플랫폼)  
-**작성자:** 윤성준  
-**담당 분야:** Backend Architecture · Database Modeling  
-**개발 환경:** Node.js, MySQL, Docker, Git Flow  
+**프로젝트명:** 익산 연계교통 환승패스 기반 카카오 선물하기 (지역 특화 교통/모바일 커머스 플랫폼)
+**작성자:** 윤성준
+**담당 분야:** Backend Architecture · Database Modeling
+**개발 환경:** Node.js, MySQL, Docker, Git Flow
 
 ---
 

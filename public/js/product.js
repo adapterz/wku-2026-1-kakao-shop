@@ -5,7 +5,6 @@
  * 주요: 상품 상세 API 조회, 뒤로가기, 로그인 확인 후 order.html/login.html 이동
  */
 
-const fallbackImageUrl = 'img/iksan-logo.svg';
 // 홈 화면에서 product.html?id=상품ID 형태로 넘긴 값을 상세 조회 기준으로 사용합니다.
 const productId = new URLSearchParams(location.search).get('id');
 
@@ -38,20 +37,14 @@ function renderProductDetail(product) {
     return;
   }
 
-  const image = document.getElementById('product-image');
+  const visual = document.getElementById('product-pass-visual');
   const category = document.getElementById('product-category');
   const name = document.getElementById('product-name');
   const price = document.getElementById('product-price');
   const description = document.getElementById('product-description');
   const productName = product.name || '환승패스 상품';
 
-  // 이미지 경로가 없거나 로딩에 실패해도 화면이 비지 않도록 익산 로고를 대체 이미지로 사용합니다.
-  image.src = product.thumbnailUrl || fallbackImageUrl;
-  image.alt = productName;
-  image.onerror = () => {
-    image.onerror = null;
-    image.src = fallbackImageUrl;
-  };
+  visual.innerHTML = createPassVisual(product, 'hero');
 
   category.textContent = product.category || '익산 환승패스';
   name.textContent = productName;
@@ -63,7 +56,7 @@ function showProductError(message) {
   document.getElementById('product-name').textContent = message;
   document.getElementById('product-price').textContent = '-';
   document.getElementById('product-description').textContent = '홈 화면에서 상품을 다시 선택해주세요.';
-  document.getElementById('product-image').src = fallbackImageUrl;
+  document.getElementById('product-pass-visual').innerHTML = createPassVisual({ name: '익산 환승패스' }, 'hero');
 }
 
 // 로그인 여부 확인 후 이동시키는 함수

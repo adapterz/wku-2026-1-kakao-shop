@@ -10,6 +10,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>패스 사용 - 익산 환승패스</title>
+  <script src="js/bootstrap.js"></script>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -27,13 +28,18 @@
 
     <!-- 패스 정보 -->
     <section class="gift-use-card">
-      <img id="gift-product-image" src="img/iksan-logo.svg" alt="패스 이미지">
-      <p class="order-brand" id="gift-brand">익산 교통</p>
-      <p class="product-name" id="gift-product-name">패스 정보를 불러오는 중입니다.</p>
+      <div id="gift-pass-visual" class="gift-pass-visual">
+        <div class="pass-visual-skeleton">패스 정보를 불러오는 중입니다.</div>
+      </div>
 
-      <!-- QR 영역 -->
+      <!-- 바코드 영역 -->
       <div class="qr-box">
-        <div class="qr-image" id="gift-qr-image">⬛⬜⬛⬜⬛<br>⬜⬛⬜⬛⬜<br>⬛⬜⬛⬛⬜<br>⬜⬛⬜⬛⬛<br>⬛⬛⬜⬛⬜</div>
+        <img
+          class="barcode-image"
+          id="gift-qr-image"
+          src="/images/barcodes/default-barcode.png"
+          alt="테스트용 익산 환승패스 바코드"
+        >
         <p class="qr-number" id="gift-barcode">-</p>
         <p class="qr-guide" id="gift-status-guide">버스 탑승 시 이 화면을 단말기에 제시하세요</p>
       </div>
@@ -46,7 +52,8 @@
     <button class="btn-primary" id="use-complete-btn">사용 완료 처리</button>
   </footer>
 
-  <script src="js/api.js"></script>
-  <script src="js/gift-use.js"></script>
+  <script src="js/api.js?v=20260715-gift-cache"></script>
+  <script src="js/pass-visual.js"></script>
+  <script src="js/gift-use.js?v=20260715-gift-cache"></script>
 </body>
 </html>

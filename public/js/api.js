@@ -5,15 +5,8 @@
  * 주요: fetch 요청/응답 처리, 에러 핸들링
  */
 
-// 다크모드 전역 초기화 (페이지 이동 시 깜빡임 없이 즉시 반영)
-(function() {
-  const isDarkMode = localStorage.getItem('profile_dark_mode') === 'true';
-  if (isDarkMode) {
-    document.addEventListener('DOMContentLoaded', () => {
-      document.body.classList.add('dark-theme');
-    });
-  }
-})();
+const GIFT_CACHE_STORAGE_KEY = 'iksan_gift_collections_v1';
+const GIFT_CACHE_TTL_MS = 5 * 60 * 1000;
 
 async function requestJson(url, options = {}) {
   // GET/POST 등 모든 JSON API 호출에서 공통으로 사용하는 fetch 래퍼입니다.
@@ -29,6 +22,10 @@ async function requestJson(url, options = {}) {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
+    if (data.message === 'login_required') {
+      clearGiftCollectionsCache();
+    }
+
     // BE가 내려준 message를 화면 JS에서 그대로 표시할 수 있도록 Error로 넘깁니다.
     throw new Error(data.message || `API request failed: ${response.status}`);
   }
@@ -69,4 +66,66 @@ async function signupUser(payload) {
 async function fetchCurrentUser() {
   // 세션 쿠키 기준으로 현재 로그인 사용자를 확인합니다. 비로그인 상태면 BE가 401을 내려줍니다.
   return requestJson('/api/auth/me');
+}
+
+function readGiftCollectionsCache() {
+  try {
+    const cachedValue = sessionStorage.getItem(GIFT_CACHE_STORAGE_KEY);
+    if (!cachedValue) return null;
+
+    const cached = JSON.parse(cachedValue);
+    const isValid = Number.isFinite(cached.cachedAt)
+      && Array.isArray(cached.unused)
+      && Array.isArray(cached.used);
+
+    if (!isValid || Date.now() - cached.cachedAt >= GIFT_CACHE_TTL_MS) {
+      clearGiftCollectionsCache();
+      return null;
+    }
+
+    return {
+      unused: cached.unused,
+      used: cached.used,
+    };
+  } catch (error) {
+    clearGiftCollectionsCache();
+    return null;
+  }
+}
+
+function writeGiftCollectionsCache(unused, used) {
+  try {
+    sessionStorage.setItem(GIFT_CACHE_STORAGE_KEY, JSON.stringify({
+      cachedAt: Date.now(),
+      unused,
+      used,
+    }));
+  } catch (error) {
+    // 저장 공간이 제한된 환경에서는 캐시 없이 기존 API 조회 흐름을 유지합니다.
+  }
+}
+
+function clearGiftCollectionsCache() {
+  try {
+    sessionStorage.removeItem(GIFT_CACHE_STORAGE_KEY);
+  } catch (error) {
+    // 저장소 접근이 제한돼도 로그인·주문·사용 처리는 계속 진행합니다.
+  }
+}
+
+async function fetchGiftCollections({ forceRefresh = false } = {}) {
+  if (!forceRefresh) {
+    const cached = readGiftCollectionsCache();
+    if (cached) return cached;
+  }
+
+  const [unusedResponse, usedResponse] = await Promise.all([
+    requestJson('/api/gifts?status=unused'),
+    requestJson('/api/gifts?status=used'),
+  ]);
+  const unused = Array.isArray(unusedResponse.data) ? unusedResponse.data : [];
+  const used = Array.isArray(usedResponse.data) ? usedResponse.data : [];
+
+  writeGiftCollectionsCache(unused, used);
+  return { unused, used };
 }

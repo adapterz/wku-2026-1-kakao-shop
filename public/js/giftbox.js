@@ -5,7 +5,6 @@
  * 주요: 선물함 API 조회, 상태 탭 전환, 선물 카드 클릭 시 gift-use.html 이동, 홈 탭 이동
  */
 
-const fallbackImageUrl = 'img/iksan-logo.svg';
 const giftList = document.getElementById('gift-list');
 const tabUnused = document.getElementById('tab-unused');
 const tabUsed = document.getElementById('tab-used');
@@ -44,14 +43,11 @@ async function loadGiftbox() {
   try {
     giftList.innerHTML = '<p class="loading-message">내 패스를 불러오는 중입니다.</p>';
 
-    const [unusedResponse, usedResponse] = await Promise.all([
-      requestJson('/api/gifts?status=unused'),
-      requestJson('/api/gifts?status=used'),
-    ]);
+    const gifts = await fetchGiftCollections();
 
-    // API 응답 data를 상태별 배열로 보관하고, 탭 라벨과 목록 렌더링에 함께 사용합니다.
-    giftsByStatus.unused = Array.isArray(unusedResponse.data) ? unusedResponse.data : [];
-    giftsByStatus.used = Array.isArray(usedResponse.data) ? usedResponse.data : [];
+    // 5분 이내 캐시가 있으면 DB를 다시 조회하지 않고 즉시 상태별 목록을 렌더링합니다.
+    giftsByStatus.unused = gifts.unused;
+    giftsByStatus.used = gifts.used;
 
     updateTabLabels();
     renderGiftList();
@@ -96,12 +92,12 @@ function createGiftCard(gift) {
   const productName = gift.productName || '익산 환승패스';
   const brandName = gift.brandName || '익산 교통';
   const senderName = gift.senderName || '나';
-  const imageUrl = gift.thumbnailUrl || fallbackImageUrl;
   const giftDate = formatGiftDate(activeStatus === 'used' ? gift.usedAt : gift.createdAt);
+  const cardClass = activeStatus === 'used' ? 'gift-card is-used' : 'gift-card';
 
   return `
-    <div class="gift-card" data-gift-id="${gift.giftId}">
-      <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(productName)}" onerror="this.onerror=null; this.src='${fallbackImageUrl}';">
+    <div class="${cardClass}" data-gift-id="${gift.giftId}">
+      ${createPassThumbnail(gift, activeStatus === 'used')}
       <div class="gift-info">
         <p class="order-brand">${escapeHtml(brandName)}</p>
         <p class="product-name">${escapeHtml(productName)}</p>
@@ -113,6 +109,10 @@ function createGiftCard(gift) {
 }
 
 function bindGiftCardEvents() {
+  if (activeStatus === 'used') {
+    return;
+  }
+
   giftList.querySelectorAll('.gift-card').forEach((card) => {
     card.addEventListener('click', () => {
       const giftId = card.dataset.giftId;
