@@ -43,7 +43,6 @@ async function initProfilePage() {
 async function loadProfileActivity() {
   const unusedCount = document.getElementById('profile-unused-count');
   const usedCount = document.getElementById('profile-used-count');
-  const totalCount = document.getElementById('profile-total-count');
   const recentList = document.getElementById('profile-recent-list');
 
   try {
@@ -53,7 +52,6 @@ async function loadProfileActivity() {
 
     if (unusedCount) unusedCount.textContent = String(unusedGifts.length);
     if (usedCount) usedCount.textContent = String(usedGifts.length);
-    if (totalCount) totalCount.textContent = String(unusedGifts.length + usedGifts.length);
 
     const recentGifts = [
       ...unusedGifts.map((gift) => ({ ...gift, profileStatus: '사용 가능', profileDate: gift.createdAt })),
