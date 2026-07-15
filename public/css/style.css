@@ -1916,9 +1916,9 @@ body.route-sheet-open {
   gap: 12px;
   margin: 0 0 16px;
   padding: 16px;
-  border: 1px solid color-mix(in srgb, var(--primary) 28%, var(--line));
+  border: 1px solid color-mix(in srgb, var(--blue) 28%, var(--line));
   border-radius: 16px;
-  background: color-mix(in srgb, var(--primary) 9%, var(--card));
+  background: color-mix(in srgb, var(--blue) 9%, var(--card));
   color: var(--ink);
   text-align: left;
 }
@@ -1932,7 +1932,7 @@ body.route-sheet-open {
   align-self: flex-start;
   padding: 5px 7px;
   border-radius: 8px;
-  background: var(--primary);
+  background: var(--blue);
   color: var(--on-accent, #fff);
   font-size: 10px;
   font-weight: 800;
