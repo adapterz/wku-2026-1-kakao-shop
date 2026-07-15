@@ -2314,6 +2314,159 @@ body {
   color: var(--muted);
 }
 
+.profile-sent-gifts-link {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background-color: var(--card);
+  box-shadow: 0 8px 24px rgba(20, 46, 70, 0.04);
+  color: var(--ink);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-sent-gifts-icon {
+  display: flex;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  background-color: rgba(17, 126, 210, 0.12);
+  color: var(--accent-text);
+}
+
+.profile-sent-gifts-copy {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-sent-gifts-copy strong {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.profile-sent-gifts-copy small {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-sent-gifts-chevron {
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+.sent-gifts-page {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 16px 36px;
+}
+
+.sent-gifts-guide {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background-color: var(--card);
+}
+
+.sent-gifts-guide strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--ink);
+  font-size: 14px;
+}
+
+.sent-gifts-guide p {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.sent-gifts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sent-gift-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background-color: var(--card);
+}
+
+.sent-gift-card img {
+  width: 54px;
+  height: 54px;
+  border-radius: 11px;
+  background-color: var(--bg);
+  object-fit: cover;
+}
+
+.sent-gift-info {
+  min-width: 0;
+}
+
+.sent-gift-info strong,
+.sent-gift-info span,
+.sent-gift-info small {
+  display: block;
+}
+
+.sent-gift-info strong {
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sent-gift-info span {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.sent-gift-info small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.sent-gift-status {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background-color: rgba(50, 164, 119, 0.14);
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.sent-gift-status.is-used {
+  background-color: var(--line);
+  color: var(--muted);
+}
+
 /* 2. 설정 카드 스위치 그룹 */
 .profile-settings-group {
   margin-bottom: 20px;
