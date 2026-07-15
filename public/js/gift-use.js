@@ -46,6 +46,7 @@ document.getElementById('use-complete-btn').addEventListener('click', async () =
     });
 
     selectedGift = response.data;
+    clearGiftCollectionsCache();
     renderGiftDetail(selectedGift);
     alert('패스 사용이 완료되었습니다.');
     location.href = 'giftbox.html';
