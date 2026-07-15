@@ -159,14 +159,11 @@ function renderOrderProduct(product) {
 
   const productName = product.name || '환승패스 상품';
   const productPrice = Number(product.price || 0).toLocaleString('ko-KR') + '원';
-  const productImage = document.getElementById('order-product-image');
+  const productThumbnailContainer = document.getElementById('order-product-thumbnail-container');
 
-  productImage.src = product.thumbnailUrl || fallbackImageUrl;
-  productImage.alt = productName;
-  productImage.onerror = () => {
-    productImage.onerror = null;
-    productImage.src = fallbackImageUrl;
-  };
+  if (productThumbnailContainer) {
+    productThumbnailContainer.innerHTML = createPassThumbnail(product);
+  }
 
   document.getElementById('order-product-brand').textContent = product.brandName || '익산 교통';
   document.getElementById('order-product-name').textContent = productName;

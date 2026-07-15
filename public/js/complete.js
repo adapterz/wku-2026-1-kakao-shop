@@ -73,13 +73,10 @@ function renderOrderDetail(order) {
     primaryDestination = 'passes.html';
   }
 
-  const productImage = document.getElementById('complete-product-image');
-  productImage.src = productImageUrl;
-  productImage.alt = product.name || '익산 환승패스';
-  productImage.onerror = () => {
-    productImage.onerror = null;
-    productImage.src = fallbackImageUrl;
-  };
+  const productThumbnailContainer = document.getElementById('complete-product-thumbnail-container');
+  if (productThumbnailContainer) {
+    productThumbnailContainer.innerHTML = createPassThumbnail(product);
+  }
 }
 
 function showOrderLoadError(message) {
