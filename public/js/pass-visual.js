@@ -27,9 +27,16 @@ const PASS_VISUAL_DEFINITIONS = [
 ];
 
 function getPassVisualDefinition(category = '', name = '') {
-  return PASS_VISUAL_DEFINITIONS.find((definition) => (
-    definition.categories.includes(category) || definition.keywords.test(name)
-  )) || PASS_VISUAL_DEFINITIONS[0];
+  const categoryDefinition = PASS_VISUAL_DEFINITIONS.find((definition) => (
+    definition.categories.includes(category)
+  ));
+
+  if (categoryDefinition) {
+    return categoryDefinition;
+  }
+
+  return PASS_VISUAL_DEFINITIONS.find((definition) => definition.keywords.test(name))
+    || PASS_VISUAL_DEFINITIONS[0];
 }
 
 function getPassVisualIcon(icon) {
