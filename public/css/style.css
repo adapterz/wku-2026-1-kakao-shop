@@ -1356,9 +1356,13 @@ body.route-sheet-open {
 
 .pass-visual--orange,
 .pass-thumbnail--orange {
-  --pass-start: #d96f16;
-  --pass-end: #f4ad3f;
+  --pass-start: #f39a2f;
+  --pass-end: #ffc95c;
   --pass-soft: #fff0bd;
+}
+
+.pass-visual.pass-visual--orange {
+  color: #4a3305;
 }
 
 .pass-visual {
