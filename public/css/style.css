@@ -1568,6 +1568,7 @@ body > * {
 .gift-list {
   display: flex;
   flex-direction: column;
+  flex: 1 0 auto;
   gap: 12px;
   padding: 16px;
 }
