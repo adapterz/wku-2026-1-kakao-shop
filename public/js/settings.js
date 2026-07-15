@@ -6,6 +6,14 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // 앱 구동 시 기존에 저장된 다크모드 설정이 있다면 로드 시 즉시 활성화 (화면 깜빡임 방지)
+  const isDarkMode = localStorage.getItem('profile_dark_mode') === 'true';
+  if (isDarkMode) {
+    document.body.classList.add('dark-theme');
+    const toggleInput = document.getElementById('dark-mode-toggle');
+    if (toggleInput) toggleInput.checked = true;
+  }
+
   initSettingsPage();
 });
 
@@ -52,7 +60,7 @@ function setupThemeAndToggles() {
   const notiToggle = document.getElementById('notification-toggle');
 
   if (darkToggle) {
-    darkToggle.checked = document.documentElement.classList.contains('dark-theme');
+    darkToggle.checked = document.body.classList.contains('dark-theme');
   }
 
   if (notiToggle) {
@@ -98,10 +106,10 @@ function bindSettingsEvents() {
   document.getElementById('dark-mode-toggle')?.addEventListener('change', (e) => {
     const isChecked = e.target.checked;
     if (isChecked) {
-      document.documentElement.classList.add('dark-theme');
+      document.body.classList.add('dark-theme');
       localStorage.setItem('profile_dark_mode', 'true');
     } else {
-      document.documentElement.classList.remove('dark-theme');
+      document.body.classList.remove('dark-theme');
       localStorage.setItem('profile_dark_mode', 'false');
     }
   });
@@ -173,12 +181,11 @@ function bindSettingsEvents() {
     try {
       const response = await fetch('/api/auth/logout', { method: 'POST' });
       if (response.ok) {
-        clearGiftCollectionsCache();
         localStorage.removeItem('profile_display_name');
         localStorage.removeItem('profile_display_phone');
         localStorage.removeItem('profile_default_card');
         localStorage.removeItem('profile_dark_mode');
-        document.documentElement.classList.remove('dark-theme');
+        document.body.classList.remove('dark-theme');
         alert('성공적으로 로그아웃되었습니다.');
         location.href = 'index.html';
       } else {

@@ -5,16 +5,10 @@
  * 주요: 선물 상세 조회, 뒤로가기, 사용 완료 버튼 클릭 시 상태 변경 API 호출
  */
 
-const fallbackBarcodeImageUrl = '/images/barcodes/default-barcode.png';
+const fallbackImageUrl = 'img/iksan-logo.svg';
 // giftbox.html에서 gift-use.html?giftId=... 로 넘긴 값을 선물 상세 조회 기준으로 사용합니다.
 const giftId = Number(new URLSearchParams(location.search).get('giftId'));
 let selectedGift = null;
-
-function getBarcodeImageElement() {
-  // 이전 QR 화면이 브라우저에 캐시된 경우와 새 바코드 화면을 모두 지원합니다.
-  return document.getElementById('gift-barcode-image')
-    || document.getElementById('gift-qr-image');
-}
 
 loadGiftDetail();
 
@@ -46,7 +40,6 @@ document.getElementById('use-complete-btn').addEventListener('click', async () =
     });
 
     selectedGift = response.data;
-    clearGiftCollectionsCache();
     renderGiftDetail(selectedGift);
     alert('패스 사용이 완료되었습니다.');
     location.href = 'giftbox.html';
@@ -85,20 +78,19 @@ function renderGiftDetail(gift) {
     return;
   }
 
-  const passVisual = document.getElementById('gift-pass-visual');
-  const barcodeImage = getBarcodeImageElement();
+  const productName = gift.productName || '익산 환승패스';
+  const productImage = document.getElementById('gift-product-image');
 
-  passVisual.innerHTML = createPassVisual(gift, 'use');
+  // 상품 이미지가 아직 없거나 경로가 깨져도 화면 확인이 가능하도록 공통 대체 이미지를 사용합니다.
+  productImage.src = gift.thumbnailUrl || fallbackImageUrl;
+  productImage.alt = productName;
+  productImage.onerror = () => {
+    productImage.onerror = null;
+    productImage.src = fallbackImageUrl;
+  };
 
-  // API 이미지가 없거나 깨지면 제공받은 테스트용 바코드 이미지로 대체합니다.
-  if (barcodeImage) {
-    barcodeImage.src = gift.barcodeImageUrl || fallbackBarcodeImageUrl;
-    barcodeImage.onerror = () => {
-      barcodeImage.onerror = null;
-      barcodeImage.src = fallbackBarcodeImageUrl;
-    };
-  }
-
+  document.getElementById('gift-brand').textContent = gift.brandName || '익산 교통';
+  document.getElementById('gift-product-name').textContent = productName;
   document.getElementById('gift-barcode').textContent = gift.barcode || '-';
   document.getElementById('gift-status-guide').textContent = getStatusGuide(gift.status);
 
@@ -108,11 +100,11 @@ function renderGiftDetail(gift) {
 }
 
 function showGiftError(message) {
-  document.getElementById('gift-pass-visual').innerHTML = `<p class="error-message">${escapePassVisualText(message)}</p>`;
+  document.getElementById('gift-product-name').textContent = message;
+  document.getElementById('gift-brand').textContent = '익산 환승패스';
   document.getElementById('gift-barcode').textContent = '-';
   document.getElementById('gift-status-guide').textContent = '내 패스에서 다시 선택해주세요.';
-  const barcodeImage = getBarcodeImageElement();
-  if (barcodeImage) barcodeImage.src = fallbackBarcodeImageUrl;
+  document.getElementById('gift-product-image').src = fallbackImageUrl;
   document.getElementById('use-complete-btn').disabled = true;
 }
 

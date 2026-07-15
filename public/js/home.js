@@ -11,34 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // HTML이 먼저 그려진 뒤 DOM 요소를 찾기 위해 DOMContentLoaded 이후에 실행합니다.
   renderFriendSelectPanel();
   loadProducts();
-  bindHomeThemeToggle();
   bindTabbarEvents();
 });
-
-function bindHomeThemeToggle() {
-  const themeToggle = document.getElementById('home-theme-toggle');
-
-  if (!themeToggle) {
-    return;
-  }
-
-  const updateThemeToggle = () => {
-    const isDarkMode = document.documentElement.classList.contains('dark-theme');
-    const nextModeLabel = isDarkMode ? '라이트모드 켜기' : '다크모드 켜기';
-
-    themeToggle.setAttribute('aria-pressed', String(isDarkMode));
-    themeToggle.setAttribute('aria-label', nextModeLabel);
-    themeToggle.title = nextModeLabel;
-  };
-
-  updateThemeToggle();
-
-  themeToggle.addEventListener('click', () => {
-    const isDarkMode = document.documentElement.classList.toggle('dark-theme');
-    localStorage.setItem('profile_dark_mode', String(isDarkMode));
-    updateThemeToggle();
-  });
-}
 
 async function renderFriendSelectPanel() {
   const friendSelectPanel = document.getElementById('friend-select-panel');

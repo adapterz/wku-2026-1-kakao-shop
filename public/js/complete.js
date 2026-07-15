@@ -49,6 +49,8 @@ function renderOrderDetail(order) {
   const receiverName = order.receiver && order.receiver.name ? order.receiver.name : '받는 분';
   const receiverPhone = order.receiver && order.receiver.phone ? order.receiver.phone : '';
   const product = order.product || {};
+  const fallbackImageUrl = 'img/iksan-logo.svg';
+  const productImageUrl = product.thumbnailUrl || fallbackImageUrl;
 
   document.getElementById('complete-title').innerHTML = `<strong>${escapeHtml(receiverName)}</strong>에게<br>선물을 보냈습니다.`;
   document.getElementById('receiver-name').textContent = receiverName;
@@ -71,10 +73,13 @@ function renderOrderDetail(order) {
     primaryDestination = 'passes.html';
   }
 
-  const productThumbnailContainer = document.getElementById('complete-product-thumbnail-container');
-  if (productThumbnailContainer) {
-    productThumbnailContainer.innerHTML = createPassThumbnail(product);
-  }
+  const productImage = document.getElementById('complete-product-image');
+  productImage.src = productImageUrl;
+  productImage.alt = product.name || '익산 환승패스';
+  productImage.onerror = () => {
+    productImage.onerror = null;
+    productImage.src = fallbackImageUrl;
+  };
 }
 
 function showOrderLoadError(message) {

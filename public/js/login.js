@@ -35,7 +35,6 @@ if (loginForm) {
     try {
       setLoginMessage('로그인 요청 중입니다.', 'info');
       await loginUser(payload);
-      clearGiftCollectionsCache();
       // 로그인 성공 후에는 세션이 생긴 상태이므로 홈/주문 등 로그인 필요 흐름으로 이동할 수 있습니다.
       setLoginMessage('로그인되었습니다. 홈으로 이동합니다.', 'success');
       window.location.href = 'index.html';

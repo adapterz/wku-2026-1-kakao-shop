@@ -123,41 +123,6 @@ body > * {
   transform: translateX(-50%);
 }
 
-.home-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.home-theme-toggle {
-  width: 30px;
-  height: 30px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 50%;
-  color: #111827;
-  background-color: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.14);
-  cursor: pointer;
-  transition: color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
-}
-
-.home-theme-toggle:active {
-  transform: scale(0.92);
-}
-
-.home-theme-toggle:focus-visible {
-  outline: 2px solid #ffffff;
-  outline-offset: 2px;
-}
-
-html.dark-theme .home-theme-toggle {
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.12);
-}
-
 .iksan-logo {
   width: 36px;
   height: 36px;
@@ -513,12 +478,10 @@ html.dark-theme .home-theme-toggle {
 .bottom-tabbar {
   position: sticky;
   bottom: 0;
-  margin-top: auto;
   display: flex;
   background-color: var(--card);
   border-top: 1px solid var(--line);
   padding: 8px 0;
-  z-index: 20;
 }
 
 .tabbar-item {
@@ -1135,215 +1098,12 @@ html.dark-theme .home-theme-toggle {
 
 /* product detail */
 
-/* 상품 이미지 대신 사용하는 공통 디지털 패스 시안 */
-.product-visual-slot {
-  padding: 16px;
-  background-color: var(--bg);
-}
-
-.pass-visual,
-.pass-thumbnail {
-  --pass-start: #075ca8;
-  --pass-end: #2c9ce2;
-  --pass-soft: #bde8ff;
-}
-
-.pass-visual--green,
-.pass-thumbnail--green {
-  --pass-start: #12795f;
-  --pass-end: #38bd8d;
-  --pass-soft: #c2f5df;
-}
-
-.pass-visual--orange,
-.pass-thumbnail--orange {
-  --pass-start: #d96f16;
-  --pass-end: #f4ad3f;
-  --pass-soft: #fff0bd;
-}
-
-.pass-visual {
-  position: relative;
-  overflow: hidden;
-  min-height: 170px;
-  padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  color: #ffffff;
-  background:
-    radial-gradient(circle at 88% 5%, rgba(255, 255, 255, 0.25), transparent 32%),
-    linear-gradient(135deg, var(--pass-start), var(--pass-end));
-  box-shadow: 0 12px 28px color-mix(in srgb, var(--pass-start) 25%, transparent);
-}
-
-.pass-visual::after {
-  content: '';
-  position: absolute;
-  right: -32px;
-  bottom: -58px;
-  width: 160px;
-  height: 160px;
-  border: 24px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-}
-
-.pass-visual--use {
-  min-height: 138px;
-  margin-bottom: 14px;
-  text-align: left;
-}
-
-.pass-visual-head,
-.pass-visual-foot {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-}
-
-.pass-visual-head {
-  gap: 8px;
-}
-
-.pass-visual-icon,
-.pass-thumbnail-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.pass-visual-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  color: var(--pass-start);
-  background: rgba(255, 255, 255, 0.92);
-}
-
-.pass-visual-icon svg,
-.pass-thumbnail-icon svg {
-  width: 20px;
-  height: 20px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.pass-visual-type {
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.pass-visual-badge {
-  margin-left: auto;
-  padding: 5px 9px;
-  border: 1px solid rgba(255, 255, 255, 0.38);
-  border-radius: 999px;
-  font-size: 9px;
-  font-weight: 900;
-  letter-spacing: 0.7px;
-}
-
-.pass-visual-name {
-  position: relative;
-  z-index: 2;
-  display: block;
-  width: 78%;
-  margin-top: 21px;
-  font-size: 19px;
-  line-height: 1.35;
-  text-align: left;
-}
-
-.pass-visual-foot {
-  justify-content: space-between;
-  margin-top: 19px;
-  padding-top: 10px;
-  border-top: 1px dashed rgba(255, 255, 255, 0.45);
-  font-size: 10px;
-  font-weight: 700;
-}
-
-.pass-visual-route {
-  position: absolute;
-  z-index: 1;
-  right: 20px;
-  top: 57px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.pass-visual-route::before {
-  content: '';
-  position: absolute;
-  top: 3px;
-  bottom: 3px;
-  width: 2px;
-  background: rgba(255, 255, 255, 0.45);
-}
-
-.pass-visual-route span {
-  z-index: 1;
-  width: 8px;
-  height: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.85);
-  border-radius: 50%;
-  background: var(--pass-start);
-}
-
-.pass-visual-skeleton {
-  min-height: 140px;
-  display: grid;
-  place-items: center;
-  border-radius: 18px;
-  color: var(--muted);
-  background: var(--line);
-  font-size: 12px;
-}
-
-.pass-thumbnail {
-  flex: 0 0 80px;
-  width: 80px;
-  height: 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 3px;
-  padding: 10px;
-  border-radius: 12px;
-  color: #ffffff;
-  background: linear-gradient(145deg, var(--pass-start), var(--pass-end));
-}
-
-.pass-thumbnail-icon {
-  width: 25px;
-  height: 25px;
-  margin-bottom: 2px;
-  border-radius: 8px;
-  color: var(--pass-start);
-  background: rgba(255, 255, 255, 0.94);
-}
-
-.pass-thumbnail-icon svg {
-  width: 16px;
-  height: 16px;
-}
-
-.pass-thumbnail strong {
-  font-size: 11px;
-  line-height: 1.15;
-}
-
-.pass-thumbnail small {
-  font-size: 7px;
-  font-weight: 800;
-  letter-spacing: 0.4px;
-  opacity: 0.8;
+/* 상품(패스) 상세 이미지 */
+.product-image img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  background-color: var(--line);
 }
 
 .product-detail {
@@ -1806,7 +1566,6 @@ html.dark-theme .home-theme-toggle {
 .gift-list {
   display: flex;
   flex-direction: column;
-  flex: 1 0 auto;
   gap: 12px;
   padding: 16px;
 }
@@ -1833,7 +1592,6 @@ html.dark-theme .home-theme-toggle {
   flex-direction: column;
   justify-content: center;
   gap: 2px;
-  min-width: 0;
 }
 
 .gift-sender {
@@ -1859,8 +1617,13 @@ html.dark-theme .home-theme-toggle {
   text-align: center;
 }
 
-.gift-pass-visual {
+.gift-use-card img {
   width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: var(--line);
+  margin-bottom: 16px;
 }
 
 .gift-use-card .order-brand {
@@ -1882,15 +1645,12 @@ html.dark-theme .home-theme-toggle {
   padding-top: 16px;
 }
 
-.barcode-image {
-  display: block;
-  width: min(420px, 100%);
-  aspect-ratio: 3 / 2;
-  object-fit: contain;
-  margin: 0 auto 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  background: #fff;
+.qr-image {
+  font-size: 20px;
+  line-height: 1.3;
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+  font-family: monospace;
 }
 
 .qr-number {
@@ -1905,8 +1665,8 @@ html.dark-theme .home-theme-toggle {
   color: var(--muted);
 }
 
-/* 전체 페이지 다크모드 색상 토큰과 배경 */
-html.dark-theme {
+/* 프로필 페이지 전용 프리미엄 스타일 */
+body.dark-theme {
   --canvas: #070b14;
   --bg: #0c1222;
   --card: #172036;
@@ -1916,40 +1676,14 @@ html.dark-theme {
   --accent-text: #5bbcff;
   --navy-text: #9bd2ff;
   --teal-text: #67d9ee;
-  background-color: var(--canvas);
-}
-
-html.dark-theme body {
   background-image:
     radial-gradient(circle at 1px 1px, rgba(179, 191, 209, 0.12) 1px, transparent 0),
     linear-gradient(165deg, var(--canvas) 0%, #111a2c 100%);
 }
 
-html.dark-theme body::before {
+body.dark-theme::before {
   border-inline-color: rgba(179, 191, 209, 0.14);
   box-shadow: 0 0 24px rgba(0, 0, 0, 0.35);
-}
-
-/* 스캔 가독성을 위해 다크모드에서도 바코드 영역은 흰색으로 유지합니다. */
-html.dark-theme .gift-use-card .qr-box {
-  padding: 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  background-color: #ffffff;
-}
-
-html.dark-theme .gift-use-card .barcode-image {
-  object-fit: contain;
-  border-color: #e5e7eb;
-  background-color: #ffffff;
-}
-
-html.dark-theme .gift-use-card .qr-number {
-  color: #334155;
-}
-
-html.dark-theme .gift-use-card .qr-guide {
-  color: #64748b;
 }
 
 /* 다크모드 적용 시 부드러운 페이드 전환 */
@@ -2375,7 +2109,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-html.dark-theme .toggle-slider {
+body.dark-theme .toggle-slider {
   background-color: #334155;
 }
 
@@ -2533,8 +2267,8 @@ input:checked + .toggle-slider:before {
 }
 
 /* 다크모드 시 상단 헤더 글씨 및 아이콘 가독성 확보 */
-html.dark-theme .top-header h1,
-html.dark-theme .top-header .icon-btn {
+body.dark-theme .top-header h1,
+body.dark-theme .top-header .icon-btn {
   color: #ffffff !important;
 }
 
@@ -2619,67 +2353,5 @@ html.dark-theme .top-header .icon-btn {
   border: 2px solid var(--card);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
   transition: border-color 0.3s;
-}
-
-/* 🎫 주문서 및 결제완료 화면용 패스 썸네일 크기 최적화 (60px) */
-.order-summary .pass-thumbnail {
-  flex: 0 0 60px;
-  width: 60px;
-  height: 60px;
-  padding: 6px;
-  border-radius: 8px;
-  gap: 2px;
-}
-
-.order-summary .pass-thumbnail-icon {
-  width: 20px;
-  height: 20px;
-  margin-bottom: 1px;
-  border-radius: 5px;
-}
-
-.order-summary .pass-thumbnail-icon svg {
-  width: 13px;
-  height: 13px;
-}
-
-.order-summary .pass-thumbnail strong {
-  font-size: 9px;
-  line-height: 1.1;
-}
-
-.order-summary .pass-thumbnail small {
-  font-size: 6px;
-}
-
-/* 🎫 프로필 최근 이용 내역용 패스 썸네일 크기 최적화 (46px) */
-.profile-recent-item .pass-thumbnail {
-  flex: 0 0 46px;
-  width: 46px;
-  height: 46px;
-  padding: 4px 6px;
-  border-radius: 8px;
-  gap: 1px;
-}
-
-.profile-recent-item .pass-thumbnail-icon {
-  width: 14px;
-  height: 14px;
-  margin-bottom: 0px;
-  border-radius: 4px;
-}
-
-.profile-recent-item .pass-thumbnail-icon svg {
-  width: 10px;
-  height: 10px;
-}
-
-.profile-recent-item .pass-thumbnail strong {
-  font-size: 8px;
-  line-height: 1;
-}
-
-.profile-recent-item .pass-thumbnail small {
-  display: none;
 }
 
