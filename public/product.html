@@ -1,0 +1,72 @@
+<!--
+  파일: public/product.html
+  목적: 패스 상세 화면 — 패스 1개 정보 보여주고 주문서로 이동
+  왜: 사용자가 패스를 선택하면 상세 정보(경유지·소요시간·환승안내)를 확인 후 구매 결정
+  주요: 패스 이미지, 이름, 가격, 교통 상세 정보, 나에게 선물하기/선물하기 버튼
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>패스 상세 - 익산 환승패스</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 상단 헤더 -->
+  <header class="top-header">
+    <button class="icon-btn" id="back-btn" aria-label="뒤로가기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <h1>패스 구매하기</h1>
+    <a class="icon-btn" href="search.html" aria-label="상품 검색">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
+    </a>
+  </header>
+
+  <!-- 패스 대표 이미지 -->
+  <div class="product-image">
+    <img id="product-image" src="img/iksan-logo.svg" alt="환승패스 상품 이미지">
+  </div>
+
+  <!-- 패스 기본 정보 -->
+  <main class="product-detail">
+    <p class="product-category-tag" id="product-category">익산 환승패스</p>
+    <p class="product-name" id="product-name">상품 정보를 불러오는 중입니다.</p>
+    <p class="product-price" id="product-price">-</p>
+
+    <!-- 교통 전용 정보 -->
+    <section class="transit-info">
+      <h2>이용 안내</h2>
+      <div class="info-row">
+        <span class="info-label">이용 범위</span>
+        <span class="info-value">익산역 · 시내버스터미널 등 시내 전 노선</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">이용 시간</span>
+        <span class="info-value">최초 승차 후 24시간</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">환승 안내</span>
+        <span class="info-value">이용 시간 내 무제한 환승 가능</span>
+      </div>
+    </section>
+
+    <!-- 상세 설명 -->
+    <section class="product-description">
+      <h2>상품 설명</h2>
+      <p id="product-description">상품 설명을 불러오는 중입니다.</p>
+    </section>
+  </main>
+
+  <!-- 하단 고정 버튼 (나에게 선물하기 / 선물하기) -->
+  <footer class="bottom-bar-double">
+    <button class="btn-secondary" id="gift-me-btn">선물하기</button>
+    <button class="btn-primary" id="gift-send-btn">구매하기</button>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/product.js"></script>
+</body>
+</html>

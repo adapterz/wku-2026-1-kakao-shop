@@ -1,0 +1,13 @@
+.git
+.github
+.env
+.env.*
+!.env.example
+*.pem
+node_modules
+npm-debug.log*
+db-backups
+docs
+Dockerfile*
+docker-compose*.yml
+README.md

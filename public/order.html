@@ -1,0 +1,110 @@
+<!--
+  파일: public/order.html
+  목적: 주문서 화면 — 받는 사람 지정 및 패스 주문 생성
+  왜: 사용자가 패스를 선택한 뒤, 받는 사람과 메시지를 정하고 최종 주문(Mock 결제)을 생성하는 단계
+  주요: 메시지 카드, 받는 사람 선택, 주문 요약, 결제 정보, 결제 버튼
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주문서 - 익산 환승패스</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 상단 헤더 -->
+  <header class="top-header">
+    <button class="icon-btn" id="back-btn" aria-label="뒤로가기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <h1>선물하기</h1>
+    <div style="width: 20px;"></div>
+  </header>
+
+  <main class="order-form">
+
+    <!-- 메시지 카드 -->
+    <section class="message-card">
+      <p class="message-text" id="gift-message-text">나는 내가 챙긴다!
+소중한 나에게 주는 선물</p>
+      <textarea id="gift-message-input" class="message-input" maxlength="80" rows="3" aria-label="선물 메시지 입력" hidden></textarea>
+      <p class="message-guide" id="gift-message-guide" hidden>최대 80자까지 입력할 수 있습니다.</p>
+      <div class="message-illustration">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 17V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v11"/><path d="M4 17h16"/><path d="M5 11h14"/><circle cx="8.5" cy="19.5" r="1.5"/><circle cx="15.5" cy="19.5" r="1.5"/>
+        </svg>
+      </div>
+      <button class="message-edit-btn" id="message-edit-btn" type="button">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+        <span id="message-edit-btn-label">메시지 편집</span>
+      </button>
+    </section>
+
+    <!-- 받는 사람 선택 -->
+    <section class="order-section">
+      <h2>받는 사람</h2>
+      <div class="order-row">
+        <button class="option-btn active" id="btn-me" type="button" aria-pressed="true">나에게 선물</button>
+        <button class="option-btn" id="btn-friend" type="button" aria-pressed="false">친구에게 선물</button>
+      </div>
+      <input
+        type="text"
+        id="receiver-name-input"
+        placeholder="받는 사람 이름"
+        class="text-input"
+        autocomplete="off"
+        maxlength="50"
+        hidden
+        disabled
+      >
+      <input
+        type="tel"
+        id="receiver-input"
+        placeholder="받는 사람 휴대폰 번호 (010-0000-0000)"
+        class="text-input"
+        inputmode="numeric"
+        autocomplete="tel"
+        maxlength="13"
+        aria-describedby="receiver-guide"
+        hidden
+        disabled
+      >
+      <p class="receiver-guide" id="receiver-guide" hidden>받는 사람의 이름과 문자로 선물받을 휴대폰 번호를 입력해주세요.</p>
+    </section>
+
+    <!-- 주문 내역 -->
+    <section class="order-summary">
+      <img id="order-product-image" src="img/iksan-logo.svg" alt="주문 상품 이미지">
+      <div class="order-summary-info">
+        <p class="order-brand" id="order-product-brand">익산 교통</p>
+        <p class="product-name" id="order-product-name">상품 정보를 불러오는 중입니다.</p>
+        <p class="product-price"><span id="order-product-price">-</span></p>
+      </div>
+    </section>
+
+    <!-- 결제 정보 -->
+    <section class="order-section">
+      <h2>결제 정보</h2>
+      <div class="info-row">
+        <span class="info-label">총 상품 (1개)</span>
+        <span class="info-value" id="order-total-price">-</span>
+      </div>
+      <div class="info-row total-row">
+        <span class="info-label">최종 결제금액</span>
+        <span class="info-value" id="order-final-price">-</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 하단 고정 결제 버튼 -->
+  <footer class="bottom-bar">
+    <button class="btn-primary" id="checkout-btn">결제하기</button>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/order.js"></script>
+</body>
+</html>
